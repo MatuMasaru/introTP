@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Reservas - Hotel</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <script>
+        function cancelarReserva(reservaId) {
+            const confirmacion = confirm("¿Estás seguro de que deseas cancelar esta reserva?");
+            if (confirmacion) {
+               
+                alert("Reserva " + reservaId + " cancelada.");
+                
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Hotel XYZ</h1>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="reservas.html" class="active">Mis Reservas</a>
+            <a href="contacto.html">Contacto</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="reservas">
+            <h2>Mis Reservas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Número de Reserva</th>
+                        <th>Fecha de Check-in</th>
+                        <th>Fecha de Check-out</th>
+                        <th>Habitación</th>
+                        <th>Estado</th>
+                        <th>Acciones</th> 
+                        <th>Id de sucursal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Ejemplo de reserva -->
+                    <tr>
+                        <td>12345</td>
+                        <td>01/12/2024</td>
+                        <td>05/12/2024</td>
+                        <td>Suite Deluxe</td>
+                        <td>Confirmada</td>
+                        <td>
+                            <button onclick="cancelarReserva(12345)">Cancelar</button>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+            <button onclick="location.href='nueva-reserva.html'">Nueva Reserva</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Hotel XYZ. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
