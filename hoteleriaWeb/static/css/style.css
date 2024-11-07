@@ -279,6 +279,8 @@
     }
   }
 
+  
+
   .btn--warning {
     background-color: var(--md-sys-color-error);
     color: var( --md-sys-color-secondary-container);
@@ -605,6 +607,34 @@ th, td {
       }
     }
   }
+
+  .image-container{
+    width: 340px;
+    border-radius: 100% 0 0 0;
+  }
+
+  .imagen-habitaciones{
+    border-radius: 2% 0 0 0 ;
+  }
+
+  .container-filter{
+    margin-top: 18vh;
+    display: flex;
+    justify-content: center;
+  }
+
+  .filter>input{
+    margin-right: 10px ;
+  }
+
+  .filter{
+    display: flex;
+    padding: 10px;
+    border-radius: 5px;
+    width: 95%;
+    background-color: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+  }
   
   .footer {
     width: 100%;
@@ -614,6 +644,7 @@ th, td {
     padding: var(--space-large);
     text-align: center;
   }
+
   
   @media only screen and (min-width: 1200px) {
     html {
