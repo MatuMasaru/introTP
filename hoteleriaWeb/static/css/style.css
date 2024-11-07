@@ -4,9 +4,9 @@
   
   body {
     background-color: var(--md-sys-color-surface);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    
+    min-height: 100vh;
+    position: relative;
     width: 100vw;
   }
   
@@ -18,6 +18,22 @@
   h5 {
     font-size: var(--font-size-normal);
     font-weight: var(--font-weight-medium);
+  }
+
+  .header-fake{
+    
+    width: 100vw;
+    height: var(--header-height);
+    background-color: var(--md-sys-color-surface-container);
+    display: flex;
+    justify-content: center;
+  
+    .header__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 85%;
+    }
   }
   
   .header {
@@ -262,6 +278,15 @@
       opacity: 0.5;
     }
   }
+
+  .btn--warning {
+    background-color: var(--md-sys-color-error);
+    color: var( --md-sys-color-secondary-container);
+  
+    &:hover {
+      opacity: 0.8;
+    }
+  }
   
   .btn--primary {
     background-color: var(--md-sys-color-primary);
@@ -270,6 +295,14 @@
     &:hover {
       opacity: 0.8;
     }
+  }
+
+  .container-button{
+    display: flex;
+  }
+
+  .btn-medium-large{
+    width: 49%;
   }
   
   .btn--size-small {
@@ -313,6 +346,22 @@
   .selected-value {
     text-align: left;
   }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0px 0;
+
+ 
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+
+}
+
+
   
   .arrow {
     border-left: 5px solid transparent;
@@ -458,9 +507,23 @@
       }
     }
   }
+
+
+
+
   
   #sobre,
   #hoteles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+    margin: 0 auto;
+    padding: var(--space-xx-large) 0;
+  }
+
+  #sobre_reserva {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -545,6 +608,7 @@
   
   .footer {
     width: 100%;
+    position: absolute;
     background-color: var(--md-sys-color-inverse-surface);
     color: var(--md-sys-color-inverse-on-surface);
     padding: var(--space-large);
