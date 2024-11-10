@@ -23,6 +23,8 @@ QUERY_HABITACION_POR_ID =  "SELECT id_hotel, numero, tipo, precio FROM habitacio
 
 QUERY_RESERVA_POR_ID_Y_CLIENTE = "SELECT id, id_habitacion, llegada, salida, cliente, estado, precio FROM reserva WHERE id= :id AND cliente = :cliente"
 
+QUERY_RESERVA_POR_ID = "SELECT id, id_habitacion, llegada, salida, cliente, estado, precio FROM reserva WHERE id= :id"
+
 #RESERVA HABITACION QUERYS --INSERT---
 
 QUERY_INGRESAR_RESERVA = "INSERT INTO reserva (id_habitacion, llegada, salida, cliente, estado, precio) VALUES (:id_habitacion, :llegada, :salida, :cliente, activo, :precio) WHERE id_habitacion = :id_habitacion AND (llegada < :salida AND salida > :llegada)"
@@ -78,14 +80,17 @@ def habitacion_por_id(id):
 def obtener_reserva_por_id_y_cliente(id, cliente):
     return run_query(QUERY_RESERVA_POR_ID_Y_CLIENTE, {'id':id, 'cliente':cliente}).fetchall()
 
-def ingresar_reserva(id_habitacion, llegada, salida, cliente, precio):
-    run_query(QUERY_INGRESAR_RESERVA, {'id_habitacion': id_habitacion, 'llegada':llegada, 'salida':salida, 'cliente': cliente, 'precio':precio})
+def obtener_reserva_por_id(id):
+    return run_query(QUERY_RESERVA_POR_ID, {'id':id}).fetchall()
+
+def ingresar_reserva(datos):
+    run_query(QUERY_INGRESAR_RESERVA, datos)
     
 def cancelar_reserva(id, cliente):
     run_query(QUERY_CANCELAR_RESERVA, {'id':id, 'cliente':cliente})
 
-def reservar_servicio_por_id_reserva(id_reserva, id_servicio, precio):
-    run_query(QUERY_RESERVAR_SERVICIOS_POR_ID_RESERVA, {'id_reserva': id_reserva, 'id_cliente': id_servicio, 'precio': precio})
+def reservar_servicio_por_id_reserva(datos):
+    run_query(QUERY_RESERVAR_SERVICIOS_POR_ID_RESERVA, datos)
 
 def cancelar_reserva_servicio_por_id_reserva(id_reserva):
     run_query(QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA, {'id_reserva': id_reserva})
