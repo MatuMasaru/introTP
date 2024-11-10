@@ -1,9 +1,9 @@
-if ! [ -x "$(command -v python)" ]; then
-  echo "Debe instalar python"
+if ! [ -x "$(command -v python3)" ]; then
+  echo "Debe instalar python3"
   exit 1
 fi
 
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
+python3 -m pip install --upgrade pip
 pip install -r requirements.txt
