@@ -1,0 +1,62 @@
+
+body {
+    background-image: url('01.jpg');
+    background-size: cover; /* Ajusta la imagen para cubrir toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+.title {
+    color: orange;
+    font-family:'Times New Roman', Times, serif;   
+}
+
+.subtile {
+    color: rgb(241, 61, 15);
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-size:x-large;
+    font-weight: 300;
+}
+
+#boton-reservar {
+    margin-top: 20px;
+    border-top: rgb(235, 133, 17) 2px solid;
+    color:blanchedalmond;
+
+}
+
+button {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background-color: rgb(250, 98, 10);
+    height: 30px;
+    width: 90px;
+    font-size:larger;
+}
+
+.cuadro {
+    background-color: black;
+    color: blanchedalmond;
+    height: 20PX;
+    width: 200PX;
+    font-family: 'Times New Roman', Times, serif;
+    border-top: rgb(235, 133, 17) 2px solid;
+}
+
+.importante-msj {
+    color: rgb(247, 10, 10);
+    font-family:'Times New Roman', Times, serif;
+}
+
+li {
+    list-style-type:upper-roman;
+    margin-bottom: 2vh;
+    color: antiquewhite;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: 200;
+
+}
+
+.subfondo-detalle {
+    
+    background-color: rgb(29, 28, 27);
+}

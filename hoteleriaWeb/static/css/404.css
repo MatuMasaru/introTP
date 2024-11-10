@@ -9,6 +9,7 @@ body {
   flex-direction: column;
   justify-content: center;
   width: 100vw;
+  height: 100vh;
 }
 
 .header {
@@ -226,6 +227,8 @@ body {
 
 .footer {
   width: 100%;
+  position: absolute;
+  bottom: 0;
   background-color: var(--md-sys-color-inverse-surface);
   color: var(--md-sys-color-inverse-on-surface);
   padding: var(--space-large);
@@ -323,17 +326,6 @@ body {
     opacity: 0.8;
   }
 }
-
-.btn--warning {
-  background-color: var(--md-sys-color-error);
-  color: var( --md-sys-color-secondary-container);
-
-  &:hover {
-    opacity: 0.8;
-  }
-}
-
-
 
 .btn--size-small {
   height: 2.25rem;
