@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - Hotel XYZ{% endblock %}
+{% block title %}Home - Hotel Estancias del Sol{% endblock %}
 
 {% block styles %}{% endblock %}
 
@@ -31,16 +31,16 @@
                   </button>
                   <ul class="select-dropdown" role="listbox" id="select-dropdown">
                     <li role="option">
-                      <input type="radio" id="BUENOS AIRES" name="social-account" />
-                      <label for="BUENOS AIRES">Buenos Aires</label>
+                      <input type="radio" id="1" name="social-account" />
+                      <label for="1">Buenos Aires</label>
                     </li>
                     <li role="option">
-                      <input type="radio" id="MAR DEL PLATA" name="social-account" />
-                      <label for="MAR DEL PLATA">Mar del Plata</label>
+                      <input type="radio" id="2" name="social-account" />
+                      <label for="2">Mar del Plata</label>
                     </li>
                     <li role="option">
-                      <input type="radio" id="BARILOCHE" name="social-account" />
-                      <label for="BARILOCHE">BARILOCHE</label>
+                      <input type="radio" id="3" name="social-account" />
+                      <label for="3">BARILOCHE</label>
                     </li>
                   </ul>
                 </div>
@@ -52,7 +52,7 @@
                 </label>
                 <input type="text" id="dates">
               </div>
-              <button class="btn btn--primary btn--size-medium"><a href="habitaciones.html">Reserva Online</a> </button>
+              <button class="btn btn--primary btn--size-medium"><a href="{{ url_for('habitaciones') }}">Reserva Online</a> </button>
             </div>
           </div>
         </aside>
@@ -74,65 +74,36 @@
               Ven y descubre por qué Estancias del Sol es la elección perfecta para tu próxima aventura en Argentina.
             </p>
           </aside>
-          <button class="btn btn--primary btn--size-medium">Reserva Online</button>
+          <a href="{{ url_for('mi_reserva') }}"><button class="btn btn--primary btn--size-medium">Reserva Online</button></a>
         </div>
         <div class="card__image">
-          <img src="../static/assets/garden-area.jpg" alt="Estancias del Sol">
+          <img src="{{ url_for('static', filename = 'assets/garden-area.jpg') }}" alt="Estancias del Sol">
         </div>
       </article>
     </section>
 
     <section id="hoteles">
       <h2>Nuestras ubicaciones</h2>
+     
       <div class="hoteles__container">
-        <article class="card">
-          <div class="card__image">
-            <img src="../static/assets/hotel-bariloche.jpg" alt="Hotel en Buenos Aires">
-          </div>
-          <div class="card__content">
-            <aside class="card__header">
-              <h3 class="card__title">Buenos Aires</h3>
-            </aside>
-            <aside class="card__description">
-              <p>
-                Ubicado en el corazón de la vibrante capital, nuestro hotel ofrece un oasis de tranquilidad en medio del bullicio urbano. Ideal para viajeros de negocios y turistas por igual.
-              </p>
-            </aside>
-            <a href="#inicio" class="btn btn--primary btn--size-medium">Más información</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__image">
-            <img src="../static/assets/hotel-bariloche.jpg" alt="Hotel en Mar del Plata">
-          </div>
-          <div class="card__content">
-            <aside class="card__header">
-              <h3 class="card__title">Mar del Plata</h3>
-            </aside>
-            <aside class="card__description">
-              <p>
-                Perfecto para quienes buscan la combinación ideal de playa y ciudad. Disfrute del sol, la arena y las actividades culturales que esta hermosa ciudad costera tiene para ofrecer.
-              </p>
-            </aside>
-            <a href="#inicio" class="btn btn--primary btn--size-medium">Más información</a>
-          </div>
-        </article>
-        <article class="card">
-          <div class="card__image hcard__image3">
-            <img src="../static/assets/hotel-bariloche.jpg" alt="Hotel en Bariloche">
-          </div>
-          <div class="card__content">
-            <aside class="card__header">
-              <h3 class="card__title">Bariloche</h3>
-            </aside>
-            <aside class="card__description">
-              <p>
-                Situado en el pintoresco escenario de la Patagonia, este hotel es ideal para los amantes de la naturaleza y los deportes de invierno. Disfrute de vistas impresionantes, actividades al aire libre y la hospitalidad cálida de siempre.
-              </p>
-            </aside>
-            <a href="#inicio" class="btn btn--primary btn--size-medium">Más información</a>
-          </div>
-        </article>
+          {% for hotel in hotels %}
+            <article class="card">
+              <div class="card__image">
+                <img src="{{ hotel['image_url'] }}" alt="Hotel en {{ hotel['name'] }}">
+              </div>
+              <div class="card__content">
+                <aside class="card__header">
+                  <h3 class="card__title">{{ hotel['name'] }}</h3>
+                </aside>
+                <aside class="card__description">
+                  <p>
+                    {{ hotel['description'] }}
+                  </p>
+                </aside>
+                <a href="{{ url_for('hoteles', id_hotel = hotel['id']) }}" class="btn btn--primary btn--size-medium">Más información</a>
+              </div>
+            </article>
+          {% endfor %}
       </div>
     </section>
 {% endblock %}

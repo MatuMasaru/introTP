@@ -17,143 +17,37 @@
           <input class="form-control " type="date" placeholder="fecha salida" aria-label="default input example">
           <input class="form-control " type="date" placeholder="fecha llegada" aria-label="default input example">
           <input class="form-control " type="text" placeholder="cantidad personas" aria-label="default input example">
-          <button class="btn btn-warning"> buscar</button>
+          <button class="btn btn-warning"> Buscar</button>
         </div>
       </div>
+      {% for room in rooms %}
+        <div class="container mt-3 mb-3 p-0">
+          <div class="  pb-0 pe-lg-0  align-items-center rounded-3 border shadow-lg">  
+          <div class="row">
+            <div class="image-container col-3">
+              <img class="imagen-habitaciones" src="{{ hotels[room['id_hotel']]['image_url'] }}" alt="">
+            </div>
+            <div class="col-9">
+              <h5 class="card__title mt-1"> -Habitacion {{ room['number'] }}</h5>
+                <p>{{ hotels[room['id_hotel']]['description'] }}</p>
 
-      <div class="container mt-3 mb-3 p-0">
-        <div class="  pb-0 pe-lg-0  align-items-center rounded-3 border shadow-lg">  
-        <div class="row">
-          <div class="image-container col-3">
-            <img class="imagen-habitaciones" src="../static/assets/hotel-bariloche.jpg" alt="">
+                <button type="button" class="btn btn-primary"><i class="fa-solid fa-wifi"></i></button>
+                <button type="button" class="btn btn-primary"><i class="fa-solid fa-tv"></i></button>
+                <button type="button" class="btn btn-primary"><i class="fa-solid fa-wind"></i></i></button>
+                <button type="button" class="btn btn-primary"><i class="fa fa-home"></i></button>
+                <button type="button" class="btn btn-primary"><i class="fa-solid fa-bath"></i></i></button>
+            </div>
           </div>
-          <div class="col-9">
-            <h5 class="card__title mt-1">hotel - nombre habitacion</h5>
-              <p>Descripción breve del hotel. Aquí puedes agregar más detalles sobre las comodidades y servicios.</p>
+            
+          <hr>
+          <div class="d-flex justify-content-end align-items-center" >
+            <span class="m-2 ">Ars $ {{ room['price'] }}</span>
+            <button class="btn btn-warning m-2" > <a href="{{url_for('reservar', id_room = room['id_room'])}}">Reservar</a> </button>
+          </div>
+        </div>
+      {% endfor %}
 
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wifi"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-tv"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wind"></i></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa fa-home"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-bath"></i></i></button>
-          </div>
-        </div>
-          
-        <hr>
-        <div class="d-flex justify-content-end align-items-center" >
-          <span class="m-2 ">Ars $ 15523285</span>
-          <button class="btn btn-warning m-2" > <a href="reservas.html">reservar</a> </button>
-        </div>
-      </div>
-
-      <div class="container mt-3 mb-3 p-0">
-        <div class="  pb-0 pe-lg-0  align-items-center rounded-3 border shadow-lg">
-  
-        <div class="row">
-          <div class="image-container col-3">
-            <img class="imagen-habitaciones" src="../static/assets/hotel-bariloche.jpg" alt="">
-          </div>
-  
-          <div class="col-9">
-            <h5 class="card__title mt-1">hotel - nombre habitacion</h5>
-              <p>Descripción breve del hotel. Aquí puedes agregar más detalles sobre las comodidades y servicios.</p>
-  
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wifi"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-tv"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wind"></i></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa fa-home"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-bath"></i></i></button>
-          </div>
-        </div>
-          
-        <hr>
-        <div class="d-flex justify-content-end align-items-center" >
-          <span class="m-2 ">Ars $ 15523285</span>
-          <button class="btn btn-warning m-2" > <a href="reservas.html">reservar</a> </button>
-        </div>
-      </div>
-
-      <div class="container mt-3 mb-3 p-0">
-        <div class="  pb-0 pe-lg-0  align-items-center rounded-3 border shadow-lg">
-  
-        <div class="row">
-          <div class="image-container col-3">
-            <img class="imagen-habitaciones" src="../static/assets/hotel-bariloche.jpg" alt="">
-          </div>
-  
-          <div class="col-9">
-            <h5 class="card__title mt-1">hotel - nombre habitacion</h5>
-              <p>Descripción breve del hotel. Aquí puedes agregar más detalles sobre las comodidades y servicios.</p>
-  
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wifi"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-tv"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wind"></i></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa fa-home"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-bath"></i></i></button>
-          </div>
-        </div>
-          
-        <hr>
-        <div class="d-flex justify-content-end align-items-center" >
-          <span class="m-2 ">Ars $ 15523285</span>
-          <button class="btn btn-warning m-2" > <a href="reservas.html">reservar</a> </button>
-        </div>
-      </div>
-
-      <div class="container mt-3 mb-3 p-0">
-        <div class="  pb-0 pe-lg-0  align-items-center rounded-3 border shadow-lg">
-  
-        <div class="row">
-          <div class="image-container col-3">
-            <img class="imagen-habitaciones" src="../static/assets/hotel-bariloche.jpg" alt="">
-          </div>
-  
-          <div class="col-9">
-            <h5 class="card__title mt-1">hotel - nombre habitacion</h5>
-              <p>Descripción breve del hotel. Aquí puedes agregar más detalles sobre las comodidades y servicios.</p>
-  
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wifi"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-tv"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wind"></i></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa fa-home"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-bath"></i></i></button>
-          </div>
-        </div>
-          
-        <hr>
-        <div class="d-flex justify-content-end align-items-center" >
-          <span class="m-2 ">Ars $ 15523285</span>
-          <button class="btn btn-warning m-2" > <a href="reservas.html">reservar</a> </button>
-        </div>
-      </div>
-
-      <div class="container mt-3 mb-3 p-0">
-        <div class="  pb-0 pe-lg-0  align-items-center rounded-3 border shadow-lg">
-  
-        <div class="row">
-          <div class="image-container col-3">
-            <img class="imagen-habitaciones" src="../static/assets/hotel-bariloche.jpg" alt="">
-          </div>
-  
-          <div class="col-9">
-            <h5 class="card__title mt-1">hotel - nombre habitacion</h5>
-              <p>Descripción breve del hotel. Aquí puedes agregar más detalles sobre las comodidades y servicios.</p>
-  
-
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wifi"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-tv"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-wind"></i></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa fa-home"></i></button>
-              <button type="button" class="btn btn-primary"><i class="fa-solid fa-bath"></i></i></button>
-          </div>
-        </div>
-          
-        <hr>
-        <div class="d-flex justify-content-end align-items-center" >
-          <span class="m-2 ">Ars $ 15523285</span>
-          <button class="btn btn-warning m-2"> reservar</button>
-        </div>
-      </div>
+      
     </main>
     {% endblock %}
 

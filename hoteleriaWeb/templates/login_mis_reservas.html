@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}login mis reservas{% endblock %}
+{% block title %}Buscar mi reserva {% endblock %}
 
 {% block styles %}
   <script>
@@ -37,14 +37,14 @@
 
                     <div >
 
-                        <a href="index.html"> <button class="btn btn--warning btn--size-medium btn-medium-large" >volver</button> </a>
-                        <a href="ver_mis_reservas.html"> <button class="btn btn--warning btn--size-medium btn-medium-large" >Verificar reserva</button> </a>
+                        <a href="{{ url_for('index') }}"> <button class="btn btn--warning btn--size-medium btn-medium-large" >Volver</button> </a>
+                        <a href="{{ url_for('informacion_reserva') }}"> <button class="btn btn--warning btn--size-medium btn-medium-large" >Verificar reserva</button> </a>
                     </div>
                     
                   </div>
 
                   <div class="card__image">
-                    <img src="../static/assets/garden-area.jpg" alt="Estancias del Sol">
+                    <img src="{{ url_for('static', filename = 'assets/garden-area.jpg')}}" alt="Estancias del Sol">
                   </div>
                 </article>
               </section>

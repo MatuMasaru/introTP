@@ -34,8 +34,8 @@
         <div class="toolbar flex-container">
           <nav class="menu flex-container">
             <a href="{{ url_for('index') }}">Inicio</a>
-            <a href="{{ url_for('mi_reserva') }}">mi reserva</a>
-            <a href="{{ url_for('hoteles') }}">Hoteles</a>
+            <a href="{{ url_for('mi_reserva') }}">Mi reserva</a>
+            <a href="{{ url_for('hoteles', id_hotel = 0) }}">Hoteles</a>
           </nav>
           <div class="theme-switch">
             <input type="checkbox" class="theme-switch__checkbox" id="checkbox" />
@@ -65,13 +65,13 @@
 
     {% block body %}{% endblock %}
   
-    <footer class="footer">
+    <!-- <footer class="footer">
       <small>Sitio diseñado por flaskn't</small>
-    </footer>
+    </footer> -->
   </body>
   
   {% block scripts %}{% endblock %}
-  <script src="../static/js/select-dropdown.js"></script>
-  <script src="{{ url_for('static', filename='js/theme-switch.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+  <script src="{{ url_for('static', filename ='js/select-dropdown.js')}}"></script>
+  <script src="{{ url_for('static', filename = 'js/theme-switch.js') }}"></script>
+  <script src="{{ url_for('static', filename = 'js/menu.js') }}"></script>
 </html>
