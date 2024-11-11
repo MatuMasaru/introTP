@@ -31,6 +31,15 @@ def index():
     return render_template("index.html", hotels=hotels)
 
 
+@app.route("/mi_reserva")
+def mi_reserva():
+    return render_template('ver_mis_reservas.html')
+
+
+@app.route("/hoteles")
+def hoteles():
+    return render_template('info_hotel.html')
+
 @app.errorhandler(404)
 def page_notfound(e):
     return render_template("404.html"), 404
