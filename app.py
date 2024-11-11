@@ -7,9 +7,12 @@ app = Flask(__name__)
 def obtener_todos_los_hoteles():
     try:
         resultado = hoteles.todos_los_hoteles()
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+    json_hoteles = [dict(fila) for fila in resultado]
+    return jsonify(json_hoteles), 200
 
 @app.route('/api/hoteles/<int:id>', methods=['GET'])
 def obtener_hotel_por_id(id):
@@ -20,6 +23,9 @@ def obtener_hotel_por_id(id):
         
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
+    
+    json_hotel = dict(resultado)
+    return jsonify(json_hotel), 200
 
 @app.route('/api/servicios/', methods=['GET'])
 def obtener_todos_los_servicios():
@@ -28,6 +34,8 @@ def obtener_todos_los_servicios():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+    json_servicios = [dict(fila) for fila in resultado]
+    return jsonify(json_servicios), 200
 
 @app.route('/api/servicios/<int:id>', methods=['GET'])
 def obtener_servicio_por_id(id):
@@ -39,6 +47,9 @@ def obtener_servicio_por_id(id):
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
     
+    json_servicio = dict(resultado)
+    return jsonify(json_servicio), 200
+    
 @app.route('/api/habitaciones/<int:id_hotel>', methods=['GET'])
 def obtener_habitaciones_por_id_hotel(id_hotel):
     try:
@@ -47,6 +58,9 @@ def obtener_habitaciones_por_id_hotel(id_hotel):
             return jsonify({'Error': 'No se econtro las habitaciones.'}), 404
     except Exception as e:
         return jsonify({'Error': str(e)}),500
+    
+    json_habitaciones = [dict(fila) for fila in resultado]
+    return jsonify(json_habitaciones), 200
     
 @app.route('/api/habitaciones/<int:id>', methods=['GET'])
 def obtener_habitacion_por_id(id):
@@ -57,6 +71,9 @@ def obtener_habitacion_por_id(id):
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
     
+    json_habitacion = dict(resultado)
+    return jsonify(json_habitacion), 200
+    
 @app.route('/api/reserva/<int:id>/<cliente>/', methods=['GET'])
 def obtener_reserva_por_id_y_cliente(id, cliente):
     try:
@@ -65,6 +82,13 @@ def obtener_reserva_por_id_y_cliente(id, cliente):
             return jsonify({'Error': 'No se encontro la reserva.'}), 404
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
+    
+    if len(resultado) == 1:
+        json_reserva = dict(resultado)
+        return jsonify(json_reserva), 200
+    else:
+        json_reservas = [dict(fila) for fila in resultado]
+        return jsonify(json_reservas), 200
     
 #Hacer la solicitud POST a la API
     #respuesta = requests.post(url, json=datos)
@@ -89,6 +113,8 @@ def ingresar_reserva():
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
     
+    return jsonify({'Exito' : 'Los datos se cargaron exitosamente'}), 200
+    
 #Hacer la solicitud PUT a la API
     #respuesta = requests.put(url)
     
@@ -103,6 +129,8 @@ def actualizar_estado_reserva(id, cliente):
         
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
+    
+    return jsonify({'Exito' : f'Los datos fueron actualizados correctamente'}), 200
     
 @app.route('/api/reserva_servicios/', methods=['POST'])
 def ingresar_reserva_de_servicio():
@@ -125,6 +153,8 @@ def ingresar_reserva_de_servicio():
         
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
+    
+    return jsonify({'Exito' : 'Los datos se cargaron exitosamente'}), 200
             
 @app.route('/api/reserva_servicios/<int:id_reserva>', methods=['PUT'])
 def cancelar_reserva_servicios(id_reserva):
@@ -137,5 +167,8 @@ def cancelar_reserva_servicios(id_reserva):
     
     except Exception as e:
         return jsonify({'Error': str(e)}), 500
+    
+    return jsonify({'Aviso', 'El estado de la reserva de servicios = cancelado'})
+
 if __name__ == "__main__":
     app.run()
