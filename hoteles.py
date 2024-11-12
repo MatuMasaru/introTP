@@ -13,9 +13,9 @@ QUERY_TODOS_LOS_SERVICIOS = "SELECT id, servicio, tipo FROM servicios"
 
 QUERY_SERVICIO_POR_ID = "SELECT id, servicio, tipo FROM servicios WHERE id = :id"
 
-QUERY_SERVICIO_POR_ID_HABITACION = "SELECT s.servicio, s.tipo, sh.precio FROM servicios s JOIN servicio_habitacion sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion;"
+QUERY_SERVICIO_POR_ID_HABITACION = "SELECT s.servicio, s.tipo, sh.precio FROM servicios s JOIN habitacion_servicio sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion;"
 
-QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio FROM servicios s JOIN servicio_hotel sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel;"
+QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel;"
 
 #HABITACIONES QUERYS
 
@@ -32,7 +32,6 @@ QUERY_RESERVA_POR_ID = "SELECT id, id_habitacion, llegada, salida, cliente_apell
 #RESERVA HABITACION QUERYS --INSERT---
 
 QUERY_INGRESAR_RESERVA = "INSERT INTO reserva (id_habitacion, llegada, salida, cliente_apellido, estado, precio) VALUES (:id_habitacion, :llegada, :salida, :cliente_apellido, 'activo', :precio)"
-
 
 QUERY_DISPONIBILIDAD_HABITACION = "SELECT estado FROM reserva WHERE id_habitacion = :id_habitacion AND (llegada < :salida AND salida > :llegada) AND estado = 'activo'"
 
@@ -61,7 +60,7 @@ QUERY_RESERVA_SERVICIO_POR_ID_RESERVA = "SELECT id, id_reserva, id_servicio, est
 QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA = "UPDATE reserva_servicios SET estado = 'cancelado' WHERE id_reserva = :id_reserva"
 
 
-engine = create_engine('mysql+pymysql://wisepilo:wisepilo@localhost:3306/hoteles')
+engine = create_engine('mysql+pymysql://usuario:contraseña@localhost:3306/hoteles')
 
 
 def run_query(query, parameters=None):
@@ -84,10 +83,10 @@ def servicios_por_id(id):
     return run_query(QUERY_SERVICIO_POR_ID, {'id': id}).fetchall()
 
 def servicio_por_habitacion(id_habitacion):
-    return run_query(QUERY_SERVICIO_POR_ID_HABITACION, {'id_habitacion': id_habitacion})
+    return run_query(QUERY_SERVICIO_POR_ID_HABITACION, {'id_habitacion': id_habitacion}).fetchall()
 
 def servicio_por_hotel(id_hotel):
-    return run_query(QUERY_SERVICIO_POR_ID_HABITACION, {'id_hotel': id_hotel})
+    return run_query(QUERY_SERVICIO_POR_ID_HOTEL, {'id_hotel': id_hotel}).fetchall()
 
 def habitacion_por_id_hotel(id_hotel):
     return run_query(QUERY_HABITACION_POR_ID_HOTEL, {'id_hotel': id_hotel}).fetchall()
