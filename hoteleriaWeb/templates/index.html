@@ -2,7 +2,10 @@
 
 {% block title %}Home - Hotel Estancias del Sol{% endblock %}
 
-{% block styles %}{% endblock %}
+{% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/flatpickr.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
 
 {% block header %}{% endblock %}
 
@@ -142,4 +145,5 @@
     }
     flatpickr("#dates", config);
   </script>
+  <script src="{{ url_for('static', filename ='js/select-dropdown.js')}}"></script>
 {% endblock %}
