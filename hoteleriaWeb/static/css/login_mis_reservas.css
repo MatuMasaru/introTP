@@ -1,0 +1,40 @@
+#sobre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: var(--main-width);
+  margin: 0 auto;
+  margin-top: var(--header-height);
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--space-xx-large) 0;
+}
+
+#sobre .card {
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+
+  .card__content {
+
+    button {
+      margin-top: var(--space-x-large);
+    }
+  }
+
+  .card__image {
+    img {
+      border-radius: var(--border-radius-large);
+    }
+  }
+}
+
+
+@media (min-width: 768px) {
+  #sobre {
+    .card {
+      display: grid;
+      grid-template: 1fr / 1fr 1fr;
+      align-items: center;
+    }
+  }
+}

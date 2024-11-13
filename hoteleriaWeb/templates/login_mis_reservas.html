@@ -3,14 +3,7 @@
 {% block title %}Buscar mi reserva {% endblock %}
 
 {% block styles %}
-  <script>
-    function cancelarReserva(reservaId) {
-        const confirmacion = confirm("¿Estás seguro de que deseas cancelar esta reserva?");
-        if (confirmacion) {
-            alert("Reserva " + reservaId + " cancelada.");
-        }
-    }
-  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login_mis_reservas.css') }}">
 {% endblock %}
 
 {% block header %}{% endblock %}
@@ -50,4 +43,13 @@
               </section>
 {% endblock %}
 
-{% block scripts %}{% endblock %}
+{% block scripts %}
+  <script>
+    function cancelarReserva(reservaId) {
+        const confirmacion = confirm("¿Estás seguro de que deseas cancelar esta reserva?");
+        if (confirmacion) {
+            alert("Reserva " + reservaId + " cancelada.");
+        }
+    }
+  </script>
+{% endblock %}
