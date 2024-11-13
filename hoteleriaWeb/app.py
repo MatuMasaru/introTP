@@ -114,7 +114,9 @@ def reservar(id_room):
 
 @app.errorhandler(404)
 def page_notfound(e):
-    return render_template("404.html"), 404
+    return render_template(
+        "error.html", error_code=404, error_description="La página que buscas no existe"
+    ), 404
 
 
 if __name__ == "__main__":
