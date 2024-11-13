@@ -326,7 +326,7 @@ body {
 
 .btn--warning {
   background-color: var(--md-sys-color-error);
-  color: var( --md-sys-color-secondary-container);
+  color: var(--md-sys-color-secondary-container);
 
   &:hover {
     opacity: 0.8;
@@ -353,6 +353,10 @@ body {
 .btn--size-icon {
   height: 2.5rem;
   width: 2.5rem;
+}
+
+.btn-medium-large {
+  width: 49%;
 }
 
 .custom-select {

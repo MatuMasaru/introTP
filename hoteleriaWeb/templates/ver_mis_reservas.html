@@ -3,6 +3,8 @@
 {% block title %} mis reservas{% endblock %}
 
 {% block styles %}
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+
     <script>
         function cancelarReserva(reservaId) {
             const confirmacion = confirm("¿Estás seguro de que deseas cancelar esta reserva?");

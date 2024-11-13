@@ -7,8 +7,6 @@
     <meta name="description" content="{{ description }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/token.css') }}">
-    <link rel="stylesheet" href="../static/css/style.css">
-    <link rel="stylesheet" href="../static/css/flatpickr.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
 
     {% block styles %}{% endblock %}
@@ -65,13 +63,12 @@
 
     {% block body %}{% endblock %}
   
-    <!-- <footer class="footer">
+    <footer class="footer">
       <small>Sitio diseñado por flaskn't</small>
-    </footer> -->
+    </footer>
   </body>
   
   {% block scripts %}{% endblock %}
-  <script src="{{ url_for('static', filename ='js/select-dropdown.js')}}"></script>
   <script src="{{ url_for('static', filename = 'js/theme-switch.js') }}"></script>
   <script src="{{ url_for('static', filename = 'js/menu.js') }}"></script>
 </html>
