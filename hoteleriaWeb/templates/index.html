@@ -89,15 +89,15 @@
           {% for hotel in hotels %}
             <article class="card">
               <div class="card__image">
-                <img src="{{ hotel['image_url'] }}" alt="Hotel en {{ hotel['name'] }}">
+                <img src="{{ hotel['url_img'] }}" alt="Hotel en {{ hotel['region'] }}">
               </div>
               <div class="card__content">
                 <aside class="card__header">
-                  <h3 class="card__title">{{ hotel['name'] }}</h3>
+                  <h3 class="card__title">{{ hotel['region'] }}</h3>
                 </aside>
                 <aside class="card__description">
                   <p>
-                    {{ hotel['description'] }}
+                    {{ hotel['descripcion'] }}
                   </p>
                 </aside>
                 <a href="{{ url_for('hoteles', id_hotel = hotel['id']) }}" class="btn btn--primary btn--size-medium">Más información</a>
