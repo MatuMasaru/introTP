@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 import requests
 
 app = Flask(__name__)
@@ -107,9 +107,18 @@ def habitaciones():
     return render_template("habitaciones.html", rooms=rooms, hotels=hotels)
 
 
-@app.route("/reservar/<id_room>")
-def reservar(id_room):
-    return render_template("reservas.html")
+@app.route("/reservar", methods=["GET", "POST"])
+def reservar():
+    if request.method == "POST":
+        nombre = request.form.get ("fnombre")
+        apellido = request.form.get ("fapellido")
+        correo = request.form.get ("fcorreo")
+        telefono = request.form.get ("ftelefono")
+
+        usuario = [nombre, apellido, correo, telefono]
+        return render_template('detalle.html', usr=usuario)
+
+    return render_template('reservas.html')
 
 
 @app.errorhandler(404)

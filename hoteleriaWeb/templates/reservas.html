@@ -12,28 +12,28 @@
             <td>  
               <h1 class="title">RESERVAR HABITACION</h1>
               
-              <form action ="./detalle.html" method="post" >
-                <label class="subtile" for="fnombre">NOMBRE DEL USUARIO :</label>
+              <form action ="{{url_for('reservar')}}" method="post" >
+                <label class="subtile" for="nombre">NOMBRE DEL USUARIO :</label>
                 <br></br>
-                <input class="cuadro" type="text" id="fnombre" name="nombre" required>
+                <input class="cuadro" type="text" id="nombre" name="fnombre" required>
                 <br></br>
         
                         
-                <label class="subtile" for="fapellido">APELLIDO DEL USUARIO :</label>
+                <label class="subtile" for="apellido">APELLIDO DEL USUARIO :</label>
                 <br></br>
-                <input class="cuadro" type="text" id="fapellido" name="apellido" required>
+                <input class="cuadro" type="text" id="apellido" name="fapellido" required>
                 <br></br>
               
                
-                <label class="subtile" for="fcorreo">CORREO DEL USUARIO:</label>
+                <label class="subtile" for="correo">CORREO DEL USUARIO:</label>
                 <br></br>
-                <input class="cuadro" type="text" id="fcorreo" name="correo" required>
+                <input class="cuadro" type="text" id="correo" name="fcorreo" required>
                 <br></br>
         
                 
-                <label class="subtile" for="ftelefono">NUMERO DE CONTACTO:</label>
+                <label class="subtile" for="telefono">NUMERO DE CONTACTO:</label>
                 <br></br>
-                <input class="cuadro" type="text" id="ftelefono" name="telefono">
+                <input class="cuadro" type="text" id="telefono" name="ftelefono">
                 <br></br>
         
                 <button id="boton-reservar" type="submit">reservar</button>

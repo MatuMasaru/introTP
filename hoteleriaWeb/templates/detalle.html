@@ -18,7 +18,7 @@
                 <ol class="subfondo-detalle">
                  <li>codigo de reserva: [40437]</li>
                  <li>numero de habitacion: [2A]</li>
-                 <li>registrado a nombre de:[ART SAN]</li>
+                 <li>registrado a nombre de: {{ usr[0] }}</li>
                  <li>fecha de llegada:[12-12-24]</li>
                  <li>fecha de salida:[14-12-24]</li>                
                 </ol>
@@ -32,7 +32,8 @@
                </ol>
               <br></br> 
 
-              <a href="./reservas.html">volver</a>
+        correo = request.form.get ("fcorreo")
+              <a href="{{ url_for('informacion_reserva') }}">Mis reservas</a>
                  
             
              </td>
