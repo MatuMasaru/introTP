@@ -15,7 +15,13 @@ def index():
     except requests.exceptions.RequestException as e:
         hotels = []
 
-    return render_template("index.html", hotels=hotels)
+    regions = []
+    for hotel in hotels:
+        region = hotel["region"]
+        if region not in regions:
+            regions.append(region)
+
+    return render_template("index.html", hotels=hotels, regions=regions)
 
 
 @app.route("/mi_reserva")
@@ -73,8 +79,8 @@ def hoteles(id_hotel):
 def habitaciones():
     try:
         if request.method == "POST":
-            region = request.form.get("region")
-            tipo = request.form.get("tipo")
+            region = "" if request.form.get("region") is None else request.form.get("region")
+            tipo = "" if request.form.get("tipo") is None else request.form.get("tipo")
             if region == "" and tipo == "":
                 response  = requests.get(API_URL + "/habitaciones")
                 response.raise_for_status()
