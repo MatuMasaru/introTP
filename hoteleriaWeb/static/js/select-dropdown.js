@@ -28,3 +28,10 @@ optionsList.forEach((option) => {
   option.addEventListener("click", handler);
 });
 
+document.addEventListener("click", (e) => {
+  if (!customSelect.contains(e.target) && !selectBtn.contains(e.target)) {
+    customSelect.classList.remove("active");
+    selectBtn.setAttribute("aria-expanded", "false");
+  }
+});
+
