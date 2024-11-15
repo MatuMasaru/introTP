@@ -89,20 +89,20 @@ INSERT INTO habitaciones
     (id_hotel, numero, tipo, precio, url_img)
 VALUES
     -- Hotel 1
-    (1, 101, 'Suite', 150, 'static/img/habitacion_por_hotel/hotel1_suit.jpeg'),
-    (1, 102, 'Doble', 100, 'static/img/habitacion_por_hotel/hotel1_doble.jpeg'),
-    (1, 103, 'Individual', 75, 'static/img/habitacion_por_hotel/hotel1_individual.jpeg'),
-    (1, 104, 'Familiar', 120, 'static/img/habitacion_por_hotel/hotel1_familiar.jpeg'),
+    (1, 101, 'Suite', 150, '/static/assets/habitacion_por_hotel/hotel1_suit.jpeg'),
+    (1, 102, 'Doble', 100, '/static/assets/habitacion_por_hotel/hotel1_doble.jpg'),
+    (1, 103, 'Individual', 75, '/static/assets/habitacion_por_hotel/hotel1_individual.jpg'),
+    (1, 104, 'Familiar', 120, '/static/assets/habitacion_por_hotel/hotel1_familiar.jpeg'),
     -- Hotel 2
-    (2, 201, 'Suite', 120, 'static/img/habitacion_por_hotel/hotel2_suit.jpeg'),
-    (2, 202, 'Doble', 85, 'static/img/habitacion_por_hotel/hotel2_doble.jpeg'),
-    (2, 203, 'Familiar', 100, 'static/img/habitacion_por_hotel/hotel2_familiar.jpeg'),
-    (2, 204, 'Individual', 75, 'static/img/habitacion_por_hotel/hotel2_individual.jpeg'),
+    (2, 201, 'Suite', 120, '/static/assets/habitacion_por_hotel/hotel2_suit.jpg'),
+    (2, 202, 'Doble', 85, '/static/assets/habitacion_por_hotel/hotel2_doble.jpg'),
+    (2, 203, 'Familiar', 100, '/static/assets/habitacion_por_hotel/hotel2_familiar.jpg'),
+    (2, 204, 'Individual', 75, '/static/assets/habitacion_por_hotel/hotel2_individual.jpg'),
     -- Hotel 3
-    (3, 301, 'Suite', 200, 'static/img/habitacion_por_hotel/hotel3_suit.jpeg'),
-    (3, 302, 'Individual', 90, 'static/img/habitacion_por_hotel/hotel3_individual.jpeg'),
-    (3, 303, 'Doble', 120, 'static/img/habitacion_por_hotel/hotel3_doble.jpeg'),
-    (3, 304, 'Familiar', 150, 'static/img/habitacion_por_hotel/hotel3_familiar.jpeg');
+    (3, 301, 'Suite', 200, '/static/assets/habitacion_por_hotel/hotel3_suit.jpg'),
+    (3, 302, 'Individual', 90, '/static/assets/habitacion_por_hotel/hotel3_individual.jpeg'),
+    (3, 303, 'Doble', 120, '/static/assets/habitacion_por_hotel/hotel3_doble.jpg'),
+    (3, 304, 'Familiar', 150, '/static/assets/habitacion_por_hotel/hotel3_familiar.jpeg');
 
 INSERT INTO servicios
     (servicio, tipo) 
