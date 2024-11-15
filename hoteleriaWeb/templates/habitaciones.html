@@ -13,25 +13,36 @@
 {% block body %}
     <main class="container_error">
       <div class="container-filter ">
-        <div  class="filter">
-          <input class="form-control" type="text" placeholder="ubicacion" aria-label="default input example">
-          <input class="form-control " type="date" placeholder="fecha salida" aria-label="default input example">
-          <input class="form-control " type="date" placeholder="fecha llegada" aria-label="default input example">
-          <input class="form-control " type="text" placeholder="cantidad personas" aria-label="default input example">
-          <button class="btn btn-warning"> Buscar</button>
-        </div>
+        <form  class="filter" action="{{url_for('habitaciones')}}", method="POST">
+          <select class="form-control"name="region" aria-label="default input example">
+            <option value="">Region</option>
+            <option value="buenos aires">Buenos Aires</option>
+            <option value="mar del plata">Mar del Plata</option>
+            <option value="bariloche">Bariloche</option>
+          </select>
+          <input class="form-control " type="date" aria-label="default input example">
+          <input class="form-control " type="date" aria-label="default input example">
+          <select class="form-control" name="tipo" aria-label="default input example">
+            <option value="">Tipo</option>
+            <option value="suite">Suite</option>
+            <option value="familiar">Familiar</option>
+            <option value="doble">Doble</option>
+            <option value="individual">Individual</option>
+          </select>
+          <button type="submit" class="btn btn-warning">Buscar</button>
+        </form>
       </div>
       {% for room in rooms %}
         <div class="container mt-3 mb-3 p-0">
           <div class="  pb-0 pe-lg-0  align-items-center rounded-3 border shadow-lg">  
           <div class="row">
             <div class="image-container col-3">
-              <img class="imagen-habitaciones" src="{{ hotels[room['id_hotel']]['image_url'] }}" alt="">
+              <img class="imagen-habitaciones" src="{{room['url_img']}}">
             </div>
             <div class="col-9">
-              <h5 class="card__title mt-1"> -Habitacion {{ room['number'] }}</h5>
-                <p>{{ hotels[room['id_hotel']]['description'] }}</p>
-
+              <h3 class="card__title mt-1"> {{room['nombre']}}</h3>
+              <h5 class="card__title mt-1">Habitacion {{ room['numero']}}</h5>
+              <h5 class="card__title mt-1">Tipo: {{room['tipo']}}</h5>
                 <button type="button" class="btn btn-primary"><i class="fa-solid fa-wifi"></i></button>
                 <button type="button" class="btn btn-primary"><i class="fa-solid fa-tv"></i></button>
                 <button type="button" class="btn btn-primary"><i class="fa-solid fa-wind"></i></i></button>
@@ -39,16 +50,13 @@
                 <button type="button" class="btn btn-primary"><i class="fa-solid fa-bath"></i></i></button>
             </div>
           </div>
-            
           <hr>
           <div class="d-flex justify-content-end align-items-center" >
-            <span class="m-2 ">Ars $ {{ room['price'] }}</span>
-            <button class="btn btn-warning m-2" > <a href="{{url_for('reservar', id_room = room['id_room'])}}">Reservar</a> </button>
+            <span class="m-2 ">USD $ {{ room['precio']}}</span>
+            <button class="btn btn-warning m-2" > <a href="#">Reservar</a> </button>
           </div>
         </div>
       {% endfor %}
-
-      
     </main>
     {% endblock %}
 
