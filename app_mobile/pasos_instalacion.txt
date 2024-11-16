@@ -1,0 +1,19 @@
+1.- crea un ambiente virtuaal
+   01 pip3 install virtualenv
+   02 virtualenv kivy_venv
+   03 sourse kivy_venv/bin/activate
+
+2.-instalar dentro del entorno virtual
+   01 pip install kivy
+   02 pip install kivymd
+        a.-este comando te instalara una version de kivymd que no funciona
+        b.-al momento de ejecutar la app.py no funcionara y saldra una
+          advertencia
+        [warning] pip install http//githup---------------------
+        c.-copias el comando y ejecutas
+        d.-te instalara la version  kivymd==2.0.1.dev0
+
+3.- Convertirlo a una aplicación androit (o paso para que la aplicación móvil funcione en un celular).
+(Por ahora no es necesario hasta que se quede conforme con la 
+App.py y el archivo.kv con todos sus funcionamientos).
+Se usará buildozer.
