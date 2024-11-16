@@ -1,6 +1,0 @@
-# Python environment
-.venv
-venv
-
-# Python byte-compiled
-__pycache__
