@@ -1,0 +1,126 @@
+ScreenManager:
+    MainScreen:
+        name: 'main'
+    DetailsScreen:
+        name: 'details'
+    CancelScreen:
+        name: 'cancel'
+        
+<MainScreen>:
+    MDLabel:
+        text: "ESTANCIAS DEL SOL"
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}
+        font_style: "Title"
+    MDLabel:
+        text: "Obtenga los detalles de su Reserva:"
+        text_color: 1, 0.65, 0, 1
+        pos_hint: {'center_y': 0.8}  
+        halign: 'center'
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: reservation_code_input
+        size_hint_x: .6
+        pos_hint: {'center_x': 0.5,'center_y': 0.7}
+        MDTextFieldHintText:
+            text: "codigo de reserva"
+        MDTextFieldHelperText:
+            text: "complete con su ID de reserva pora continuar"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1 
+                     
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.5}
+        on_release:
+            app.root.current = 'details'
+            root.manager.get_screen('details').get_reservation_details(reservation_code_input.text)         
+        MDButtonText:
+            text: "consultar"
+    MDLabel:
+        text: "Para cancelar la reserva pulse aqui: :"
+        text_color: 1, 0.65, 0, 1
+        pos_hint: {'center_y': 0.4}
+        halign: 'center'  
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.3}
+        on_release:
+            app.root.current = 'cancel'       
+        MDButtonText:
+            text: "cancelar reserva"
+
+<DetailsScreen>:
+    MDLabel:
+        text: "Detalles de tu reserva"
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}
+        font_style: "Title"     
+    MDLabel:
+        id: details_label
+        text: "Detalles:"
+        halign: 'center'
+        themtext_color: "Custom"
+        text_color: 1, 0.65, 0, 1
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.3}
+        on_release:
+            app.root.current = 'main'
+        MDButtonText:
+            text: "volver"
+
+<CancelScreen>:   
+    MDLabel:
+        text: "CANCELAR RESERVA"      
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}       
+        font_style: "Title"      
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: cancel_code_input
+        size_hint_x: .8
+        pos_hint: {'center_x': 0.5,'center_y': 0.7}       
+        MDTextFieldHintText:
+            text: "codigo de reserva"
+        MDTextFieldHelperText:
+            text: "coloque su id de reserva por favor"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: cancel_name_input
+        size_hint_x: .8
+        pos_hint: {'center_x': 0.5,'center_y': 0.5}
+        MDTextFieldHintText:
+            text: "nombre"
+        MDTextFieldHelperText:
+            text: "coloque su nombre de usuario por favor"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.3}
+        on_release:
+            app.root.current = 'cancel'
+            root.manager.get_screen('cancel').cancel_reservation(cancel_code_input.text, cancel_name_input.text)    
+        MDButtonText:
+            text: "cancelar reserva"                
+    MDLabel:
+        id: cancel_label
+        text: ""
+        pos_hint: {'center_x': 0.5,'center_y': 0.2} 
+        text_color: 1, 0, 0, 1  
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.1}
+        on_release:
+            app.root.current = 'main'
+        MDButtonText:
+            text: "volver"  
