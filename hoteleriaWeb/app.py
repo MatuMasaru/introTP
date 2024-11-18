@@ -109,14 +109,16 @@ def habitaciones():
 
 @app.route("/reservar/<id_room>")
 def reservar(id_room):
-    return render_template("reservas.html")
+    rooms = {
+        "0": {"id_hotel": 0, "number": 150, "persons": 4, "price": 40000},
+        "1": {"id_hotel": 2, "number": 300, "persons": 4, "price": 40000},
+    }
+    return render_template("reservas.html", room = rooms[id_room], id_room=id_room)
 
 
 @app.errorhandler(404)
 def page_notfound(e):
-    return render_template(
-        "error.html", error_code=404, error_description="La página que buscas no existe"
-    ), 404
+    return render_template("404.html"), 404
 
 
 if __name__ == "__main__":
