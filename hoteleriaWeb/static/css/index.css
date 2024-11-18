@@ -16,6 +16,13 @@
   background-color: rgb(0 0 0 / 0.5);
 }
 
+.hero-image-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .booking {
   width: 85%;
   display: grid;

@@ -11,6 +11,16 @@ body {
   width: 100vw;
 }
 
+h2 {
+  font-size: var(--font-size-x-large);
+  font-weight: var(--font-weight-semibold);
+}
+
+h5 {
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-medium);
+}
+
 .header {
   position: fixed;
   left: 0;
