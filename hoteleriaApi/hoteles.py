@@ -23,6 +23,25 @@ QUERY_HABITACION_POR_ID = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h
 
 QUERY_HABITACION_POR_TIPO = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id WHERE tipo = :tipo"
 
+QUERY_OBTENER_HABITACIONES_DISPONIBLES = """
+SELECT
+    h.id AS habitacion_id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre
+FROM
+    habitaciones h
+JOIN
+    hotel ho ON h.id_hotel = ho.id
+LEFT JOIN
+    reserva r ON h.id = r.id_habitacion AND r.estado != 'cancelado'
+    AND (
+        (:llegada BETWEEN r.llegada AND r.salida)
+        OR (:salida BETWEEN r.llegada AND r.salida)
+    )
+WHERE
+    (ho.region = :region OR :region IS NULL OR :region = '')
+    AND (h.tipo = :tipo OR :tipo IS NULL OR :tipo = '')
+    AND r.id IS NULL;
+"""
+
 # QUERY PARA FILTRAR HABITACIONES POR REGION Y TIPO
 
 QUERY_HABITACION_REGION_TIPO = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id WHERE tipo = :tipo AND ho.region = :region"
@@ -102,6 +121,9 @@ def habitacion_por_tipo(tipo):
 
 def comprobar_disponibilidad_habitacion(id_habitacion, salida, llegada):
     return run_query(QUERY_DISPONIBILIDAD_HABITACION,{"id_habitacion": id_habitacion, "salida": salida, "llegada": llegada},).fetchall()
+
+def obtener_habitaciones_disponibles(region, salida, llegada, tipo):
+    return run_query(QUERY_OBTENER_HABITACIONES_DISPONIBLES, {"region": region, "salida": salida, "llegada": llegada, "tipo": tipo}).fetchall()
 
 #----FILTRO HABITACION POR REGION Y TIPO
 
