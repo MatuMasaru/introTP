@@ -101,6 +101,26 @@ def obtener_habitaciones_por_id_hotel(id_hotel):
     respuesta = crear_respuesta_habitaciones(resultado)
     return jsonify(respuesta), 200
 
+@app.route("/api/habitaciones/disponibles", methods=["GET"])
+def obtener_habitaciones_disponibles():
+    region = request.args.get("region")
+    llegada = request.args.get("llegada")
+    salida = request.args.get("salida")
+    tipo = request.args.get("tipo")
+    
+    if llegada is None or salida is None:
+        return jsonify({"Error": "Faltan datos"}), 400
+
+    try:
+        resultado = hoteles.obtener_habitaciones_disponibles(region, llegada, salida, tipo)
+        if len(resultado) == 0:
+            return jsonify({"Error": "No hay habitaciones disponibles"}), 404
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
+    
+
+    respuesta = crear_respuesta_habitaciones(resultado)
+    return jsonify(respuesta), 200
 
 @app.route("/api/habitacion/<int:id>", methods=["GET"])
 def obtener_habitacion_por_id(id):
