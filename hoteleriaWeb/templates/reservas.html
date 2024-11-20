@@ -10,46 +10,49 @@
 
 
 {% block body %}
-<div class="container">
-  <h2>Información del Huésped</h2>
-  <form action="/submit" method="post">
-      <!-- Nombre -->
-      <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
-      
-      <!-- Apellido -->
-      <label for="apellido">Apellido:</label>
-      <input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido" required>
-      
-      <!-- Correo Electrónico -->
-      <label for="email">Correo Electrónico:</label>
-      <input type="email" id="email" name="email" placeholder="Ingrese su correo electrónico" required>
-      
-      <!-- Teléfono -->
-      <label for="telefono">Teléfono:</label>
-      <input type="tel" id="telefono" name="telefono" placeholder="Ingrese su número de teléfono" required>
-      
-      <!-- Fecha de Entrada -->
-      <label for="fecha_entrada">Fecha de Entrada:</label>
-      <input type="date" id="fecha_entrada" name="fecha_entrada" required>
-      
-      <!-- Fecha de Salida -->
-      <label for="fecha_salida">Fecha de Salida:</label>
-      <input type="date" id="fecha_salida" name="fecha_salida" required>
-      
-      <!-- Número de Huéspedes -->
-      <label for="num_huespedes">Número de Huéspedes:</label>
-      <select id="num_huespedes" name="num_huespedes" required>
-          <option value="">Seleccione...</option>
-          <option value="1">1 Huésped</option>
-          <option value="2">2 Huéspedes</option>
-          <option value="3">3 Huéspedes</option>
-          <option value="4">4 Huéspedes</option>
-          <option value="5+">5 o más</option>
-      </select>
-      
-      <!-- Botón de Enviar -->
-      <button type="submit">Reservar Ahora</button>
-  </form>
-</div>     
+<div class="contenedor-primario">
+  <div class="container">
+    <h2>Información del Huésped</h2>
+    <form action="/submit" method="post">
+        
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+        
+        
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido" required>
+        
+        
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" placeholder="Ingrese su correo electrónico" required>
+        
+        
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" placeholder="Ingrese su número de teléfono" required>
+        
+        
+        <label for="fecha_entrada">Fecha de Entrada:</label>
+        <input type="date" id="fecha_entrada" name="fecha_entrada" required>
+        
+        
+        <label for="fecha_salida">Fecha de Salida:</label>
+        <input type="date" id="fecha_salida" name="fecha_salida" required>
+        
+        <button type="submit">Reservar Ahora</button>
+    </form>
+  </div>
+  
+  <div class="container">
+    <h2>Clasica, Habitacion, 1 king, acceso a la piscina</h2>
+    <img src="{{url_for('static', filename = 'assets/hab.jpeg')}}"
+  <h3>Fechas de estancia</h3>
+  <p>martes. 19 nov 2024-miercoles. 20 nov 2024</p>
+  <p>Tipo: {{ room['tipo'] }}</p>
+  <p>Precio: USD ${{ room['precio'] }}</p>
+  </div>
+  
+</div>
+
+
+
 {% endblock %}
