@@ -3,6 +3,8 @@ from sqlalchemy.exc import SQLAlchemyError
 from dotenv import load_dotenv
 import os
 
+load_dotenv()
+
 # HOTELES QUERYS
 
 QUERY_TODOS_LOS_HOTELES = "SELECT id, nombre, direccion, descripcion, url_img, region FROM hotel"
