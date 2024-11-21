@@ -168,10 +168,7 @@ def obtener_habitacion_por_region_tipo(tipo, region):
 def crear_respuesta_servicios(resultado):
     respuesta = []
     for fila in resultado:
-        if "id" in resultado:
-            respuesta.append({"id": fila[0], "servicio": fila[1], "tipo": fila[2]})
-        else:
-            respuesta.append({"servicio": fila[0], "tipo": fila[1], "precio": fila[2]})
+        respuesta.append({"servicio": fila[0], "tipo": fila[1], "precio": fila[2]})
     return respuesta
 
 @app.route("/api/servicios/", methods=["GET"])
@@ -180,8 +177,11 @@ def obtener_todos_los_servicios():
         resultado = hoteles.todos_los_servicios()
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    respuesta = crear_respuesta_servicios(resultado)
+    respuesta = []
+    for fila in resultado:
+	    respuesta.append({"id": fila[0], "servicio": fila[1], "tipo": fila[2]})
     return jsonify(respuesta), 200
+
 
 @app.route("/api/servicios/<int:id>", methods=["GET"])
 def obtener_servicio_por_id(id):
@@ -191,8 +191,9 @@ def obtener_servicio_por_id(id):
             return jsonify({"Error": "El id es inexistente"}), 404
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
-    
-    respuesta = crear_respuesta_servicios(resultado)
+    respuesta = []
+    for fila in resultado:
+	    respuesta.append({"id": fila[0], "servicio": fila[1], "tipo": fila[2]})
     return jsonify(respuesta), 200
 
 @app.route("/api/servicios/hotel/<int:id_hotel>", methods=["GET"])
