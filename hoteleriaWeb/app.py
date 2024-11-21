@@ -34,45 +34,42 @@ def informacion_reserva():
     return render_template("ver_mis_reservas.html")
 
 
+@app.route("/hoteles")
 @app.route("/hoteles/<id_hotel>")
 def hoteles(id_hotel):
     id_hotel = int(id_hotel)
-    hotels = [
-        {
-            "id": 1,
-            "image_url": "static/assets/hotel-buenos-aire.jpg",
-            "name": "Buenos Aires",
-            "ubication": "Avenida de Mayo 123",
-            "description": "Ubicado en el corazón de la vibrante capital, nuestro hotel ofrece un oasis de tranquilidad en medio del bullicio urbano. Ideal para viajeros de negocios y turistas por igual.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Spa", "Sauna", "Mesas de Pool", "Piscina"],
-        },
-        {
-            "id": 2,
-            "image_url": "static/assets/hotel-mar-del-plata.jpg",
-            "name": "Mar del Plata",
-            "ubication": "Av. de Los Trabajadores 3100",
-            "description": "Perfecto para quienes buscan la combinación ideal de playa y ciudad. Disfrute del sol, la arena y las actividades culturales que esta hermosa ciudad costera tiene para ofrecer.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Spa", "Piscina"],
-        },
-        {
-            "id": 3,
-            "image_url": "static/assets/hotel-bariloche.jpg",
-            "name": "Bariloche",
-            "ubication": "Cerro Catedral 1450",
-            "description": "Situado en el pintoresco escenario de la Patagonia, este hotel es ideal para los amantes de la naturaleza y los deportes de invierno. Disfrute de vistas impresionantes, actividades al aire libre y la hospitalidad cálida de siempre.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Sauna", "Mesas de Pool", "Piscina"],
-        },
-    ]
+    try:
+            #------------------INFORMACION DE TODOS LOS HOTELES------------------
+            if id_hotel == 0:
 
-    if id_hotel == 0:
-        return render_template("info_hotel.html", params=hotels)
+                response_todos_los_hoteles = requests.get(API_URL + "/hoteles")
+                response_todos_los_hoteles.raise_for_status()
+                hoteles = response_todos_los_hoteles.json()
+
+                response_todos_los_servicios = requests.get(API_URL + "/servicios")
+                response_todos_los_servicios.raise_for_status()
+                servicios = response_todos_los_servicios.json()
+
+            else:
+            #----------------------INFORMACION DE UN SOLO HOTEL----------------------
+                response_hotel = requests.get(API_URL + f"/hoteles/{id_hotel}")
+                response_hotel.raise_for_status()
+                hoteles = response_hotel.json()
+                
+                response_servicio_hotel = requests.get(API_URL + f"/servicios/hotel/{id_hotel}")
+                response_servicio_hotel.raise_for_status()
+                servicios = response_servicio_hotel.json()
+
+    except requests.exceptions.RequestException as e:
+        params = []
+        servicios = []
+    
     params = []
-    params.append(hotels[id_hotel])
-
-    return render_template("info_hotel.html", params=params)
+    for hotel in hoteles:
+            if hotel not in params:
+                params.append(hotel)
+                
+    return render_template("info_hotel.html", params = params, servicios = servicios)
 
 
 @app.route("/habitaciones", methods=["GET", "POST"])
