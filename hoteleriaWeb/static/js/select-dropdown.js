@@ -1,37 +1,39 @@
-const customSelect = document.querySelector(".custom-select");
-const selectBtn = document.querySelector(".select-button");
+document.querySelectorAll(".custom-select").forEach(customSelect => {
+  const selectBtn = customSelect.querySelector(".select-button");
+  const selectedValue = customSelect.querySelector(".selected-value");
+  const optionsList = customSelect.querySelectorAll(".select-dropdown li");
 
-const selectedValue = document.querySelector(".selected-value");
-const optionsList = document.querySelectorAll(".select-dropdown li");
+  selectBtn.addEventListener("click", () => {
+    customSelect.classList.toggle("active");
+    selectBtn.setAttribute(
+      "aria-expanded",
+      selectBtn.getAttribute("aria-expanded") === "true" ? "false" : "true"
+    );
+  });
 
-selectBtn.addEventListener("click", () => {
-  customSelect.classList.toggle("active");
-  selectBtn.setAttribute(
-    "aria-expanded",
-    selectBtn.getAttribute("aria-expanded") === "true" ? "false" : "true"
-  );
-});
-
-optionsList.forEach((option) => {
-  function handler(e) {
-    if (e.type === "click" && e.clientX !== 0 && e.clientY !== 0) {
-      selectedValue.textContent = this.children[1].textContent;
-      customSelect.classList.remove("active");
+  optionsList.forEach((option) => {
+    function handler(e) {
+      if (e.type === "click" && e.clientX !== 0 && e.clientY !== 0) {
+        selectedValue.textContent = this.children[1].textContent;
+        customSelect.classList.remove("active");
+      }
+      if (e.key === "Enter") {
+        selectedValue.textContent = this.textContent;
+        customSelect.classList.remove("active");
+      }
     }
-    if (e.key === "Enter") {
-      selectedValue.textContent = this.textContent;
+
+    option.addEventListener("keyup", handler);
+    option.addEventListener("click", handler);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!customSelect.contains(e.target) && !selectBtn.contains(e.target)) {
       customSelect.classList.remove("active");
+      selectBtn.setAttribute("aria-expanded", "false");
     }
-  }
-
-  option.addEventListener("keyup", handler);
-  option.addEventListener("click", handler);
+  });
 });
 
-document.addEventListener("click", (e) => {
-  if (!customSelect.contains(e.target) && !selectBtn.contains(e.target)) {
-    customSelect.classList.remove("active");
-    selectBtn.setAttribute("aria-expanded", "false");
-  }
-});
+
 

@@ -75,38 +75,66 @@ def hoteles(id_hotel):
     return render_template("info_hotel.html", params=params)
 
 
-@app.route("/habitaciones", methods=['GET','POST'])
+@app.route("/habitaciones", methods=["GET", "POST"])
 def habitaciones():
-    try:
-        if request.method == "POST":
-            region = "" if request.form.get("region") is None else request.form.get("region")
-            tipo = "" if request.form.get("tipo") is None else request.form.get("tipo")
-            if region == "" and tipo == "":
-                response  = requests.get(API_URL + "/habitaciones")
-                response.raise_for_status()
-                habitaciones = response.json()
-            elif region == "" and tipo != "":
-                response  = requests.get(API_URL + "/habitaciones/" + tipo)
-                response.raise_for_status()
-                habitaciones = response.json()
-            elif region != "" and tipo == "":
-                response  = requests.get(API_URL + "/hoteles/" + region)
-                response.raise_for_status()
-                hoteles = response.json()
-                response  = requests.get(API_URL + "/habitaciones/" + str(hoteles[0]['id']))
-                response.raise_for_status()
-                habitaciones = response.json()
-            else:
-                response = requests.get(API_URL + "/habitacion/" + tipo + "/" + region)
-                response.raise_for_status()
-                habitaciones = response.json()
-        else:
-            response  = requests.get(API_URL + "/habitaciones")
+    rooms = []
+
+    if request.method == "POST":
+        query_string = ""
+        query = []
+        if request.form.get("region") is not None:
+            query.append(f"region={request.form.get('region')}")
+
+        if request.form.get("dates") is not None:
+            dates = request.form.get("dates").split(" a ")
+            query.append(f"llegada={dates[0]}")
+            query.append(f"salida={dates[1]}")
+
+        if request.form.get("type") is not None:
+            query.append(f"tipo={request.form.get('type')}")
+
+        if len(query) > 0:
+            query_string = "?" + "&".join(query)
+
+        try:
+            response = requests.get(
+                API_URL + "/habitaciones/disponibles" + query_string
+            )
             response.raise_for_status()
-            habitaciones = response.json()
+            rooms = response.json()
+        except requests.exceptions.RequestException as e:
+            rooms = []
+
+        for room in rooms:
+            try:
+                response = requests.get(
+                    API_URL + "/servicios/habitacion/" + str(room["id"])
+                )
+                response.raise_for_status()
+                services = response.json()
+            except requests.exceptions.RequestException as e:
+                services = []
+
+            room["servicios"] = services
+
+    try:
+        response = requests.get(API_URL + "/hoteles")
+        response.raise_for_status()
+        hotels = response.json()
     except requests.exceptions.RequestException as e:
-        habitaciones = []
-    return render_template("habitaciones.html", rooms=habitaciones)
+        hotels = []
+
+    regions = []
+    for hotel in hotels:
+        region = hotel["region"]
+        if region not in regions:
+            regions.append(region)
+
+    room_types = ["suite", "familiar", "doble", "individual"]
+
+    return render_template(
+        "habitaciones.html", regions=regions, room_types=room_types, rooms=rooms
+    )
 
 
 @app.route("/reservar/<id_room>")
