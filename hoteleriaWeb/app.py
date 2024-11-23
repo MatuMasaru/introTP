@@ -85,11 +85,10 @@ def admin_add_hotel():
                     "url_img": request.form.get("furl_img"),
                     "region": request.form.get("fregion")
                 }
-            response = requests.post(API_URL + "/create_hotel")
-            response.raise_for_status()
-            hotel = response.json()    
+            response = requests.post(API_URL + "/create_hotel", json=data)
+            response.raise_for_status()    
         except requests.exceptions.RequestException as e:
-            hotel = []
+            response = []
 
     return render_template('add_hotel.html')
 

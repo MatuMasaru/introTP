@@ -13,6 +13,9 @@ QUERY_HOTEL_POR_ID = "SELECT id, nombre, direccion, descripcion, url_img, region
 
 QUERY_HOTEL_POR_REGION = "SELECT id, nombre, direccion, descripcion, url_img, region FROM hotel WHERE region = :region"
 
+#HOTELES QUERYS --INSERT---
+QUERY_INGRESAR_HOTEL = "INSERT INTO hotel (nombre, direccion, descripcion, url_img, region) VALUES (:nombre, :direccion, :descripcion, :url_img, :region)"
+
 # HABITACIONES QUERYS
 
 QUERY_TODAS_LAS_HABITACIONES = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id;"
@@ -104,6 +107,11 @@ def hoteles_por_region(region):
 
 def todos_los_servicios():
     return run_query(QUERY_TODOS_LOS_SERVICIOS).fetchall()
+
+#----POST----
+
+def insert_hotel(data):
+    run_query(QUERY_INGRESAR_HOTEL, data)
 
 #----HABITACIONES FUNCIONES
 

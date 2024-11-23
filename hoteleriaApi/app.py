@@ -60,6 +60,23 @@ def obtener_hotel_por_region(region):
     respuesta = crear_respuesta_hoteles(resultado)
     return jsonify(respuesta), 200
 
+@app.route("/api/create_hotel/", methods=["POST"])
+def create_hotel():
+    data = request.get_json()
+
+    keys = ('nombre', 'direccion', 'descripcion', 'url_img', 'region')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+    
+    try:
+        hoteles.insert_hotel(data)
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify(data), 201
+
 #---------------------------------#
 #-----------HABITACIONES----------#
 #---------------------------------#
