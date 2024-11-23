@@ -72,6 +72,17 @@ def hoteles(id_hotel):
     return render_template("info_hotel.html", params = params, servicios = servicios)
 
 
+@app.route('/admin')
+def admin():
+    try:
+        response = requests.get(API_URL + "/hoteles")
+        response.raise_for_status()
+        hotels = response.json()
+    except requests.exceptions.RequestException as e:
+        hotels = []
+    return render_template('admin.html',hotels=hotels)
+
+
 @app.route('/admin/add_hotel', methods=['GET','POST'])
 def admin_add_hotel():
     if request.method == "GET":
@@ -91,18 +102,6 @@ def admin_add_hotel():
             response = []
 
     return render_template('add_hotel.html')
-
-
-@app.route('/admin')
-def admin():
-    try:
-        response = requests.get(API_URL + "/hoteles")
-        response.raise_for_status()
-        hotels = response.json()
-    except requests.exceptions.RequestException as e:
-        hotels = []
-    return render_template('admin.html',hotels=hotels)
-
 
 
 app.route('/admin/delete_hotel/<id_hotel>',methods=['GET'])
