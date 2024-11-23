@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}añadir hotel{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+<section>
+    <h2>Agregar Hotel</h2>
+    <div class="form-container">
+        <form action="{{ url_for('admin_add_hotel') }}" method="post">
+            <div>
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="fnombre">
+            </div>
+            <div>
+                <label for="direccion">Direccion</label>
+                <input type="text" id="direccion" name="fdireccion">
+            </div>
+            <div>
+                <label for="descripcion">Descripción</label>
+                <input type="text" id="descripcion" name="fdescripcion">
+            </div>
+            <div>
+                <label for="imagen">Imagen</label>
+                <input type="text" id="url_img" name="furl_img">
+            </div>
+            <div>
+                <label for="region">Region</label>
+                <input type="text" id="region" name="fregion">
+            </div>
+            <button type="submit">Agregar</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

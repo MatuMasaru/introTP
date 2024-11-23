@@ -72,6 +72,28 @@ def hoteles(id_hotel):
     return render_template("info_hotel.html", params = params, servicios = servicios)
 
 
+@app.route('/admin/add_hotel', methods=['GET','POST'])
+def admin_add_hotel():
+    if request.method == "GET":
+        return render_template('add_hotel.html')
+    elif request.method == "POST":
+        try:
+            data = {
+                    "nombre": request.form.get("fnombre"),
+                    "direccion": request.form.get("fdireccion"),
+                    "descripcion": request.form.get("fdescripcion"),
+                    "url_img": request.form.get("furl_img"),
+                    "region": request.form.get("fregion")
+                }
+            response = requests.post(API_URL + "/create_hotel")
+            response.raise_for_status()
+            hotel = response.json()    
+        except requests.exceptions.RequestException as e:
+            hotel = []
+
+    return render_template('add_hotel.html')
+
+
 @app.route("/habitaciones", methods=["GET", "POST"])
 def habitaciones():
     rooms = []
