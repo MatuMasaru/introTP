@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 import requests
 
 app = Flask(__name__)
@@ -91,6 +91,32 @@ def admin_add_hotel():
             response = []
 
     return render_template('add_hotel.html')
+
+
+@app.route('/admin')
+def admin():
+    try:
+        response = requests.get(API_URL + "/hoteles")
+        response.raise_for_status()
+        hotels = response.json()
+    except requests.exceptions.RequestException as e:
+        hotels = []
+    return render_template('admin.html',hotels=hotels)
+
+
+
+app.route('/admin/delete_hotel/<id_hotel>',methods=['GET'])
+def admin_delete_hotel(id):
+    try:
+        hotel_data = {
+            "id": id
+        }
+        response = requests.delete(API_URL + "/delete_hotel",json=hotel_data)
+        response.raise_for_status()   
+    except requests.exceptions.RequestException as e:
+            response = []
+
+    return redirect(url_for('admin'))
 
 
 @app.route("/habitaciones", methods=["GET", "POST"])

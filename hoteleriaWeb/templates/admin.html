@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{%block title%}Panel de Administración de Hoteles{%endblock%}
+{%block head%}
+
+{%endblock%}
+{%block body%}
+<section>
+    <h1 class="title">Panel de Administración de Cabañas</h1>
+</section>
+
+<section>
+    <div>
+	{% for hotel in hotels %}
+          <div>
+            <div>
+                <img src="{{ hotel['url_img'] }}" alt="Hotel en {{ hotel['region'] }}">
+              <div>
+                <h5>{{ hotel['nombre'] }}</h5>
+                <p>{{ hotel['descripcion'] }}</p>
+                <div>
+                  <div>
+                    <button type="button" id="" data-nombre="{{ hotel['nombre'] }}" data-url="{{ url_for('admin_delete_hotel', id=hotel['id'])}}">Eliminar</button>
+                    <a href="{{ url_for('admin_update_hotel', id=hotel['id'])}}"><button type="button">Editar</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+	{% endfor %}
+    </div>
+</section>
+
+{%endblock%}
