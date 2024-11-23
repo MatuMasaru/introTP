@@ -1,32 +1,20 @@
-.hero-image {
-  background-image: url('../assets/hero-image-home.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-
-.hero-image-opacity {
-  width: 100%;
+main {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  background-color: rgb(0 0 0 / 0.5);
-}
-
-.hero-image-content {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  width: var(--main-width);
+  margin: 0 auto;
+  margin-top: var(--header-height);
+  padding: var(--space-x-large) 0;
+  gap: var(--space-x-large);
 }
 
 .booking {
-  width: 85%;
+  width: 100%;
   display: grid;
-  grid-template: 1fr 1fr 1fr / 1fr;
+  grid-template: 1fr 1fr 1fr 1fr / 1fr;
   gap: var(--space-x-large) 0;
   justify-items: stretch;
   align-items: center;
@@ -35,7 +23,8 @@
   background-color: var(--md-sys-color-surface-container-highest);
 
   .booking__select,
-  .booking__dates {
+  .booking__dates,
+  .booking__room {
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -68,12 +57,13 @@
 
 @media (min-width: 768px) {
   .booking {
-    grid-template: 1fr / 1fr 1fr 1fr;
+    grid-template: 1fr / 1fr 1fr 1fr 1fr;
     gap: 0 var(--space-x-large);
     padding: var(--space-large);
 
     .booking__select,
-    .booking__dates {
+    .booking__dates,
+    .booking__room {
       gap: var(--space-x-small);
       border-right: 1px solid var(--md-sys-color-outline-variant);
     }
@@ -173,87 +163,104 @@
   visibility: visible;
 }
 
-
-#sobre,
-#hoteles {
+#room {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: var(--main-width);
-  margin: 0 auto;
-  padding: var(--space-xx-large) 0;
+  gap: var(--space-x-large);
+  width: 100%;
 }
 
-#sobre .card {
+.room__card {
   background-color: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-on-surface);
-
-  .card__content {
-
-    button {
-      margin-top: var(--space-x-large);
-    }
-  }
-
-  .card__image {
-    img {
-      border-radius: var(--border-radius-large);
-    }
-  }
+  border-radius: var(--border-radius-large);
 }
 
-#hoteles {
-  h2 {
-    margin-bottom: var(--space-x-large);
-    color: var(--md-sys-color-on-surface);
-  }
+.room__card__image {
+  border-top-left-radius: var(--border-radius-large);
+  border-top-right-radius: var(--border-radius-large);
+  overflow: hidden;
+  height: 200px;
 
-  .hoteles__container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-x-large);
+  img {
+    object-fit: cover;
     width: 100%;
-  }
-
-  .card {
-    background-color: var(--md-sys-color-surface-container);
-    color: var(--md-sys-color-on-surface);
-    overflow: hidden;
-
-    .card__content {
-      a {
-        margin-top: var(--space-x-large);
-        align-self: center;
-      }
-    }
-
-    .card__image {
-      padding: 0;
-    }
+    height: 100%;
   }
 }
 
-@media (min-width: 640px) {
-  #hoteles .card {
-    width: 400px;
+.room__card__content,
+.room__card__footer {
+  padding: var(--space-x-large);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-medium);
+}
+
+.room__card__content {
+
+  h3,
+  p {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  h3 {
+    font-size: var(--font-size-large);
+  }
+
+  p {
+    font-size: var(--font-size-medium);
+  }
+}
+
+.room__card__services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-small);
+
+  svg {
+    padding: var(--space-x-small);
+    width: 100%;
+    fill: var(--md-sys-color-on-secondary);
   }
 }
 
 @media (min-width: 768px) {
-  #sobre {
-    .card {
-      display: grid;
-      grid-template: 1fr / 1fr 1fr;
-      align-items: center;
-    }
+
+  .room__card,
+  .room__card__image {
+    height: 300px;
   }
 
-  #hoteles {
-    .hoteles__container {
-      flex-direction: row;
-      align-items: flex-start;
-    }
+  .room__card {
+    display: grid;
+    grid-template: 3fr 1fr / 1fr 2fr;
+    grid-template-areas:
+      "image content"
+      "image footer";
+    gap: 0 var(--space-x-large);
+  }
+
+  .room__card__image {
+    grid-area: image;
+    border-bottom-left-radius: var(--border-radius-large);
+    border-top-right-radius: 0;
+  }
+
+  .room__card__content {
+    grid-area: content;
+    padding-bottom: 0;
+  }
+
+  .room__card__footer {
+    grid-area: footer;
+  }
+}
+
+@media (min-width: 1200px) {
+
+  .room__card,
+  .room__card__image {
+    height: 350px;
   }
 }

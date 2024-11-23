@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import requests
 
 app = Flask(__name__)
@@ -15,7 +15,13 @@ def index():
     except requests.exceptions.RequestException as e:
         hotels = []
 
-    return render_template("index.html", hotels=hotels)
+    regions = []
+    for hotel in hotels:
+        region = hotel["region"]
+        if region not in regions:
+            regions.append(region)
+
+    return render_template("index.html", hotels=hotels, regions=regions)
 
 
 @app.route("/mi_reserva")
@@ -28,104 +34,118 @@ def informacion_reserva():
     return render_template("ver_mis_reservas.html")
 
 
+@app.route("/hoteles")
 @app.route("/hoteles/<id_hotel>")
 def hoteles(id_hotel):
     id_hotel = int(id_hotel)
-    hotels = [
-        {
-            "id": 1,
-            "image_url": "static/assets/hotel-buenos-aire.jpg",
-            "name": "Buenos Aires",
-            "ubication": "Avenida de Mayo 123",
-            "description": "Ubicado en el corazón de la vibrante capital, nuestro hotel ofrece un oasis de tranquilidad en medio del bullicio urbano. Ideal para viajeros de negocios y turistas por igual.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Spa", "Sauna", "Mesas de Pool", "Piscina"],
-        },
-        {
-            "id": 2,
-            "image_url": "static/assets/hotel-mar-del-plata.jpg",
-            "name": "Mar del Plata",
-            "ubication": "Av. de Los Trabajadores 3100",
-            "description": "Perfecto para quienes buscan la combinación ideal de playa y ciudad. Disfrute del sol, la arena y las actividades culturales que esta hermosa ciudad costera tiene para ofrecer.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Spa", "Piscina"],
-        },
-        {
-            "id": 3,
-            "image_url": "static/assets/hotel-bariloche.jpg",
-            "name": "Bariloche",
-            "ubication": "Cerro Catedral 1450",
-            "description": "Situado en el pintoresco escenario de la Patagonia, este hotel es ideal para los amantes de la naturaleza y los deportes de invierno. Disfrute de vistas impresionantes, actividades al aire libre y la hospitalidad cálida de siempre.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Sauna", "Mesas de Pool", "Piscina"],
-        },
-    ]
+    try:
+            #------------------INFORMACION DE TODOS LOS HOTELES------------------
+            if id_hotel == 0:
 
-    if id_hotel == 0:
-        return render_template("info_hotel.html", params=hotels)
+                response_todos_los_hoteles = requests.get(API_URL + "/hoteles")
+                response_todos_los_hoteles.raise_for_status()
+                hoteles = response_todos_los_hoteles.json()
+
+                response_todos_los_servicios = requests.get(API_URL + "/servicios")
+                response_todos_los_servicios.raise_for_status()
+                servicios = response_todos_los_servicios.json()
+
+            else:
+            #----------------------INFORMACION DE UN SOLO HOTEL----------------------
+                response_hotel = requests.get(API_URL + f"/hoteles/{id_hotel}")
+                response_hotel.raise_for_status()
+                hoteles = response_hotel.json()
+                
+                response_servicio_hotel = requests.get(API_URL + f"/servicios/hotel/{id_hotel}")
+                response_servicio_hotel.raise_for_status()
+                servicios = response_servicio_hotel.json()
+
+    except requests.exceptions.RequestException as e:
+        params = []
+        servicios = []
+    
     params = []
-    params.append(hotels[id_hotel])
+    for hotel in hoteles:
+            if hotel not in params:
+                params.append(hotel)
+                
+    return render_template("info_hotel.html", params = params, servicios = servicios)
 
-    return render_template("info_hotel.html", params=params)
 
-
-@app.route("/habitaciones")
+@app.route("/habitaciones", methods=["GET", "POST"])
 def habitaciones():
-    hotels = [
-        {
-            "id": 1,
-            "image_url": "static/assets/hotel-buenos-aire.jpg",
-            "name": "Buenos Aires",
-            "ubication": "Avenida de Mayo 123",
-            "description": "Ubicado en el corazón de la vibrante capital, nuestro hotel ofrece un oasis de tranquilidad en medio del bullicio urbano. Ideal para viajeros de negocios y turistas por igual.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Spa", "Sauna", "Mesas de Pool", "Piscina"],
-        },
-        {
-            "id": 2,
-            "image_url": "static/assets/hotel-mar-del-plata.jpg",
-            "name": "Mar del Plata",
-            "ubication": "Av. de Los Trabajadores 3100",
-            "description": "Perfecto para quienes buscan la combinación ideal de playa y ciudad. Disfrute del sol, la arena y las actividades culturales que esta hermosa ciudad costera tiene para ofrecer.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Spa", "Piscina"],
-        },
-        {
-            "id": 3,
-            "image_url": "static/assets/hotel-bariloche.jpg",
-            "name": "Bariloche",
-            "ubication": "Cerro Catedral 1450",
-            "description": "Situado en el pintoresco escenario de la Patagonia, este hotel es ideal para los amantes de la naturaleza y los deportes de invierno. Disfrute de vistas impresionantes, actividades al aire libre y la hospitalidad cálida de siempre.",
-            "link": "#inicio",
-            "services": ["Gimnasio", "Sauna", "Mesas de Pool", "Piscina"],
-        },
-    ]
-    rooms = [
-        {"id_room": 0, "id_hotel": 0, "number": 150, "persons": 4, "price": 40000},
-        {"id_room": 1, "id_hotel": 2, "number": 300, "persons": 4, "price": 40000},
-    ]
-    return render_template("habitaciones.html", rooms=rooms, hotels=hotels)
+    rooms = []
 
-
-@app.route("/reservar", methods=["GET", "POST"])
-def reservar():
     if request.method == "POST":
-        nombre = request.form.get ("fnombre")
-        apellido = request.form.get ("fapellido")
-        correo = request.form.get ("fcorreo")
-        telefono = request.form.get ("ftelefono")
+        query_string = ""
+        query = []
+        if request.form.get("region") is not None:
+            query.append(f"region={request.form.get('region')}")
 
-        usuario = [nombre, apellido, correo, telefono]
-        return render_template('detalle.html', usr=usuario)
+        if request.form.get("dates") is not None:
+            dates = request.form.get("dates").split(" a ")
+            query.append(f"llegada={dates[0]}")
+            query.append(f"salida={dates[1]}")
 
-    return render_template('reservas.html')
+        if request.form.get("type") is not None:
+            query.append(f"tipo={request.form.get('type')}")
+
+        if len(query) > 0:
+            query_string = "?" + "&".join(query)
+
+        try:
+            response = requests.get(
+                API_URL + "/habitaciones/disponibles" + query_string
+            )
+            response.raise_for_status()
+            rooms = response.json()
+        except requests.exceptions.RequestException as e:
+            rooms = []
+
+        for room in rooms:
+            try:
+                response = requests.get(
+                    API_URL + "/servicios/habitacion/" + str(room["id"])
+                )
+                response.raise_for_status()
+                services = response.json()
+            except requests.exceptions.RequestException as e:
+                services = []
+
+            room["servicios"] = services
+
+    try:
+        response = requests.get(API_URL + "/hoteles")
+        response.raise_for_status()
+        hotels = response.json()
+    except requests.exceptions.RequestException as e:
+        hotels = []
+
+    regions = []
+    for hotel in hotels:
+        region = hotel["region"]
+        if region not in regions:
+            regions.append(region)
+
+    room_types = ["suite", "familiar", "doble", "individual"]
+
+    return render_template(
+        "habitaciones.html", regions=regions, room_types=room_types, rooms=rooms
+    )
+
+
+@app.route("/reservar/<id_room>")
+def reservar(id_room):
+    rooms = {
+        "0": {"id_hotel": 0, "number": 150, "persons": 4, "price": 40000},
+        "1": {"id_hotel": 2, "number": 300, "persons": 4, "price": 40000},
+    }
+    return render_template("reservas.html", room = rooms[id_room], id_room=id_room)
 
 
 @app.errorhandler(404)
 def page_notfound(e):
-    return render_template(
-        "error.html", error_code=404, error_description="La página que buscas no existe"
-    ), 404
+    return render_template("404.html"), 404
 
 
 if __name__ == "__main__":

@@ -11,6 +11,16 @@ body {
   width: 100vw;
 }
 
+h2 {
+  font-size: var(--font-size-x-large);
+  font-weight: var(--font-weight-semibold);
+}
+
+h5 {
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-medium);
+}
+
 .header {
   position: fixed;
   left: 0;
@@ -127,6 +137,7 @@ body {
     position: relative;
     top: 0;
     width: auto;
+    height: auto;
     background-color: transparent;
     flex-direction: row;
     padding: 0;
@@ -324,6 +335,11 @@ body {
   }
 }
 
+.btn--secondary {
+  background-color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-secondary);
+}
+
 .btn--warning {
   background-color: var(--md-sys-color-error);
   color: var(--md-sys-color-secondary-container);
@@ -353,6 +369,7 @@ body {
 .btn--size-icon {
   height: 2.5rem;
   width: 2.5rem;
+  border-radius: var(--border-radius-large);
 }
 
 .btn-medium-large {

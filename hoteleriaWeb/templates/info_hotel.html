@@ -14,27 +14,24 @@
         <article class="card">
           <div class="card__content">
             <aside class="card__header">
-              <h1 class="card__title"> Estancias del Sol- {{ articulo['name']}}</h1>
+              <h1 class="card__title"> {{articulo['region']}} - {{ articulo['nombre']}}.</h1>
             </aside>
             <aside>
-              <h2>Información General</h2>
-        <p><strong>Dirección:</strong> {{articulo['ubication']}}</p>
-        <p><strong>Teléfono:</strong> +54 11 5555-1234</p>
-        <p><strong>Categoría:</strong> 4 estrellas</p>
-        <p><strong>Estilo:</strong> Moderno con toques clásicos de estilo porteño</p>
-      
+              <h2>Información General.</h2>
+        <p><strong>Dirección:</strong> {{ articulo['direccion'] }}</p>
+        <p><strong>Ubicación:</strong> {{ articulo['region'] }}</p>
             </aside>
             <aside class="card__description">
-              <h2>Servicios Disponibles</h2>
+              <h2>Servicios Disponibles.</h2>
         <ul>
-          {% for service in articulo['services'] %}
-          <li><strong>{{ service }}</strong>.</li>
+          {% for servicio in servicios %}
+            <li><strong>- {{ servicio['servicio'] }}</strong>.</li>
           {% endfor %}
         </ul>
             </aside>
             <aside class="card__description">
-              <h2>Opinión</h2>
-              <p> {{ articulo['description'] }} </p>
+              <h2>Opinión.</h2>
+              <p> {{ articulo['descripcion'] }} </p>
             </aside>
           </div>
           <div class="card__image">

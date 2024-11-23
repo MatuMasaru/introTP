@@ -1,45 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>reservar_habitacion</title>
-    <link rel="stylesheet" href="../static/css5/style.css">
-</head>
-<body>
-    <table align="center">
-        <tr>
-            <td>  
-              <h1 class="title">RESERVAR HABITACION</h1>
-              
-              <form action ="{{url_for('reservar')}}" method="post" >
-                <label class="subtile" for="nombre">NOMBRE DEL USUARIO :</label>
-                <br></br>
-                <input class="cuadro" type="text" id="nombre" name="fnombre" required>
-                <br></br>
+{% extends 'base.html' %}
+
+{% block title %}Reservas{% endblock %}
+
+{% block styles %}
+ <link rel="stylesheet" href="{{ url_for('static', filename = 'css/reservas.css') }}">
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+
+{% block body %}
+<h1>Tu reserva</h1>
+<div class="contenedor-primario">
+  <div class="container">
+    <h2>Información del Huésped</h2>
+    <form action="/submit" method="post">
         
-                        
-                <label class="subtile" for="apellido">APELLIDO DEL USUARIO :</label>
-                <br></br>
-                <input class="cuadro" type="text" id="apellido" name="fapellido" required>
-                <br></br>
-              
-               
-                <label class="subtile" for="correo">CORREO DEL USUARIO:</label>
-                <br></br>
-                <input class="cuadro" type="text" id="correo" name="fcorreo" required>
-                <br></br>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
         
-                
-                <label class="subtile" for="telefono">NUMERO DE CONTACTO:</label>
-                <br></br>
-                <input class="cuadro" type="text" id="telefono" name="ftelefono">
-                <br></br>
         
-                <button id="boton-reservar" type="submit">reservar</button>
-              </form>
-            </td>
-        </tr>
-    </table>          
-</body>
-</html>
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido" required>
+        
+        
+        
+        
+        <button type="submit">Reservar Ahora</button>
+    </form>
+  </div>
+  
+  <div class="container">
+    
+    <img id="image" src="{{url_for('static', filename = 'assets/hab.jpeg')}}">
+    <h2 id="Habitacion">Clasica, Habitacion, 1 king, acceso a la piscina</h2>
+    <form>
+      <label for="Fechas">Fechas de estancia</label>
+      <p>martes. 19 nov 2024-miercoles. 20 nov 2024</p>
+      
+      <label for="tipo">Tipo de Habitacion</label>
+      <p>1 Habitacion, 2 personas</p>
+
+      <label for="pago">Estancia total</label>
+      <p>Precio: 200 USD </p>
+    </form>
+
+    
+  </div>
+  
+  <div class="container">
+    <h2>Detalles de la Habitacion</h2>
+    <ul>
+      <label class="servicios">Comidas y bebidas</label>
+      <li>Servicio a la habitacion las 24 horas</li>
+      <li>Minibar con cargo</li>
+      <label class="servicios">Baño</label>
+      <li>Combinacion de ducha/bañera</li>
+      <li>Secador</li>
+      <li>Bide</li>
+      <label class="servicios">Camas</label>
+      <li>Capacidad maxima: 3</li>
+      <li>1 king</li>
+      <label class="servicios">Caracteristicas generales</label>
+      <li>Wi-fi</li>
+      <li>Aire acondicionado</li>
+      <li>Ventanas insonorizadas</li>
+      <li>telefono</li>
+      <li>Caja de seguridad</li>
+      
+    </ul>
+  </div>
+</div>
+
+
+
+{% endblock %}
