@@ -22,17 +22,6 @@ QUERY_BORRAR_HOTEL = "DELETE FROM hotel WHERE id = :id"
 #HOTELES QUERYS --UPDATE---
 QUERY_ACTUALIZAR_HOTEL = "UPDATE hotel SET nombre = :nombre, direccion = :direccion, descripcion = :descripcion, url_img = :url_img, region = :region"
 
-
-#HOTELES QUERYS --INSERT---
-QUERY_INGRESAR_HOTEL = "INSERT INTO hotel (nombre, direccion, descripcion, url_img, region) VALUES (:nombre, :direccion, :descripcion, :url_img, :region)"
-
-#HOTELES QUERYS --DELETE---
-QUERY_BORRAR_HOTEL = "DELETE FROM hotel WHERE id = :id"
-
-#HOTELES QUERYS --UPDATE---
-QUERY_ACTUALIZAR_HOTEL = "UPDATE hotel SET nombre = :nombre, direccion = :direccion, descripcion = :descripcion, url_img = :url_img, region = :region"
-
-
 QUERY_REGIONES = "SELECT DISTINCT region FROM hotel"
 # HABITACIONES QUERYS
 

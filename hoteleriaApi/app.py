@@ -60,6 +60,20 @@ def obtener_hotel_por_region(region):
     respuesta = crear_respuesta_hoteles(resultado)
     return jsonify(respuesta), 200
 
+@app.route("/api/hoteles/regiones/", methods=["GET"])
+def obtener_todas_las_regiones():
+    try:
+        resultado = hoteles.todas_las_regiones()
+        if len(resultado) == 0:
+            return jsonify({"Error": "No hay regiones"}), 404
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
+    respuesta = []
+    for fila in resultado:
+        respuesta.append(fila[0])
+    return jsonify(respuesta), 200
+
+
 @app.route("/api/create_hotel/", methods=["POST"])
 def create_hotel():
     data = request.get_json()
@@ -76,7 +90,6 @@ def create_hotel():
         return jsonify({'error': str(e)}), 500
 
     return jsonify(data), 201
-
 
 @app.route('/api/delete_hotel', methods=['DELETE'])
 def delete_hotel():
@@ -119,19 +132,6 @@ def update_hotel():
 
     return jsonify(data), 201
 
-
-@app.route("/api/hoteles/regiones/", methods=["GET"])
-def obtener_todas_las_regiones():
-    try:
-        resultado = hoteles.todas_las_regiones()
-        if len(resultado) == 0:
-            return jsonify({"Error": "No hay regiones"}), 404
-    except Exception as e:
-        return jsonify({"Error": str(e)}), 500
-    respuesta = []
-    for fila in resultado:
-        respuesta.append(fila[0])
-    return jsonify(respuesta), 200
 
 #---------------------------------#
 #-----------HABITACIONES----------#
@@ -218,6 +218,66 @@ def obtener_habitaciones_por_tipo(tipo):
     
     respuesta = crear_respuesta_habitaciones(resultado)
     return jsonify(respuesta), 200
+
+
+@app.route('/api/create_habitacion/', methods=['POST'])
+def create_habitacion():
+    data = request.get_json()
+
+    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+        
+    try:
+        result = hoteles.hoteles_por_id(data['h.id_hotel'])
+        if len(result) == 0:
+            return jsonify({'error': 'La habitacion no pertenece a ningun hotel'}), 400
+
+        hoteles.insert_habitacion(data)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify(data), 201
+
+
+@app.route('/api/delete_habitacion/<int:id>', methods=['DELETE'])
+def delete_habitacion(id):
+    try:
+        result = hoteles.habitacion_por_id(id)
+        if len(result) == 0:
+            return jsonify({'error': 'No se encontró la habitacion'}), 404
+
+        hoteles.borrar_habitacion(id)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    result = result[0]
+    return jsonify({'h.numero': result[1], 'h.url_img': result[2], 'h.tipo': result[3], 'h.precio': result[4], 'h.id_hotel': result[5], 'h.id': id}), 200
+
+
+@app.route('/api/update_habitacion/<int:id>', methods=['PUT'])
+def update_habitacion(id):
+    data = request.get_json()
+
+    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+
+    try:
+        result = hoteles.hoteles_por_id(data['h.id_hotel'])
+        if len(result) == 0:
+            return jsonify({'error': 'La habitacion no pertenece a ningun hotel'}), 400
+        
+        hoteles.actualizar_habitacion(id, data)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify({'h.id': id, **data}), 200
 
 #------------------------------------------------#
 #------------HABITACION REGION Y TIPO------------#
