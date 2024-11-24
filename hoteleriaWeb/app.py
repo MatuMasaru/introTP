@@ -101,7 +101,7 @@ def admin_add_hotel():
         except requests.exceptions.RequestException as e:
             response = []
 
-    return render_template('add_hotel.html')
+    return redirect(url_for('admin'))
 
 
 @app.route('/admin/delete_hotel/<id_hotel>',methods=['GET'])
