@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} mis reservas{% endblock %}
+{% block title %}Mi reserva{% endblock %}
 
 {% block styles %}
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
@@ -33,34 +33,15 @@
                     <thead>
                         <tr>
                             <th>Número de Reserva</th>
-                            <th>Fecha de Check-in</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Ejemplo de reserva -->
-                        <tr>
-                            <td>12345</td>
-                            <td>01/12/2024</td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-
-                <table>
-                    <thead>
-                        <tr>
-
-                            <th>Fecha de Check-out</th>
                             <th>Habitación</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Ejemplo de reserva -->
                         <tr>
-
-                            <td>05/12/2024</td>
-                            <td>Suite Deluxe</td>
+                            <td>{{reserva[0]['id']}}</td>
+                            <td>{{habitacion[0]['tipo']}}</td>
                         </tr>
                         
                     </tbody>
@@ -69,44 +50,67 @@
                 <table>
                     <thead>
                         <tr>
-                            
-                            <th>Estado</th>
-                            <th>Acciones</th> 
-                            <th>Id de sucursal</th>
+                            <th>Fecha de Check-in</th>
+                            <th>Fecha de Check-out</th>
+                           
+                           
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Ejemplo de reserva -->
                         <tr>
+                            <td>{{reserva[0]['llegada']}}</td>
+                            <td>{{reserva[0]['salida']}}</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
 
-                            <td>Confirmada</td>
-                            <td></td>
-                            <td></td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sucursal</th>
+                            <th>Estado</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Ejemplo de reserva -->
+                        <tr>
+                            <td>{{ hotel[0]['nombre'] }} - {{ hotel[0]['region'] }}</td>
+                            <td>{{ reserva[0]['estado'] }}</td>
+                           
                         </tr>
                         
                     </tbody>
                 </table>
 
             </aside>
-            <button class="btn btn--warning btn--size-medium">Cancelar reserva</button>
+          
           </div>
 
           <div class="card__content" style="height: 100%;">
             <aside class="card__header">
-              <h2 class="card__title">Servicios contratados</h2>
+              <h2 class="card__title">Servicios Incluidos</h2>
             </aside>
             <aside class="card__description" style="height: 80%;">
                 <ul>
-                    <li>jacuzzi</li>
-                    <li>gym</li>
-                    <li>desayuno</li>
-                    <li>cena</li>
-                    <li>limpieza</li>
+                    {% for servicio in servicios_incluidos %}
+                    <li>{{ servicio['servicio'] }}</li>
+                    {% endfor %}
+                </ul>
+                <h2 class="card__title">Servicios Contratados</h2>
+                <ul>
+                    {% for servicio in servicios_aparte %}
+                        <li>{{ servicio }}</li>   
+                    {% endfor %}
                 </ul>
             </aside>
-            <button class="btn btn--primary btn--size-medium">Agregar servicios</button>
+     
           </div>
+        
         </article>
+        <a href = "{{ url_for('index') }}" class="btn btn--warning btn--size-medium">Volver al inicio.</a>
       </section> 
 {% endblock %}
 

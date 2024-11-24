@@ -23,6 +23,17 @@ QUERY_BORRAR_HOTEL = "DELETE FROM hotel WHERE id = :id"
 QUERY_ACTUALIZAR_HOTEL = "UPDATE hotel SET nombre = :nombre, direccion = :direccion, descripcion = :descripcion, url_img = :url_img, region = :region"
 
 
+#HOTELES QUERYS --INSERT---
+QUERY_INGRESAR_HOTEL = "INSERT INTO hotel (nombre, direccion, descripcion, url_img, region) VALUES (:nombre, :direccion, :descripcion, :url_img, :region)"
+
+#HOTELES QUERYS --DELETE---
+QUERY_BORRAR_HOTEL = "DELETE FROM hotel WHERE id = :id"
+
+#HOTELES QUERYS --UPDATE---
+QUERY_ACTUALIZAR_HOTEL = "UPDATE hotel SET nombre = :nombre, direccion = :direccion, descripcion = :descripcion, url_img = :url_img, region = :region"
+
+
+QUERY_REGIONES = "SELECT DISTINCT region FROM hotel"
 # HABITACIONES QUERYS
 
 QUERY_TODAS_LAS_HABITACIONES = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id;"
@@ -52,6 +63,8 @@ WHERE
     AND r.id IS NULL;
 """
 
+QUERY_TIPOS_HABITACIONES = "SELECT DISTINCT tipo FROM habitaciones"
+
 # QUERY PARA FILTRAR HABITACIONES POR REGION Y TIPO
 
 QUERY_HABITACION_REGION_TIPO = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id WHERE tipo = :tipo AND ho.region = :region"
@@ -72,9 +85,11 @@ QUERY_TODOS_LOS_SERVICIOS = "SELECT id, servicio, tipo FROM servicios"
 
 QUERY_SERVICIO_POR_ID = "SELECT id, servicio, tipo FROM servicios WHERE id = :id"
 
-QUERY_SERVICIO_POR_ID_HABITACION = "SELECT s.servicio, s.tipo, sh.precio FROM servicios s JOIN habitacion_servicio sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion;"
+QUERY_SERVICIO_POR_ID_HABITACION = "SELECT s.servicio, s.tipo, sh.precio, s.id FROM servicios s JOIN habitacion_servicio sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion;"
 
-QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel;"
+QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel;"
+
+QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel AND sh.id_servicio = :id_servicio;"
 
 # RESERVA HABITACION QUERYS --GET---
 
@@ -122,8 +137,8 @@ def hoteles_por_id(id):
 def hoteles_por_region(region):
     return run_query(QUERY_HOTEL_POR_REGION, {"region": region}).fetchall()
 
-def todos_los_servicios():
-    return run_query(QUERY_TODOS_LOS_SERVICIOS).fetchall()
+def todas_las_regiones():
+    return run_query(QUERY_REGIONES).fetchall()
 
 #----POST----
 
@@ -159,6 +174,9 @@ def comprobar_disponibilidad_habitacion(id_habitacion, salida, llegada):
 def obtener_habitaciones_disponibles(region, salida, llegada, tipo):
     return run_query(QUERY_OBTENER_HABITACIONES_DISPONIBLES, {"region": region, "salida": salida, "llegada": llegada, "tipo": tipo}).fetchall()
 
+def todos_los_tipos_de_habitacion():
+    return run_query(QUERY_TIPOS_HABITACIONES).fetchall()
+
 #----FILTRO HABITACION POR REGION Y TIPO
 
 def habitacion_por_region_y_tipo(tipo, region):
@@ -177,17 +195,20 @@ def actualizar_habitacion(id, data):
     run_query(text(QUERY_ACTUALIZAR_HABITACION), {'h.id': id, **data})
 
 #----SERVICIOS FUNCIONES
+def todos_los_servicios():
+    return run_query(QUERY_TODOS_LOS_SERVICIOS).fetchall()
 
 def servicios_por_id(id):
     return run_query(QUERY_SERVICIO_POR_ID, {"id": id}).fetchall()
 
 def servicio_por_habitacion(id_habitacion):
-    return run_query(
-        QUERY_SERVICIO_POR_ID_HABITACION, {"id_habitacion": id_habitacion}
-    ).fetchall()
+    return run_query(QUERY_SERVICIO_POR_ID_HABITACION, {"id_habitacion": id_habitacion}).fetchall()
 
 def servicio_por_hotel(id_hotel):
     return run_query(QUERY_SERVICIO_POR_ID_HOTEL, {"id_hotel": id_hotel}).fetchall()
+
+def servicio_id_hotel_id_servicio(id_hotel, id_servicio):
+    return run_query(QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO, {"id_hotel": id_hotel, "id_servicio": id_servicio}).fetchall()
 
 #----RESERVA FUNCIONES 
 
