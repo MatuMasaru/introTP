@@ -56,6 +56,10 @@ WHERE
 
 QUERY_HABITACION_REGION_TIPO = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id WHERE tipo = :tipo AND ho.region = :region"
 
+#----HABITACION QUERYS INSERT----
+QUERY_INGRESAR_HABITACION = "INSERT INTO habitaciones (h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre) VALUES (:h.numero, :h.url_img, :h.tipo, :h.precio, :h.id_hotel, :ho.nombre)"
+
+
 # SERVICIOS QUERYS
 
 QUERY_TODOS_LOS_SERVICIOS = "SELECT id, servicio, tipo FROM servicios"
@@ -153,6 +157,10 @@ def obtener_habitaciones_disponibles(region, salida, llegada, tipo):
 
 def habitacion_por_region_y_tipo(tipo, region):
     return run_query(QUERY_HABITACION_REGION_TIPO, {"tipo": tipo, "region": region}).fetchall()
+
+#----POST----
+def insert_habitacion(data):
+    run_query(QUERY_INGRESAR_HABITACION, data)
 
 #----SERVICIOS FUNCIONES
 

@@ -206,6 +206,28 @@ def obtener_habitaciones_por_tipo(tipo):
     respuesta = crear_respuesta_habitaciones(resultado)
     return jsonify(respuesta), 200
 
+
+@app.route('/api/create_habitacion', methods=['POST'])
+def create_habitacion():
+    data = request.get_json()
+
+    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel', 'ho.nombre')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+        
+    try:
+        result = hoteles.hoteles_por_id(data['h.id_hotel'])
+        if len(result) == 0:
+            return jsonify({'error': 'La habitacion no pertenece a ningun hotel'}), 400
+
+        hoteles.insert_habitacion(data)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify(data), 201
+
 #------------------------------------------------#
 #------------HABITACION REGION Y TIPO------------#
 #------------------------------------------------#
