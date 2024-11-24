@@ -83,7 +83,7 @@ QUERY_RESERVA_SERVICIO_POR_ID_RESERVA = "SELECT id, id_reserva, id_servicio, est
 # CANCELAR SERVICIO
 QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA = "UPDATE reserva_servicios SET estado = 'cancelado' WHERE id_reserva = :id_reserva"
 
-engine = create_engine(f"mysql+mysqlconnector://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}:3306/{os.getenv('MYSQL_DB')}?charset=utf8mb4&collation=utf8mb4_unicode_ci")
+engine = create_engine(f"mysql+pymysql://tomi:1234@localhost:3306/hoteles")
 
 def run_query(query, parameters=None):
     with engine.connect() as conn:

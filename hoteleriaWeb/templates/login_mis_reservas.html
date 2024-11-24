@@ -10,37 +10,38 @@
 
 {% block body %}
             <section id="sobre">
-                <article class="card">
-                  <div class="card__content">
-
-                    <aside class="card__header">
-                      <h2 class="card__title">Mi reserva</h2>
-                    </aside>
-                    <aside class="card__description">
-                      <p>
-                        Numero reserva
-                      </p>
-                      <input class="btn" type="text">
-                      <p>
-                        Apellido
-                      </p>
-                      <input class="btn" type="text">
-
-                    </aside>
-
-                    <div >
-
-                        <a href="{{ url_for('index') }}"> <button class="btn btn--warning btn--size-medium btn-medium-large" >Volver</button> </a>
-                        <a href="{{ url_for('informacion_reserva') }}"> <button class="btn btn--warning btn--size-medium btn-medium-large" >Verificar reserva</button> </a>
+                <form action="{{ url_for('informacion_reserva') }}" method="post">
+                  <article class="card">
+                    <div class="card__content">
+  
+                      <aside class="card__header">
+                        <h2 class="card__title">Mi reserva</h2>
+                      </aside>
+                      <aside class="card__description">
+                        <p>
+                          Numero reserva
+                        </p>
+                        <input class="btn" type="text" id="numero_reserva" name = "nreserva">
+                        <p>
+                          Apellido
+                        </p>
+                        <input class="btn" type="text" id="apellido_cliente" name = "acliente">
+                      </aside>
+  
+                      <div >
+                          <input type="submit" value="Verificar reserva" class="btn btn--warning btn--size-medium btn-medium-large" >
+                      </div>
+                      {{error}}
                     </div>
-                    
-                  </div>
-
-                  <div class="card__image">
-                    <img src="{{ url_for('static', filename = 'assets/garden-area.jpg')}}" alt="Estancias del Sol">
-                  </div>
-                </article>
+  
+                    <div class="card__image">
+                      <img src="{{ url_for('static', filename = 'assets/garden-area.jpg')}}" alt="Estancias del Sol">
+                    </div>
+                  </article>
+                </form>
               </section>
+
+             
 {% endblock %}
 
 {% block scripts %}
