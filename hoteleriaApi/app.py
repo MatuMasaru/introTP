@@ -86,7 +86,7 @@ def delete_hotel():
 
         resultado = hoteles.hoteles_por_id(int_id_hotel)
         if len(resultado) == 0:
-            return jsonify({'error': 'No se encontró el alumno'}), 404
+            return jsonify({'error': 'No se encontró el hotel'}), 404
         
         hoteles.borrar_hotel(int_id_hotel)
 
@@ -94,7 +94,7 @@ def delete_hotel():
         return jsonify({'error': str(e)}), 500
 
     resultado = resultado[0]
-    return jsonify(resultado), 200
+    return jsonify({'nombre': resultado[0], 'direccion': resultado[1], 'descripcion': resultado[2], 'url_img': resultado[3], 'region': resultado[4], 'id': int_id_hotel}), 200
 
 
 app.route("/api/update_hotel/", methods=["PUT"])
@@ -110,7 +110,7 @@ def update_hotel():
     try:
         resultado = hoteles.hoteles_por_id(int_id_hotel)
         if len(resultado) == 0:
-            return jsonify({'error': 'No se encontró el alumno'}), 404
+            return jsonify({'error': 'No se encontró el hotel'}), 404
 
         hoteles.actualizar_hotel(int_id_hotel, data)
 
@@ -207,7 +207,7 @@ def obtener_habitaciones_por_tipo(tipo):
     return jsonify(respuesta), 200
 
 
-@app.route('/api/create_habitacion', methods=['POST'])
+@app.route('/api/create_habitacion/', methods=['POST'])
 def create_habitacion():
     data = request.get_json()
 
@@ -227,6 +227,23 @@ def create_habitacion():
         return jsonify({'error': str(e)}), 500
 
     return jsonify(data), 201
+
+
+@app.route('/api/delete_habitacion/<int:id>', methods=['DELETE'])
+def delete_habitacion(id):
+    try:
+        result = hoteles.habitacion_por_id(id)
+        if len(result) == 0:
+            return jsonify({'error': 'No se encontró la habitacion'}), 404
+
+        hoteles.borrar_habitacion(id)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    result = result[0]
+    return jsonify({'h.numero': result[1], 'h.url_img': result[2], 'h.tipo': result[3], 'h.precio': result[4], 'h.id_hotel': result[5], 'ho.nombre': result[6], 'h.id': id}), 200
+
 
 #------------------------------------------------#
 #------------HABITACION REGION Y TIPO------------#

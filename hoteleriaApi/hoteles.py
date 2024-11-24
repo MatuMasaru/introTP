@@ -59,6 +59,8 @@ QUERY_HABITACION_REGION_TIPO = "SELECT h.id, h.numero, h.url_img, h.tipo, h.prec
 #----HABITACION QUERYS INSERT----
 QUERY_INGRESAR_HABITACION = "INSERT INTO habitaciones (h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre) VALUES (:h.numero, :h.url_img, :h.tipo, :h.precio, :h.id_hotel, :ho.nombre)"
 
+#----HABITACION QUERYS DELETE----
+QUERY_BORRAR_HABITACION = "DELETE FROM habitaciones WHERE h.id = :id"
 
 # SERVICIOS QUERYS
 
@@ -161,6 +163,11 @@ def habitacion_por_region_y_tipo(tipo, region):
 #----POST----
 def insert_habitacion(data):
     run_query(QUERY_INGRESAR_HABITACION, data)
+
+#----DELETE----
+def borrar_habitacion(id):
+    run_query(text(QUERY_BORRAR_HABITACION), {'h.id': id})
+
 
 #----SERVICIOS FUNCIONES
 
