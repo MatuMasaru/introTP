@@ -211,7 +211,7 @@ def obtener_habitaciones_por_tipo(tipo):
 def create_habitacion():
     data = request.get_json()
 
-    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel', 'ho.nombre')
+    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel')
     for key in keys:
         if key not in data:
             return jsonify({'error': f'Faltan el dato {key}'}), 400
@@ -242,7 +242,29 @@ def delete_habitacion(id):
         return jsonify({'error': str(e)}), 500
 
     result = result[0]
-    return jsonify({'h.numero': result[1], 'h.url_img': result[2], 'h.tipo': result[3], 'h.precio': result[4], 'h.id_hotel': result[5], 'ho.nombre': result[6], 'h.id': id}), 200
+    return jsonify({'h.numero': result[1], 'h.url_img': result[2], 'h.tipo': result[3], 'h.precio': result[4], 'h.id_hotel': result[5], 'h.id': id}), 200
+
+
+@app.route('/api/update_habitacion/<int:id>', methods=['PUT'])
+def update_habitacion(id):
+    data = request.get_json()
+
+    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+
+    try:
+        result = hoteles.hoteles_por_id(data['h.id_hotel'])
+        if len(result) == 0:
+            return jsonify({'error': 'La habitacion no pertenece a ningun hotel'}), 400
+        
+        hoteles.actualizar_habitacion(id, data)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify({'h.id': id, **data}), 200
 
 
 #------------------------------------------------#

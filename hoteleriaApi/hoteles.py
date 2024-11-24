@@ -57,10 +57,14 @@ WHERE
 QUERY_HABITACION_REGION_TIPO = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id WHERE tipo = :tipo AND ho.region = :region"
 
 #----HABITACION QUERYS INSERT----
-QUERY_INGRESAR_HABITACION = "INSERT INTO habitaciones (h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre) VALUES (:h.numero, :h.url_img, :h.tipo, :h.precio, :h.id_hotel, :ho.nombre)"
+QUERY_INGRESAR_HABITACION = "INSERT INTO habitaciones (h.numero, h.url_img, h.tipo, h.precio, h.id_hotel) VALUES (:h.numero, :h.url_img, :h.tipo, :h.precio, :h.id_hotel)"
 
 #----HABITACION QUERYS DELETE----
 QUERY_BORRAR_HABITACION = "DELETE FROM habitaciones WHERE h.id = :id"
+
+#----HABITACION QUERYS UPDATE----
+QUERY_ACTUALIZAR_HABITACION = "UPDATE habitaciones SET h.numero = :h.numero, h.url_img = :h.url_img, h.tipo = :h.tipo, h.precio = :h.precio, h.id_hotel = :h.id_hotel WHERE h.id = :id"
+
 
 # SERVICIOS QUERYS
 
@@ -131,7 +135,7 @@ def insert_hotel(data):
 def borrar_hotel(id):
     run_query(text(QUERY_BORRAR_HOTEL), {'id': id})
 
-#----DELETE----
+#----PUT----
 def actualizar_hotel(id, data):
     run_query(text(QUERY_ACTUALIZAR_HOTEL),{'id': id, **data})
 
@@ -168,6 +172,9 @@ def insert_habitacion(data):
 def borrar_habitacion(id):
     run_query(text(QUERY_BORRAR_HABITACION), {'h.id': id})
 
+#----PUT----
+def actualizar_habitacion(id, data):
+    run_query(text(QUERY_ACTUALIZAR_HABITACION), {'h.id': id, **data})
 
 #----SERVICIOS FUNCIONES
 
