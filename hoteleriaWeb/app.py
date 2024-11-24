@@ -104,7 +104,7 @@ def admin_add_hotel():
     return render_template('add_hotel.html')
 
 
-app.route('/admin/delete_hotel/<id_hotel>',methods=['GET'])
+@app.route('/admin/delete_hotel/<id_hotel>',methods=['GET'])
 def admin_delete_hotel(id):
     try:
         hotel_data = {
@@ -117,6 +117,34 @@ def admin_delete_hotel(id):
 
     return redirect(url_for('admin'))
 
+
+@app.route('/admin/update_hotel/<id_hotel>', methods=['GET','POST'])
+def admin_update_hotel(id):
+    if request.method == "GET":
+        try:
+            response = requests.get(API_URL + f'/hoteles/{id}')
+            response.raise_for_status()
+            hotel = response.json()       
+            return render_template('update_hotel.html', hotel=hotel)
+        except requests.exceptions.RequestException as e:
+                hotel = []
+
+    elif requests.method == "POST":
+        try:
+            data = {
+                    "id": id,
+                    "nombre": request.form.get("fnombre"),
+                    "direccion": request.form.get("fdireccion"),
+                    "descripcion": request.form.get("fdescripcion"),
+                    "url_img": request.form.get("furl_img"),
+                    "region": request.form.get("fregion")
+                }
+            response = requests.put(API_URL + "/update_hotel", json=data)
+            response.raise_for_status()  
+            return redirect(url_for('admin'))
+
+        except requests.exceptions.RequestException as e:
+            response = []
 
 @app.route("/habitaciones", methods=["GET", "POST"])
 def habitaciones():

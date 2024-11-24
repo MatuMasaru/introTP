@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}actualizar hotel{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+<section>
+    <h2>Actualizar datos del Hotel: {{hotel['nombre']}}</h2>
+    <div class="form-container">
+        <form action="{{ url_for('admin_update_hotel', id=hotel['id']) }}" method="post">
+            <div>
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="fnombre" value="{{ hotel['nombre'] }}"> 
+            </div>
+            <div>
+                <label for="direccion">Direccion</label>
+                <input type="text" id="direccion" name="fdireccion" value="{{ hotel['direccion'] }}">
+            </div>
+            <div>
+                <label for="descripcion">Descripción</label>
+                <input type="text" id="descripcion" name="fdescripcion" value="{{ hotel['descripcion'] }}">
+            </div>
+            <div>
+                <label for="imagen">Imagen</label>
+                <input type="text" id="url_img" name="furl_img" value="{{ hotel['url_img'] }}">
+            </div>
+            <div>
+                <label for="region">Region</label>
+                <input type="text" id="region" name="fregion" value="{{ hotel['region'] }}">
+            </div>
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+</section>
+{% endblock %}
