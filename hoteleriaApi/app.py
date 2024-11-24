@@ -3,7 +3,7 @@ import hoteles
 
 app = Flask(__name__)
 
-@app.route("/api/hola/", methods=["GET"])
+@app.route("/")
 def hola():
     return jsonify({"Saludo": "La api funciona"}), 200
 
@@ -58,6 +58,19 @@ def obtener_hotel_por_region(region):
         return jsonify({"Error": str(e)}), 500
     
     respuesta = crear_respuesta_hoteles(resultado)
+    return jsonify(respuesta), 200
+
+@app.route("/api/hoteles/regiones/", methods=["GET"])
+def obtener_todas_las_regiones():
+    try:
+        resultado = hoteles.todas_las_regiones()
+        if len(resultado) == 0:
+            return jsonify({"Error": "No hay regiones"}), 404
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
+    respuesta = []
+    for fila in resultado:
+        respuesta.append(fila[0])
     return jsonify(respuesta), 200
 
 #---------------------------------#
@@ -146,6 +159,19 @@ def obtener_habitaciones_por_tipo(tipo):
     respuesta = crear_respuesta_habitaciones(resultado)
     return jsonify(respuesta), 200
 
+@app.route("/api/habitaciones/tipos/", methods=["GET"])
+def obtener_los_tipos_habitacion():
+    try:
+        resultado = hoteles.todos_los_tipos_de_habitacion()
+        if len(resultado) == 0:
+            return jsonify({"Error": "No hay tipos de habitaciones"}), 404
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
+    respuesta = []
+    for fila in resultado:
+        respuesta.append(fila[0])
+    return jsonify(respuesta), 200
+
 #------------------------------------------------#
 #------------HABITACION REGION Y TIPO------------#
 #------------------------------------------------#
@@ -168,7 +194,10 @@ def obtener_habitacion_por_region_tipo(tipo, region):
 def crear_respuesta_servicios(resultado):
     respuesta = []
     for fila in resultado:
-        respuesta.append({"servicio": fila[0], "tipo": fila[1], "precio": fila[2]})
+        if len(resultado[0]) == 3:
+            respuesta.append({"id": fila[0], "servicio": fila[1], "tipo": fila[2]})
+        else:
+            respuesta.append({"servicio": fila[0], "tipo": fila[1], "precio": fila[2], "id_servicio": fila[3]})
     return respuesta
 
 @app.route("/api/servicios/", methods=["GET"])
@@ -177,11 +206,8 @@ def obtener_todos_los_servicios():
         resultado = hoteles.todos_los_servicios()
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    respuesta = []
-    for fila in resultado:
-	    respuesta.append({"id": fila[0], "servicio": fila[1], "tipo": fila[2]})
+    respuesta = crear_respuesta_servicios(resultado)
     return jsonify(respuesta), 200
-
 
 @app.route("/api/servicios/<int:id>", methods=["GET"])
 def obtener_servicio_por_id(id):
@@ -191,9 +217,7 @@ def obtener_servicio_por_id(id):
             return jsonify({"Error": "El id es inexistente"}), 404
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
-    respuesta = []
-    for fila in resultado:
-	    respuesta.append({"id": fila[0], "servicio": fila[1], "tipo": fila[2]})
+    respuesta = crear_respuesta_servicios(resultado)
     return jsonify(respuesta), 200
 
 @app.route("/api/servicios/hotel/<int:id_hotel>", methods=["GET"])
@@ -205,6 +229,24 @@ def obtener_servicios_por_hotel(id_hotel):
         resultado = hoteles.servicio_por_hotel(id_hotel)
         if len(resultado) == 0:
             return jsonify({"Error": "No hay servicios incluidos en este hotel"}), 404
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
+    
+    respuesta = crear_respuesta_servicios(resultado)
+    return jsonify(respuesta), 200
+
+@app.route("/api/servicios/hotel/<int:id_hotel>/<int:id_servicio>", methods=["GET"])
+def obtener_precio_servicio_hotel(id_hotel, id_servicio):
+    try:
+        resultado = hoteles.hoteles_por_id(id_hotel)
+        if len(resultado) == 0:
+            return jsonify({"Error": "El id_hotel es inexistente"}), 404
+        resultado = hoteles.servicios_por_id(id_servicio)
+        if len(resultado) == 0:
+            return jsonify({"Error": "No hay servicio con ese id_servicio"}), 404
+        resultado = hoteles.servicio_id_hotel_id_servicio(id_hotel, id_servicio)
+        if len(resultado) == 0:
+            return jsonify({"Error": "No hay servicio en el id_hotel con ese id_servicio"})
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
     
