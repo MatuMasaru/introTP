@@ -97,6 +97,29 @@ def delete_hotel():
     return jsonify(resultado), 200
 
 
+app.route("/api/update_hotel/", methods=["PUT"])
+def update_hotel():
+    data = request.get_json()
+    int_id_hotel = data['id']
+
+    keys = ('nombre', 'direccion', 'descripcion', 'url_img', 'region')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Falta el dato {key}'}), 400
+    
+    try:
+        resultado = hoteles.hoteles_por_id(int_id_hotel)
+        if len(resultado) == 0:
+            return jsonify({'error': 'No se encontró el alumno'}), 404
+
+        hoteles.actualizar_hotel(int_id_hotel, data)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify(data), 201
+
+
 #---------------------------------#
 #-----------HABITACIONES----------#
 #---------------------------------#

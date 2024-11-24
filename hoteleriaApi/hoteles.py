@@ -19,6 +19,9 @@ QUERY_INGRESAR_HOTEL = "INSERT INTO hotel (nombre, direccion, descripcion, url_i
 #HOTELES QUERYS --DELETE---
 QUERY_BORRAR_HOTEL = "DELETE FROM hotel WHERE id = :id"
 
+#HOTELES QUERYS --UPDATE---
+QUERY_ACTUALIZAR_HOTEL = "UPDATE hotel SET nombre = :nombre, direccion = :direccion, descripcion = :descripcion, url_img = :url_img, region = :region"
+
 
 # HABITACIONES QUERYS
 
@@ -121,6 +124,10 @@ def insert_hotel(data):
 
 def borrar_hotel(id):
     run_query(text(QUERY_BORRAR_HOTEL), {'id': id})
+
+#----DELETE----
+def actualizar_hotel(id, data):
+    run_query(text(QUERY_ACTUALIZAR_HOTEL),{'id': id, **data})
 
 #----HABITACIONES FUNCIONES
 
