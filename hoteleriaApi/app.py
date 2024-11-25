@@ -107,7 +107,7 @@ def delete_hotel():
         return jsonify({'error': str(e)}), 500
 
     resultado = resultado[0]
-    return jsonify({'nombre': resultado[0], 'direccion': resultado[1], 'descripcion': resultado[2], 'url_img': resultado[3], 'region': resultado[4], 'id': int_id_hotel}), 200
+    return jsonify({'nombre': resultado[1], 'direccion': resultado[2], 'descripcion': resultado[3], 'url_img': resultado[4], 'region': resultado[5], 'id': int_id_hotel}), 200
 
 
 app.route("/api/update_hotel/", methods=["PUT"])
@@ -224,13 +224,23 @@ def obtener_habitaciones_por_tipo(tipo):
 def create_habitacion():
     data = request.get_json()
 
-    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel')
+    """
+        data =  {
+                "numero": numero,
+                "url_img": url_img,
+                "tipo": tipo,
+                "precio": precio,
+                "id_hotel": id_hotel,
+            } 
+    """
+
+    keys = ('numero', 'url_img', 'tipo', 'precio', 'id_hotel')
     for key in keys:
         if key not in data:
             return jsonify({'error': f'Faltan el dato {key}'}), 400
         
     try:
-        result = hoteles.hoteles_por_id(data['h.id_hotel'])
+        result = hoteles.hoteles_por_id(data['id_hotel'])
         if len(result) == 0:
             return jsonify({'error': 'La habitacion no pertenece a ningun hotel'}), 400
 
@@ -255,20 +265,30 @@ def delete_habitacion(id):
         return jsonify({'error': str(e)}), 500
 
     result = result[0]
-    return jsonify({'h.numero': result[1], 'h.url_img': result[2], 'h.tipo': result[3], 'h.precio': result[4], 'h.id_hotel': result[5], 'h.id': id}), 200
+    return jsonify({'numero': result[1], 'url_img': result[2], 'tipo': result[3], 'precio': result[4], 'id_hotel': result[5], 'id': id}), 200
 
 
 @app.route('/api/update_habitacion/<int:id>', methods=['PUT'])
 def update_habitacion(id):
     data = request.get_json()
 
-    keys = ('h.numero', 'h.url_img', 'h.tipo', 'h.precio', 'h.id_hotel')
+    """
+        data =  {
+                "numero": numero,
+                "url_img": url_img,
+                "tipo": tipo,
+                "precio": precio,
+                "id_hotel": id_hotel,
+            } 
+    """
+
+    keys = ('numero', 'url_img', 'tipo', 'precio', 'id_hotel')
     for key in keys:
         if key not in data:
             return jsonify({'error': f'Faltan el dato {key}'}), 400
 
     try:
-        result = hoteles.hoteles_por_id(data['h.id_hotel'])
+        result = hoteles.hoteles_por_id(data['id_hotel'])
         if len(result) == 0:
             return jsonify({'error': 'La habitacion no pertenece a ningun hotel'}), 400
         
@@ -277,7 +297,7 @@ def update_habitacion(id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-    return jsonify({'h.id': id, **data}), 200
+    return jsonify({'id': id, **data}), 200
 
 #------------------------------------------------#
 #------------HABITACION REGION Y TIPO------------#
