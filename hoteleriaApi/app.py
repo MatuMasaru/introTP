@@ -355,10 +355,13 @@ def ingresar_reserva_de_servicio():
     try:
         resultado_reserva = hoteles.obtener_reserva_por_id(datos["id_reserva"])
         resultado_servicio = hoteles.servicios_por_id(datos["id_servicio"])
+        resultado_duplicados = hoteles.duplicados_reserva_servicio(datos["id_reserva"], datos["id_servicio"])
         if len(resultado_reserva) == 0:
-            return jsonify({"Error": "El id_reserva no existe."}), 404
+            return jsonify({"Error": f"El id_reserva {datos["id_reserva"]} no existe."}), 404
         elif len(resultado_servicio) == 0:
-            return jsonify({"Error": "El id_servicio no existe."}), 404
+            return jsonify({"Error": f"El id_servicio: {datos["id_servicio"]} no existe."}), 404
+        elif len(resultado_duplicados) != 0:
+            return jsonify({"Error": f"El servicio con id: {datos["id_servicio"]} ya se encuentra reservado para la reserva con id: {datos["id_reserva"]} "}), 404
         hoteles.reservar_servicio_por_id_reserva(datos)
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
@@ -382,22 +385,43 @@ def actualizar_estado_reserva(id, cliente):
         return jsonify({"Error": str(e)}), 500
     return jsonify({"Exito": f"El estado de la reserva paso a cancelado, asi como los servicio relacionados a esa reserva"}), 200
 
+def comprobar_reserva_servicio(id_reserva):
+    resultado = hoteles.obtener_reserva_por_id(id_reserva)
+    if len(resultado) == 0:
+        return jsonify({"Error": "El id_reserva no existe"}), 404
+    resultado = hoteles.obtener_reserva_servicio_por_id_reserva(id_reserva)
+    if len(resultado) == 0:
+        return jsonify({"Error" : f"No hay servicios reservados con id {id_reserva}, o todos se encuentran cancelados"})
+    return True
+        
 @app.route("/api/reserva/servicios/<int:id_reserva>", methods=["PUT"])
 def cancelar_reserva_servicios(id_reserva):
     try:
-        resultado = hoteles.obtener_reserva_servicio_por_id_reserva(id_reserva)
-        if len(resultado) == 0:
-            return jsonify({"Error": "El id_reserva no existe"}), 404
-        elif resultado[0][3] == "cancelado":
-            return jsonify({"Error": "La reserva ya se encuentra cancelada"})
-
-        hoteles.cancelar_reserva_servicio_por_id_reserva(id_reserva)
+        resultado = comprobar_reserva_servicio(id_reserva)
+        if resultado == True:
+            hoteles.cancelar_reserva_servicio_por_id_reserva(id_reserva)
+        else:
+            return resultado
 
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
-    return jsonify({"Aviso", "El estado de la reserva de servicios = cancelado"})
+    return jsonify({"Aviso": "El estado de la reserva de servicios = cancelado"}), 200
 
+@app.route("/api/reserva/servicios/<int:id_reserva>/<int:id_servicio>", methods=["PUT"])
+def cancelar_reserva_servicio_individual(id_reserva, id_servicio):
+    try:
+        resultado = comprobar_reserva_servicio(id_reserva)
+        if resultado == True:
+            hoteles.cancelar_reserva_servicio_individual(id_reserva, id_servicio)
+        else:
+            return resultado
+        
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
+
+    return jsonify({"message": "Servicio cancelado exitosamente"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True, port=3648)
+
