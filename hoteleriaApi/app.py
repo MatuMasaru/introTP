@@ -430,6 +430,21 @@ def create_servicios():
 
     return jsonify(data), 201
 
+@app.route("/api/delete_servicio/<int:id>", methods=['DELETE'])
+def delete_servicio(id):
+    try:
+        result = hoteles.servicios_por_id(id)
+        if len(result) == 0:
+            return jsonify({'error': 'No se encontró el servicio'}), 404
+
+        hoteles.borrar_servicio(id)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    result = result[0]
+    return jsonify({'servicio': result[1], 'tipo': result[2], 'id': id}), 200
+
 
 #-----------------------------------------------------------#----------------------#
 #-------------RESERVAS DE HABITACION Y SERVICIOS------------#-------GET------------#

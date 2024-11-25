@@ -83,6 +83,9 @@ QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO = "SELECT s.servicio, s.tipo,
 #----SERVICIO QUERYS INSERT----
 QUERY_INGRESAR_SERVICIO = "INSERT INTO servicios (servicio, tipo) VALUES (:servicio, :tipo)"
 
+#----SERVICIO QUERYS DELETE----
+QUERY_BORRAR_SERVICIO = "DELETE FROM servicios WHERE id = :id"
+
 
 # RESERVA HABITACION QUERYS --GET---
 
@@ -206,6 +209,10 @@ def servicio_id_hotel_id_servicio(id_hotel, id_servicio):
 #----POST----
 def insert_servicio(data):
     run_query(QUERY_INGRESAR_SERVICIO, data)
+
+#----DELETE----
+def borrar_servicio(id):
+    run_query(text(QUERY_BORRAR_SERVICIO), {'id': id})
 
 
 #----RESERVA FUNCIONES 
