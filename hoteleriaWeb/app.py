@@ -6,20 +6,21 @@ app = Flask(__name__)
 API_URL = "http://localhost:3648/api"
 
 
+def get_data(endpoint):
+    try:
+        response = requests.get(API_URL + endpoint)
+        response.raise_for_status()
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        data = []
+
+    return data
+
+
 @app.route("/")
 def index():
-    try:
-        response = requests.get(API_URL + "/hoteles")
-        response.raise_for_status()
-        hotels = response.json()
-    except requests.exceptions.RequestException as e:
-        hotels = []
-
-    regions = []
-    for hotel in hotels:
-        region = hotel["region"]
-        if region not in regions:
-            regions.append(region)
+    hotels = get_data("/hoteles")
+    regions = get_data("/hoteles/regiones")
 
     return render_template("index.html", hotels=hotels, regions=regions)
 
@@ -131,41 +132,13 @@ def habitaciones():
         if len(query) > 0:
             query_string = "?" + "&".join(query)
 
-        try:
-            response = requests.get(
-                API_URL + "/habitaciones/disponibles" + query_string
-            )
-            response.raise_for_status()
-            rooms = response.json()
-        except requests.exceptions.RequestException as e:
-            rooms = []
+        rooms = get_data("/habitaciones/disponibles" + query_string)
 
         for room in rooms:
-            try:
-                response = requests.get(
-                    API_URL + "/servicios/habitacion/" + str(room["id"])
-                )
-                response.raise_for_status()
-                services = response.json()
-            except requests.exceptions.RequestException as e:
-                services = []
+            room["servicios"] = get_data("/servicios/habitacion/" + str(room["id"]))
 
-            room["servicios"] = services
-
-    try:
-        response = requests.get(API_URL + "/hoteles")
-        response.raise_for_status()
-        hotels = response.json()
-    except requests.exceptions.RequestException as e:
-        hotels = []
-
-    regions = []
-    for hotel in hotels:
-        region = hotel["region"]
-        if region not in regions:
-            regions.append(region)
-
-    room_types = ["suite", "familiar", "doble", "individual"]
+    regions = get_data("/hoteles/regiones")
+    room_types = get_data("/habitaciones/tipos/")
 
     return render_template(
         "habitaciones.html", regions=regions, room_types=room_types, rooms=rooms
