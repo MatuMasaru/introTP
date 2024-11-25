@@ -110,6 +110,81 @@ def hoteles(id_hotel):
     return render_template("info_hotel.html", params = params, servicios = servicios)
 
 
+@app.route("/habitaciones", methods=["GET", "POST"])
+def habitaciones():
+    rooms = []
+
+    if request.method == "POST":
+        query_string = ""
+        query = []
+        if request.form.get("region") is not None:
+            query.append(f"region={request.form.get('region')}")
+
+        if request.form.get("dates") is not None:
+            dates = request.form.get("dates").split(" a ")
+            query.append(f"llegada={dates[0]}")
+            query.append(f"salida={dates[1]}")
+
+        if request.form.get("type") is not None:
+            query.append(f"tipo={request.form.get('type')}")
+
+        if len(query) > 0:
+            query_string = "?" + "&".join(query)
+
+        try:
+            response = requests.get(
+                API_URL + "/habitaciones/disponibles" + query_string
+            )
+            response.raise_for_status()
+            rooms = response.json()
+        except requests.exceptions.RequestException as e:
+            rooms = []
+
+        for room in rooms:
+            try:
+                response = requests.get(
+                    API_URL + "/servicios/habitacion/" + str(room["id"])
+                )
+                response.raise_for_status()
+                services = response.json()
+            except requests.exceptions.RequestException as e:
+                services = []
+
+            room["servicios"] = services
+
+    try:
+        response = requests.get(API_URL + "/hoteles")
+        response.raise_for_status()
+        hotels = response.json()
+    except requests.exceptions.RequestException as e:
+        hotels = []
+
+    regions = []
+    for hotel in hotels:
+        region = hotel["region"]
+        if region not in regions:
+            regions.append(region)
+
+    room_types = ["suite", "familiar", "doble", "individual"]
+
+    return render_template(
+        "habitaciones.html", regions=regions, room_types=room_types, rooms=rooms
+    )
+
+
+@app.route("/reservar/<id_room>")
+def reservar(id_room):
+    rooms = {
+        "0": {"id_hotel": 0, "number": 150, "persons": 4, "price": 40000},
+        "1": {"id_hotel": 2, "number": 300, "persons": 4, "price": 40000},
+    }
+    return render_template("reservas.html", room = rooms[id_room], id_room=id_room)
+
+
+#---------------------------------#
+#-----------ADMIN----------#
+#---------------------------------#
+
 @app.route('/admin')
 def admin():
     try:
@@ -183,76 +258,6 @@ def admin_update_hotel(id):
 
         except requests.exceptions.RequestException as e:
             response = []
-
-@app.route("/habitaciones", methods=["GET", "POST"])
-def habitaciones():
-    rooms = []
-
-    if request.method == "POST":
-        query_string = ""
-        query = []
-        if request.form.get("region") is not None:
-            query.append(f"region={request.form.get('region')}")
-
-        if request.form.get("dates") is not None:
-            dates = request.form.get("dates").split(" a ")
-            query.append(f"llegada={dates[0]}")
-            query.append(f"salida={dates[1]}")
-
-        if request.form.get("type") is not None:
-            query.append(f"tipo={request.form.get('type')}")
-
-        if len(query) > 0:
-            query_string = "?" + "&".join(query)
-
-        try:
-            response = requests.get(
-                API_URL + "/habitaciones/disponibles" + query_string
-            )
-            response.raise_for_status()
-            rooms = response.json()
-        except requests.exceptions.RequestException as e:
-            rooms = []
-
-        for room in rooms:
-            try:
-                response = requests.get(
-                    API_URL + "/servicios/habitacion/" + str(room["id"])
-                )
-                response.raise_for_status()
-                services = response.json()
-            except requests.exceptions.RequestException as e:
-                services = []
-
-            room["servicios"] = services
-
-    try:
-        response = requests.get(API_URL + "/hoteles")
-        response.raise_for_status()
-        hotels = response.json()
-    except requests.exceptions.RequestException as e:
-        hotels = []
-
-    regions = []
-    for hotel in hotels:
-        region = hotel["region"]
-        if region not in regions:
-            regions.append(region)
-
-    room_types = ["suite", "familiar", "doble", "individual"]
-
-    return render_template(
-        "habitaciones.html", regions=regions, room_types=room_types, rooms=rooms
-    )
-
-
-@app.route("/reservar/<id_room>")
-def reservar(id_room):
-    rooms = {
-        "0": {"id_hotel": 0, "number": 150, "persons": 4, "price": 40000},
-        "1": {"id_hotel": 2, "number": 300, "persons": 4, "price": 40000},
-    }
-    return render_template("reservas.html", room = rooms[id_room], id_room=id_room)
 
 
 @app.errorhandler(404)

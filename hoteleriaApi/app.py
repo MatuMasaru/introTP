@@ -74,6 +74,10 @@ def obtener_todas_las_regiones():
     return jsonify(respuesta), 200
 
 
+#---------------------------------#
+#-----------ADMIN HOTELES----------#
+#---------------------------------#
+
 @app.route("/api/create_hotel/", methods=["POST"])
 def create_hotel():
     data = request.get_json()
@@ -219,6 +223,10 @@ def obtener_habitaciones_por_tipo(tipo):
     respuesta = crear_respuesta_habitaciones(resultado)
     return jsonify(respuesta), 200
 
+
+#---------------------------------#
+#-----------ADMIN HABITACIONES----------#
+#---------------------------------#
 
 @app.route('/api/create_habitacion/', methods=['POST'])
 def create_habitacion():
@@ -394,6 +402,34 @@ def obtener_servicios_por_habitacion(id_habitacion):
 
     respuesta = crear_respuesta_servicios(resultado)
     return jsonify(respuesta), 200
+
+
+#---------------------------------#
+#-----------ADMIN SERVICIOS----------#
+#---------------------------------#
+
+@app.route("/api/create_servicio", methods=['POST'])
+def create_servicios():
+    data = request.get_json()
+    """
+        data =  {
+                "servicio": servicio,
+                "tipo": tipo
+            } 
+    """
+    keys = ('servicio', 'tipo')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+
+    try:
+      hoteles.insert_servicio(data)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify(data), 201
+
 
 #-----------------------------------------------------------#----------------------#
 #-------------RESERVAS DE HABITACION Y SERVICIOS------------#-------GET------------#

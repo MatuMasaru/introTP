@@ -80,6 +80,10 @@ QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM 
 
 QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel AND sh.id_servicio = :id_servicio;"
 
+#----SERVICIO QUERYS INSERT----
+QUERY_INGRESAR_SERVICIO = "INSERT INTO servicios (servicio, tipo) VALUES (:servicio, :tipo)"
+
+
 # RESERVA HABITACION QUERYS --GET---
 
 QUERY_RESERVA_POR_ID_Y_CLIENTE = "SELECT id, id_habitacion, llegada, salida, cliente_apellido, estado, precio, fecha_cancelacion FROM reserva WHERE id= :id AND cliente_apellido = :cliente_apellido"
@@ -198,6 +202,11 @@ def servicio_por_hotel(id_hotel):
 
 def servicio_id_hotel_id_servicio(id_hotel, id_servicio):
     return run_query(QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO, {"id_hotel": id_hotel, "id_servicio": id_servicio}).fetchall()
+
+#----POST----
+def insert_servicio(data):
+    run_query(QUERY_INGRESAR_SERVICIO, data)
+
 
 #----RESERVA FUNCIONES 
 
