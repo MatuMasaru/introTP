@@ -86,6 +86,8 @@ QUERY_INGRESAR_SERVICIO = "INSERT INTO servicios (servicio, tipo) VALUES (:servi
 #----SERVICIO QUERYS DELETE----
 QUERY_BORRAR_SERVICIO = "DELETE FROM servicios WHERE id = :id"
 
+#----SERVICIO QUERYS UPDATE----
+QUERY_ACTUALIZAR_SERVICIO = "UPDATE servicios SET servicio = :servicio, tipo = :tipo WHERE id = :id"
 
 # RESERVA HABITACION QUERYS --GET---
 
@@ -213,6 +215,10 @@ def insert_servicio(data):
 #----DELETE----
 def borrar_servicio(id):
     run_query(text(QUERY_BORRAR_SERVICIO), {'id': id})
+
+#----PUT----
+def actualizar_servicio(id, data):
+    run_query(text(QUERY_ACTUALIZAR_SERVICIO), {'id': id, **data})
 
 
 #----RESERVA FUNCIONES 
