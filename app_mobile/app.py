@@ -4,6 +4,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
 from kivymd.app import MDApp
 import requests
 
+
+
 # Definir las pantallas
 class MainScreen(Screen):
     pass

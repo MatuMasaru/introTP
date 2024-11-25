@@ -8,6 +8,14 @@ ScreenManager:
         
 
 <MainScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.9, 0.6, 1  # Naranja claro
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
     MDLabel:
         text: "ESTANCIAS DEL SOL"
         text_color: 1, 0.65, 0, 1
@@ -63,6 +71,13 @@ ScreenManager:
 
 
 <DetailsScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.9, 0.6, 1  # Naranja claro
+            Rectangle:
+                pos: self.pos
+                size: self.size
     MDLabel:
         text: "Detalles de tu reserva"
         text_color: 1, 0.65, 0, 1
@@ -85,6 +100,13 @@ ScreenManager:
 
 
 <CancelScreen>:   
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.9, 0.6, 1  # Naranja claro
+            Rectangle:
+                pos: self.pos
+                size: self.size
     MDLabel:
         text: "CANCELAR RESERVA"      
         text_color: 1, 0.65, 0, 1
