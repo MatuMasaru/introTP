@@ -114,20 +114,28 @@ def hoteles(id_hotel):
 @app.route("/habitaciones", methods=["GET", "POST"])
 def habitaciones():
     rooms = []
+    meta_region = ""
+    meta_start_date = ""
+    meta_end_date = ""
+    meta_room_type = ""
 
     if request.method == "POST":
         query_string = ""
         query = []
         if request.form.get("region") is not None:
-            query.append(f"region={request.form.get('region')}")
+            meta_region = request.form.get("region")
+            query.append(f"region={meta_region}")
 
         if request.form.get("dates") is not None:
             dates = request.form.get("dates").split(" a ")
-            query.append(f"llegada={dates[0]}")
-            query.append(f"salida={dates[1]}")
+            meta_start_date = dates[0]
+            meta_end_date = dates[1]
+            query.append(f"llegada={meta_start_date}")
+            query.append(f"salida={meta_end_date}")
 
         if request.form.get("type") is not None:
-            query.append(f"tipo={request.form.get('type')}")
+            meta_room_type = request.form.get("type")
+            query.append(f"tipo={meta_room_type}")
 
         if len(query) > 0:
             query_string = "?" + "&".join(query)
@@ -141,7 +149,14 @@ def habitaciones():
     room_types = get_data("/habitaciones/tipos/")
 
     return render_template(
-        "habitaciones.html", regions=regions, room_types=room_types, rooms=rooms
+        "habitaciones.html",
+        regions=regions,
+        room_types=room_types,
+        rooms=rooms,
+        meta_region=meta_region,
+        meta_start_date=meta_start_date,
+        meta_end_date=meta_end_date,
+        meta_room_type=meta_room_type
     )
 
 
