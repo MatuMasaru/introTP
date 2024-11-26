@@ -446,7 +446,7 @@ def delete_servicio(id):
     return jsonify({'servicio': result[1], 'tipo': result[2], 'id': id}), 200
 
 
-@app.route("/api/servicios/admnin/<int:id>", methods=['PUT'])
+@app.route("/api/servicios/admin/<int:id>", methods=['PUT'])
 def update_servicio(id):
     data = request.get_json()
     """
@@ -472,6 +472,43 @@ def update_servicio(id):
 
     return jsonify({'id': id, **data}), 200
 
+
+#---------------------------------#
+#-----------ADMIN HOTEL_SERVICIO----------#
+#---------------------------------#
+
+@app.route("/api/hotel_servicio/admin", methods=['POST'])
+def add_hotel_servicio():
+    data = request.get_json()
+
+    """
+        data =  {
+                "id_hotel": id_hotel,
+                "id_servicio": id_servicio,
+                "precio": precio,
+            } 
+    """
+    
+    keys = ('id_hotel', 'id_servicio', 'precio')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+
+    try:
+        result_1 = hoteles.servicios_por_id(data['id_servicio'])
+        if len(result_1) == 0:
+            return jsonify({'error': 'No se encontró el servicio'})
+
+        result_2 = hoteles.hoteles_por_id(data['id_hotel'])
+        if len(result_2) == 0:
+            return jsonify({'error': 'El servicio no pertence a ningun hotel'}), 400
+
+        hoteles.insert_servicio_hotel(data)
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify(data), 201
 
 #-----------------------------------------------------------#----------------------#
 #-------------RESERVAS DE HABITACION Y SERVICIOS------------#-------GET------------#

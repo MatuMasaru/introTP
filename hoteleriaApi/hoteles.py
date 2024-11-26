@@ -90,6 +90,11 @@ QUERY_BORRAR_SERVICIO = "DELETE FROM servicios WHERE id = :id"
 #----SERVICIO QUERYS UPDATE----
 QUERY_ACTUALIZAR_SERVICIO = "UPDATE servicios SET servicio = :servicio, tipo = :tipo WHERE id = :id"
 
+
+#SERVICIO_HOTEL QUERYS INSERT
+QUERY_INGRESAR_SERVICIO_HOTEL = "INSERT INTO hotel_servicio (id_hotel, id_servicio, precio) VALUES (:id_hotel, :id_servicio, :precio)"
+
+
 # RESERVA HABITACION QUERYS --GET---
 
 QUERY_RESERVA_POR_ID_Y_CLIENTE = "SELECT id, id_habitacion, llegada, salida, cliente_apellido, estado, precio, fecha_cancelacion FROM reserva WHERE id= :id AND cliente_apellido = :cliente_apellido"
@@ -224,6 +229,11 @@ def borrar_servicio(id):
 #----PUT----
 def actualizar_servicio(id, data):
     run_query(text(QUERY_ACTUALIZAR_SERVICIO), {'id': id, **data})
+
+#----HOTEL_SERVICIO FUNCIONES
+
+def insert_servicio_hotel(data):
+    run_query(QUERY_INGRESAR_SERVICIO_HOTEL, data)
 
 
 #----RESERVA FUNCIONES 
