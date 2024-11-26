@@ -3,9 +3,9 @@ CREATE DATABASE IF NOT EXISTS hoteles;
 USE hoteles;
 
 -- Eliminar tablas existentes
+DROP TABLE IF EXISTS reserva_hotel_servicio;
 DROP TABLE IF EXISTS habitacion_servicio;
 DROP TABLE IF EXISTS hotel_servicio;
-DROP TABLE IF EXISTS reserva_servicios;
 DROP TABLE IF EXISTS reserva;
 DROP TABLE IF EXISTS servicios;
 DROP TABLE IF EXISTS habitaciones;
@@ -49,16 +49,6 @@ CREATE TABLE reserva (
     FOREIGN KEY (id_habitacion) REFERENCES habitaciones(id)
 );
 
-CREATE TABLE reserva_servicios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_reserva INT,
-    id_servicio INT,
-    estado TEXT,
-    precio INT,
-    FOREIGN KEY (id_reserva) REFERENCES reserva(id),
-    FOREIGN KEY (id_servicio) REFERENCES servicios(id)
-);
-
 CREATE TABLE hotel_servicio (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_hotel INT,
@@ -66,6 +56,14 @@ CREATE TABLE hotel_servicio (
     precio INT,
     FOREIGN KEY (id_hotel) REFERENCES hotel(id),
     FOREIGN KEY (id_servicio) REFERENCES servicios(id)
+);
+
+CREATE TABLE reserva_hotel_servicio (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_hotel_servicio INT,
+    id_reserva INT,
+    FOREIGN KEY (id_reserva) REFERENCES reserva(id),
+    FOREIGN KEY (id_hotel_servicio) REFERENCES hotel_servicio(id)
 );
 
 CREATE TABLE habitacion_servicio (
@@ -107,51 +105,49 @@ VALUES
 INSERT INTO servicios
     (servicio, tipo) 
 VALUES
+    ('TV', 'Entretenimiento'),
     ('WiFi', 'Conectividad'),
     ('Desayuno', 'Alimentación'),
     ('Gimnasio', 'Entretenimiento'),
     ('Spa', 'Relajación'),
-    ('Piscina', 'Entretenimiento');
+    ('Piscina', 'Entretenimiento'),
+    ('Excursiones', 'Actividades');
 
 INSERT INTO hotel_servicio
     (id_hotel, id_servicio, precio)
 VALUES
     -- Hotel 1
-    (1, 1, 0),
-    (1, 2, 15),
-    (1, 3, 20),
-    (1, 4, 25),
+    (1, 4, 10),
     (1, 5, 15),
+    (1, 6, 20),
+    (1, 7, 25),
     -- Hotel 2
-    (2, 1, 0),
-    (2, 2, 20),
-    (2, 3, 25),
-    (2, 4, 30),
-    (2, 5, 20),
+    (2, 4, 10),
+    (2, 5, 15),
+    (2, 6, 25),
+    (2, 7, 30),
     -- Hotel 3
-    (3, 1, 0),
-    (3, 2, 25),
-    (3, 3, 30),
-    (3, 4, 40),
-    (3, 5, 30);
+    (3, 5, 25),
+    (3, 6, 30),
+    (3, 7, 40);
 
 INSERT INTO habitacion_servicio
     (id_habitacion, id_servicio, precio)
 VALUES
     -- Habitaciones del Hotel 1
-    (1, 1, 0), (1, 2, 15), (1, 3, 20), (1, 4, 25), (1, 5, 15),
-    (2, 1, 0), (2, 2, 15), (2, 3, 20),
-    (3, 1, 0), (3, 2, 15),
-    (4, 1, 0), (4, 2, 15), (4, 5, 20),
-    
+    (1, 1, 0), (1, 2, 0), (1, 3, 0),
+    (2, 1, 0), (2, 2, 0), (2, 3, 0),
+    (3, 1, 0), (3, 2, 0),
+    (4, 1, 0), (4, 2, 0), (4, 5, 0),
+
     -- Habitaciones del Hotel 2
-    (5, 1, 0), (5, 2, 20), (5, 3, 25), (5, 4, 30), (5, 5, 20),
-    (6, 1, 0), (6, 2, 20), (6, 3, 25),
-    (7, 1, 0), (7, 2, 20), (7, 5, 25),
-    (8, 1, 0), (8, 2, 20),
-    
+    (5, 1, 0), (5, 2, 0), (5, 3, 0),
+    (6, 1, 0), (6, 2, 0), (6, 3, 0),
+    (7, 1, 0), (7, 2, 0), (7, 5, 0),
+    (8, 1, 0), (8, 2, 0),
+
     -- Habitaciones del Hotel 3
-    (9, 1, 0), (9, 2, 25), (9, 3, 30), (9, 4, 40), (9, 5, 30),
-    (10, 1, 0), (10, 2, 25),
-    (11, 1, 0), (11, 2, 25), (11, 3, 30),
-    (12, 1, 0), (12, 2, 25), (12, 3, 30), (12, 5, 30);
+    (9, 1, 0), (9, 2, 0), (9, 3, 0),
+    (10, 1, 0), (10, 2, 0),
+    (11, 1, 0), (11, 2, 0), (11, 3, 0),
+    (12, 1, 0), (12, 2, 0), (12, 3, 0);

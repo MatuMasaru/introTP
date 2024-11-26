@@ -110,10 +110,9 @@
               </div>
             </div>
             <div class="room__card__footer">
-              <a class="btn btn--primary btn--size-medium" href="{{url_for('reservar', id_room=room['id'])}}">
+              <a class="btn btn--primary btn--size-medium" href="{{url_for('reservar', id_room=room['id'], region=meta_region, start_date=meta_start_date, end_date=meta_end_date)}}">
                 Reservar por {{ room['precio'] }} USD la noche
               </a>
-            </button>
             </div>
           </article>
         {% endfor %}

@@ -6,20 +6,21 @@ app = Flask(__name__)
 API_URL = "http://localhost:3648/api"
 
 
+def get_data(endpoint):
+    try:
+        response = requests.get(API_URL + endpoint)
+        response.raise_for_status()
+        data = response.json()
+    except requests.exceptions.RequestException as e:
+        data = []
+
+    return data
+
+
 @app.route("/")
 def index():
-    try:
-        response = requests.get(API_URL + "/hoteles")
-        response.raise_for_status()
-        hotels = response.json()
-    except requests.exceptions.RequestException as e:
-        hotels = []
-
-    regions = []
-    for hotel in hotels:
-        region = hotel["region"]
-        if region not in regions:
-            regions.append(region)
+    hotels = get_data("/hoteles")
+    regions = get_data("/hoteles/regiones")
 
     return render_template("index.html", hotels=hotels, regions=regions)
 
@@ -113,62 +114,49 @@ def hoteles(id_hotel):
 @app.route("/habitaciones", methods=["GET", "POST"])
 def habitaciones():
     rooms = []
+    meta_region = ""
+    meta_start_date = ""
+    meta_end_date = ""
+    meta_room_type = ""
 
     if request.method == "POST":
         query_string = ""
         query = []
         if request.form.get("region") is not None:
-            query.append(f"region={request.form.get('region')}")
+            meta_region = request.form.get("region")
+            query.append(f"region={meta_region}")
 
         if request.form.get("dates") is not None:
             dates = request.form.get("dates").split(" a ")
-            query.append(f"llegada={dates[0]}")
-            query.append(f"salida={dates[1]}")
+            meta_start_date = dates[0]
+            meta_end_date = dates[1]
+            query.append(f"llegada={meta_start_date}")
+            query.append(f"salida={meta_end_date}")
 
         if request.form.get("type") is not None:
-            query.append(f"tipo={request.form.get('type')}")
+            meta_room_type = request.form.get("type")
+            query.append(f"tipo={meta_room_type}")
 
         if len(query) > 0:
             query_string = "?" + "&".join(query)
 
-        try:
-            response = requests.get(
-                API_URL + "/habitaciones/disponibles" + query_string
-            )
-            response.raise_for_status()
-            rooms = response.json()
-        except requests.exceptions.RequestException as e:
-            rooms = []
+        rooms = get_data("/habitaciones/disponibles" + query_string)
 
         for room in rooms:
-            try:
-                response = requests.get(
-                    API_URL + "/servicios/habitacion/" + str(room["id"])
-                )
-                response.raise_for_status()
-                services = response.json()
-            except requests.exceptions.RequestException as e:
-                services = []
+            room["servicios"] = get_data("/servicios/habitacion/" + str(room["id"]))
 
-            room["servicios"] = services
-
-    try:
-        response = requests.get(API_URL + "/hoteles")
-        response.raise_for_status()
-        hotels = response.json()
-    except requests.exceptions.RequestException as e:
-        hotels = []
-
-    regions = []
-    for hotel in hotels:
-        region = hotel["region"]
-        if region not in regions:
-            regions.append(region)
-
-    room_types = ["suite", "familiar", "doble", "individual"]
+    regions = get_data("/hoteles/regiones")
+    room_types = get_data("/habitaciones/tipos/")
 
     return render_template(
-        "habitaciones.html", regions=regions, room_types=room_types, rooms=rooms
+        "habitaciones.html",
+        regions=regions,
+        room_types=room_types,
+        rooms=rooms,
+        meta_region=meta_region,
+        meta_start_date=meta_start_date,
+        meta_end_date=meta_end_date,
+        meta_room_type=meta_room_type
     )
 
 
@@ -262,10 +250,13 @@ def admin_update_hotel(id):
 
 @app.errorhandler(404)
 def page_notfound(e):
-    return render_template("error.html"), 404
+    return render_template("error.html", error_code="404", error_description="Página no encontrada"), 404
+
 
 @app.errorhandler(500)
 def server_error(e):
-    return render_template("error.html"), 500
+    return render_template("error.html", error_code="500", error_description="Error del servidor"), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True)

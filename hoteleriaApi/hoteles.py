@@ -5,6 +5,7 @@ import os
 
 load_dotenv()
 
+
 # HOTELES QUERYS
 
 QUERY_TODOS_LOS_HOTELES = "SELECT id, nombre, direccion, descripcion, url_img, region FROM hotel"
@@ -74,7 +75,7 @@ QUERY_TODOS_LOS_SERVICIOS = "SELECT id, servicio, tipo FROM servicios"
 
 QUERY_SERVICIO_POR_ID = "SELECT id, servicio, tipo FROM servicios WHERE id = :id"
 
-QUERY_SERVICIO_POR_ID_HABITACION = "SELECT s.servicio, s.tipo, sh.precio, s.id FROM servicios s JOIN habitacion_servicio sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion;"
+QUERY_SERVICIO_POR_ID_HABITACION = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN habitacion_servicio sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion;"
 
 QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel;"
 
@@ -105,16 +106,20 @@ QUERY_DISPONIBILIDAD_HABITACION = "SELECT estado FROM reserva WHERE id_habitacio
 
 QUERY_CANCELAR_RESERVA = "UPDATE reserva SET estado = 'cancelado', fecha_cancelacion  = NOW() WHERE id = :id AND cliente_apellido =:cliente_apellido AND estado = 'activo'"
 
-# RESERVA DE SERVICIO POR CLIENTE ---INSERT---
+# RESERVA DE SERVICIO ---INSERT---
+
+QUERY_DUPLICADOS_DE_RESERVA_SERVICIOS = "SELECT id_servicio FROM reserva_servicios WHERE (id_reserva= :id_reserva AND id_servicio= :id_servicio) AND estado = 'activo'"
 
 QUERY_RESERVAR_SERVICIOS_POR_ID_RESERVA = "INSERT INTO reserva_servicios (id_reserva, id_servicio, estado, precio) VALUES (:id_reserva, :id_servicio, 'activo', :precio)"
 
 # VER RESERVA SERVICIO POR ID RESERVA
 
-QUERY_RESERVA_SERVICIO_POR_ID_RESERVA = "SELECT id, id_reserva, id_servicio, estado, precio FROM reserva_servicios WHERE id_reserva= :id_reserva"
+QUERY_VER_RESERVA_SERVICIO_POR_ID_RESERVA = "SELECT id, id_reserva, id_servicio, estado, precio FROM reserva_servicios WHERE id_reserva= :id_reserva AND estado = 'activo'"
 
 # CANCELAR SERVICIO
 QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA = "UPDATE reserva_servicios SET estado = 'cancelado' WHERE id_reserva = :id_reserva"
+
+QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA_ID_SERVICIO = "UPDATE reserva_servicios SET estado = 'cancelado' WHERE id_reserva = :id_reserva AND id_servicio= :id_servicio"
 
 engine = create_engine(f"mysql+mysqlconnector://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}:3306/{os.getenv('MYSQL_DB')}?charset=utf8mb4&collation=utf8mb4_unicode_ci")
 
@@ -232,7 +237,10 @@ def obtener_reserva_por_id(id):
     return run_query(QUERY_RESERVA_POR_ID, {"id": id}).fetchall()
 
 def obtener_reserva_servicio_por_id_reserva(id_reserva):
-    return run_query(QUERY_RESERVA_SERVICIO_POR_ID_RESERVA, {"id_reserva": id_reserva}).fetchall()
+    return run_query(QUERY_VER_RESERVA_SERVICIO_POR_ID_RESERVA, {"id_reserva": id_reserva}).fetchall()
+
+def duplicados_reserva_servicio(id_reserva, id_servicio):
+    return run_query(QUERY_DUPLICADOS_DE_RESERVA_SERVICIOS, {"id_reserva": id_reserva, "id_servicio": id_servicio}).fetchall()
 
 #----POST----
 
@@ -247,6 +255,9 @@ def reservar_servicio_por_id_reserva(datos):
 
 def cancelar_reserva(id, cliente_apellido):
     run_query(QUERY_CANCELAR_RESERVA, {"id": id, "cliente_apellido": cliente_apellido})
+
+def cancelar_reserva_servicio_individual(id_reserva, id_servicio):
+    run_query(QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA_ID_SERVICIO,{"id_reserva": id_reserva, "id_servicio": id_servicio})
 
 def cancelar_reserva_servicio_por_id_reserva(id_reserva):
     run_query(QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA, {"id_reserva": id_reserva})
