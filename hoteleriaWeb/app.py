@@ -171,10 +171,13 @@ def reservar(id_room):
 
 @app.errorhandler(404)
 def page_notfound(e):
-    return render_template("error.html"), 404
+    return render_template("error.html", error_code="404", error_description="Página no encontrada"), 404
+
 
 @app.errorhandler(500)
 def server_error(e):
-    return render_template("error.html"), 500
+    return render_template("error.html", error_code="500", error_description="Error del servidor"), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True)
