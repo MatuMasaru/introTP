@@ -589,6 +589,21 @@ def add_habitacion_servicio():
 
     return jsonify(data), 201
 
+@app.route("/api/habitacion_servicio/admin/<int:id_habitacion>/<int:id_servicio", methods=['DELETE'])
+def delete_habitacion_servicio(id_habitacion, id_servicio):
+    try:
+        result = hoteles.servicio_id_habitacion_id_servicio(id_habitacion, id_servicio)
+        if len(result) == 0:
+            return jsonify({'error': 'No se encontró el servicio de la habitacion'}), 404
+
+        hoteles.borrar_servicio_habitacion(id_habitacion, id_servicio)
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    result = result[0]
+    return jsonify({'servicio': result[0], 'tipo': result[1], 'precio':[2], 'id': id_servicio}), 200
+
 #-----------------------------------------------------------#----------------------#
 #-------------RESERVAS DE HABITACION Y SERVICIOS------------#-------GET------------#
 #-----------------------------------------------------------#----------------------#

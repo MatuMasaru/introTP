@@ -81,6 +81,9 @@ QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM 
 
 QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel AND sh.id_servicio = :id_servicio;"
 
+QUERY_OBTENER_PRECIO_SERVICIO_ID_HABITACION_ID_SERVICIO = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN habitacion_servicio sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion AND sh.id_servicio = :id_servicio;"
+
+
 #----SERVICIO QUERYS INSERT----
 QUERY_INGRESAR_SERVICIO = "INSERT INTO servicios (servicio, tipo) VALUES (:servicio, :tipo)"
 
@@ -102,6 +105,11 @@ QUERY_ACTUALIZAR_SERVICIO_HOTEL = "UPDATE hotel_servicio SET precio = :precio WH
 
 #SERVICIO_HABITACION INSERT
 QUERY_INGRESAR_SERVICIO_HABITACION = "INSERT INTO habitacion_servicio (id_habitacion, id_servicio, precio) VALUES (:id_habitacion, :id_servicio, :precio)"
+
+#SERVICIO_HABITACION QUERYS DELETE
+QUERY_BORRAR_SERVICIO_HABITACION = "DELETE FROM habitacion_servicio WHERE id_habitacion = :id_habitacion AND id_servicio = :id_servicio"
+
+
 
 # RESERVA HABITACION QUERYS --GET---
 
@@ -226,6 +234,9 @@ def servicio_por_hotel(id_hotel):
 def servicio_id_hotel_id_servicio(id_hotel, id_servicio):
     return run_query(QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO, {"id_hotel": id_hotel, "id_servicio": id_servicio}).fetchall()
 
+def servicio_id_habitacion_id_servicio(id_habitacion, id_servicio):
+    return run_query(QUERY_OBTENER_PRECIO_SERVICIO_ID_HABITACION_ID_SERVICIO, {"id_habitacion": id_habitacion, "id_servicio": id_servicio}).fetchall()
+
 #----POST----
 def insert_servicio(data):
     run_query(QUERY_INGRESAR_SERVICIO, data)
@@ -256,6 +267,9 @@ def actualizar_servicio_hotel(id_hotel, id_servicio, data):
 def insert_servicio_habitacion(data):
     run_query(QUERY_INGRESAR_SERVICIO_HABITACION, data)
 
+#DELETE
+def borrar_servicio_habitacion(id_habitacion, id_servicio):
+    run_query(text(QUERY_BORRAR_SERVICIO_HABITACION), {'id_habitacion': id_habitacion, 'id_servicio': id_servicio})
 
 
 #----RESERVA FUNCIONES 
