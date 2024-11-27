@@ -1,149 +1,33 @@
-# introTP
+# Estancias del Sol
 
-Explicacion de como usar la api
+Este proyecto fue desarrollado por alumnos de la Facultad de Ingeniería de Buenos Aires, en la materia de Introducción al Desarrollo de Software. El objetivo principal es diseñar un software para una cadena de hoteles en Argentina. El sistema incluye un sitio web que ofrece información detallada sobre las distintas ubicaciones, permite consultar la disponibilidad de habitaciones según las fechas seleccionadas y brinda la opción de realizar reservas. Adicionalmente, se ha creado una aplicación móvil que complementa el sitio web, permitiendo a los huéspedes contratar servicios adicionales ingresando su número de reserva y apellido.
 
-Los GET devuelven: 
+## Diagrama de arquitectura
 
-JSON = [{ 
-“columna1”: dato, 
-“columna2”: dato, 
-..., 
-“columnaN”: dato}
-] 
-Lista = [ {}, {}, {}, ..., {}] 
-Individual = [{}] 
+```mermaid
+architecture-beta
+    group frontend[frontend]
+    group backend[backend]
+    group mobile[mobile]
+    
+    service serverMobile(server) in mobile
+    service serverFrontend(server) in frontend
+    service serverBackend(server) in backend
+    service db(database) in backend
+    service user[user]
+    
+    user:B --> T:serverFrontend
+    user:R --> L:serverMobile
+    serverFrontend:R --> L:serverBackend
+    serverBackend:R --> L:db
+    serverMobile:B --> T:serverBackend
+```
 
-Los ERRORES U MSJ:
+## Tecnologías usadas
 
-{ 
-“tipo”: “descripcion” 
-} 
-
-Al enviar datos JSON en POST 
-[{ 
-“columna1”: dato, 
-“columna2”: dato, 
-..., 
-“columnaN”: dato}
-]
-
-IMPORTANTE EN hoteles.py
-
-#NOMBRE DE LA BASE DE DATOS hoteles
-
-#pip install pymysql
-
-#cambiar usuario y contraseña por el de ustedes:
-    engine = create_engine('mysql+pymysql://usuario:constraseña@localhost:3306/hoteles')
-
-
-.../api/hola/ 
-    GET 
-        Un saludo 
-
-... /api/hoteles/ 
-    GET 
-        Una lista de hoteles, cada elemento es un hotel distinto 
-    ERRORES 
-        Interno (código: 500) 
-
-.../api/hoteles/<id> 
-    GET 
-        El hotel relacionado al id 
-    ERRORES 
-        El id es inexistente (código:  404) 
-        Interno (código: 500) 
-
-.../api/servicios/ 
-    GET 
-        Una lista de servicios 
-    ERRORES 
-        Interno (código : 500) 
-
-.../api/servicios/id 
-    GET 
-        El servicio relacionado al id 
-    ERRORES 
-        El id es inexistente (código: 404) 
-        Interno (código: 500) 
-
-.../api/servicios/hotel/id_hotel 
-    GET 
-        Devuelve servicios, tipos y precios relacionado al id_hotel
-    ERRORES 
-        No hay servicios incluidos en este hotel (código 400)
-        El id es inexistente (código: 404) 
-        Interno (código: 500) 
-
-.../api/servicios/habitacion/id_habitacion 
-    GET 
-        Devuelve servicios, tipos y precios relacionado al id_habitacion
-    ERRORES 
-        No hay servicios incluidos en este hotel (código 400)
-        El id es inexistente (código: 404) 
-        Interno (código: 500)
-
-.../api/habitaciones/id_hotel 
-    GET 
-        Una lista de habitaciones que tiene un hotel 
-    ERRORES 
-        El id es inexistente (código: 404) 
-        Interno (código: 500) 
-
-.../api/habitacion/id 
-    GET 
-        La habitacion relacionada al id 
-    ERRORES 
-        El id es inexistente (código: 404) 
-        Interno (código: 500) 
-
-.../api/reserva/id/cliente 
-    GET 
-        La información de la reserva 
-    ERRORES 
-        El id o el cliente es incorrecto. (código: 404) 
-        Interno (código: 500) 
-
-.../api/reserva/ 
-    POST 
-        Json con las keys = ('id_habitacion', 'llegada', 'salida', 'cliente_apellido', 'precio') 
-        (Código: 200) ‘Los datos se cargaron exitosamente, el id de la reserva es id_reserva' 
-    ERRORES 
-        La habitacion no está disponible en esas fechas (código: 400) 
-        El id de habitacion es inexistente (código: 404) 
-        Interno (código: 500) 
-
-.../api/reserva/id/cliente 
-    PUT 
-        Cambia el estado de la reserva a “cancelado”, en la reserva y los servicios relacionados a la reserva 
-    ERRORES 
-        Falta el dato {key} (código: 400) 
-        El id o el cliente es inexistente. (código: 404) 
-        La reserva ya se encuentra cancelada (código: 400) 
-        Interno (código: 500) 
-
-... /api/reserva/servicios/ 
-    POST 
-        Json con las keys = ('id_reserva', 'id_servicio', 'precio') 
-    (Código: 200) Los datos se cargaron exitosamente 
-    ERRORES 
-        Falta el dato {key} (código: 400) 
-        El id_reserva no existe (código: 404) 
-        El id_servicio no existe (código: 404) 
-        Interno (código: 500) 
-
-... /api/reserva/servicios/<id_reserva> 
-    GET     
-        La información de la reserva de servicio 
-    ERRORES 
-        El id_reserva no existe. (código: 404) 
-        No hay servicios reservados (código: 400) 
-        Interno (código: 500) 
-
-... /api/reserva/servicios/<id_reserva> 
-    PUT 
-        El estado de la reserva de servicio pasa a cancelado 
-    ERRORES 
-        El id_reserva no existe (código: 404) 
-        La reserva ya se encuentra cancelada (código: 400) 
-        Interno (código: 500) 
+- Flask
+- HTML
+- CSS
+- Javascript
+- MySQL
+- Kivy

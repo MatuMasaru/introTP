@@ -231,6 +231,14 @@
 
     .card__image {
       padding: 0;
+      overflow: hidden;
+      height: 200px;
+
+      img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }
@@ -253,6 +261,7 @@
   #hoteles {
     .hoteles__container {
       flex-direction: row;
+      flex-wrap: wrap;
       align-items: flex-start;
     }
   }

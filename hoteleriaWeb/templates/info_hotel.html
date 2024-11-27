@@ -25,7 +25,9 @@
               <h2>Servicios Disponibles.</h2>
         <ul>
           {% for servicio in servicios %}
-            <li><strong>- {{ servicio['servicio'] }}</strong>.</li>
+            {% if articulo["id"] == servicio["id_hotel"] %}
+              <li><strong>- {{ servicio['servicio'] }}</strong>.</li>
+            {% endif %}
           {% endfor %}
         </ul>
             </aside>
