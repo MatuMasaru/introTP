@@ -19,7 +19,7 @@ def get_data(endpoint):
 
 @app.route("/")
 def index():
-    hotels = get_data("/hoteles")
+    hotels = get_data("/hoteles")[:3]
     regions = get_data("/hoteles/regiones")
 
     return render_template("index.html", hotels=hotels, regions=regions)
