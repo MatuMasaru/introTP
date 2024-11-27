@@ -74,7 +74,6 @@ def informacion_reserva():
     return render_template("ver_mis_reservas.html", reserva = reserva, servicios_aparte = sa, servicios_incluidos = servicios_incluidos,habitacion = habitacion, hotel = hotel)
 
 
-@app.route("/hoteles")
 @app.route("/hoteles/<id_hotel>")
 def hoteles(id_hotel):
     id_hotel = int(id_hotel)
@@ -85,11 +84,17 @@ def hoteles(id_hotel):
                 response_todos_los_hoteles = requests.get(API_URL + "/hoteles")
                 response_todos_los_hoteles.raise_for_status()
                 hoteles = response_todos_los_hoteles.json()
-
-                response_todos_los_servicios = requests.get(API_URL + "/servicios")
-                response_todos_los_servicios.raise_for_status()
-                servicios = response_todos_los_servicios.json()
-
+                
+                id_hoteles = [hotel["id"] for hotel in hoteles]
+                servicios = []
+                
+                for id in id_hoteles:
+                    response_servicio_hotel = requests.get(API_URL + f"/servicios/hotel/{id}")
+                    response_servicio_hotel.raise_for_status()
+                    servicios_hotel = response_servicio_hotel.json()
+                    for servicio in servicios_hotel:
+                        servicio["id_hotel"] = id
+                        servicios.append(servicio)
             else:
             #----------------------INFORMACION DE UN SOLO HOTEL----------------------
                 response_hotel = requests.get(API_URL + f"/hoteles/{id_hotel}")
@@ -98,7 +103,11 @@ def hoteles(id_hotel):
                 
                 response_servicio_hotel = requests.get(API_URL + f"/servicios/hotel/{id_hotel}")
                 response_servicio_hotel.raise_for_status()
-                servicios = response_servicio_hotel.json()
+                servicios_hotel = response_servicio_hotel.json()
+                servicios = []
+                for servicio in servicios_hotel:
+                    servicio["id_hotel"] = id_hotel
+                    servicios.append(servicio)
 
     except requests.exceptions.RequestException as e:
         params = []
@@ -107,7 +116,7 @@ def hoteles(id_hotel):
     for hotel in hoteles:
             if hotel not in params:
                 params.append(hotel)
-                
+
     return render_template("info_hotel.html", params = params, servicios = servicios)
 
 
