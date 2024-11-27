@@ -78,20 +78,26 @@ QUERY_DISPONIBILIDAD_HABITACION = "SELECT estado FROM reserva WHERE id_habitacio
 
 QUERY_CANCELAR_RESERVA = "UPDATE reserva SET estado = 'cancelado', fecha_cancelacion  = NOW() WHERE id = :id AND cliente_apellido =:cliente_apellido AND estado = 'activo'"
 
+
+######################################
+######-----SERVICIOS
+######################################
+
 # RESERVA DE SERVICIO ---INSERT---
 
-QUERY_DUPLICADOS_DE_RESERVA_SERVICIOS = "SELECT id_servicio FROM reserva_servicios WHERE (id_reserva= :id_reserva AND id_servicio= :id_servicio) AND estado = 'activo'"
+QUERY_EVITAR_DUPLICADOS_RESERVA_SERVICIO ="SELECT id, id_reserva, id_hotel_servicio FROM reserva_hotel_servicio WHERE id_reserva= :id_reserva AND id_hotel_servicio= :id_hotel_servicio"
 
-QUERY_RESERVAR_SERVICIOS_POR_ID_RESERVA = "INSERT INTO reserva_servicios (id_reserva, id_servicio, estado, precio) VALUES (:id_reserva, :id_servicio, 'activo', :precio)"
+QUERY_RESERVAR_SERVICIOS_POR_ID_RESERVA = "INSERT INTO reserva_hotel_servicio (id_reserva, id_hotel_servicio) VALUES (:id_reserva, :id_hotel_servicio)"
 
 # VER RESERVA SERVICIO POR ID RESERVA
 
-QUERY_VER_RESERVA_SERVICIO_POR_ID_RESERVA = "SELECT id, id_reserva, id_servicio, estado, precio FROM reserva_servicios WHERE id_reserva= :id_reserva AND estado = 'activo'"
+QUERY_VER_RESERVA_SERVICIO_POR_ID_RESERVA = "SELECT id, id_reserva, id_hotel_servicio FROM reserva_hotel_servicio WHERE id_reserva= :id_reserva"
 
-# CANCELAR SERVICIO
-QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA = "UPDATE reserva_servicios SET estado = 'cancelado' WHERE id_reserva = :id_reserva"
+# ELIMINAR SERVICIO
+QUERY_ELIMINAR_SERVICIOS_POR_ID_RESERVA = "DELETE FROM reserva_hotel_servicio WHERE id_reserva = :id_reserva"
 
-QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA_ID_SERVICIO = "UPDATE reserva_servicios SET estado = 'cancelado' WHERE id_reserva = :id_reserva AND id_servicio= :id_servicio"
+QUERY_ELIMINAR_RESERVA_SERVICIOS_POR_ID_RESERVA_Y_ID_HOTEL_SERVICIO = "DELETE FROM reserva_hotel_servicio WHERE id_reserva = :id_reserva AND id_hotel_servicio = :id_hotel_servicio"
+
 
 engine = create_engine(f"mysql+mysqlconnector://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}:3306/{os.getenv('MYSQL_DB')}?charset=utf8mb4&collation=utf8mb4_unicode_ci")
 
@@ -172,8 +178,8 @@ def obtener_reserva_por_id(id):
 def obtener_reserva_servicio_por_id_reserva(id_reserva):
     return run_query(QUERY_VER_RESERVA_SERVICIO_POR_ID_RESERVA, {"id_reserva": id_reserva}).fetchall()
 
-def duplicados_reserva_servicio(id_reserva, id_servicio):
-    return run_query(QUERY_DUPLICADOS_DE_RESERVA_SERVICIOS, {"id_reserva": id_reserva, "id_servicio": id_servicio}).fetchall()
+def verificar_reserva_servicio(id_reserva, id_servicio):
+    return run_query(QUERY_EVITAR_DUPLICADOS_RESERVA_SERVICIO, {"id_reserva": id_reserva, "id_hotel_servicio": id_servicio}).fetchall()
 
 #----POST----
 
@@ -181,16 +187,17 @@ def ingresar_reserva(datos):
     run_query(QUERY_INGRESAR_RESERVA, datos)
     return run_query("SELECT LAST_INSERT_ID();").scalar()
 
-def reservar_servicio_por_id_reserva(datos):
-    run_query(QUERY_RESERVAR_SERVICIOS_POR_ID_RESERVA, datos)
+def reservar_servicio_por_id_reserva(id_reserva, id_servicio):
+    run_query(QUERY_RESERVAR_SERVICIOS_POR_ID_RESERVA, {"id_reserva": id_reserva, "id_hotel_servicio": id_servicio})
     
 #----PUT----
 
 def cancelar_reserva(id, cliente_apellido):
     run_query(QUERY_CANCELAR_RESERVA, {"id": id, "cliente_apellido": cliente_apellido})
 
-def cancelar_reserva_servicio_individual(id_reserva, id_servicio):
-    run_query(QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA_ID_SERVICIO,{"id_reserva": id_reserva, "id_servicio": id_servicio})
+def eliminar_un_solo_servicio(id_reserva, id_servicio):
+    run_query(QUERY_ELIMINAR_RESERVA_SERVICIOS_POR_ID_RESERVA_Y_ID_HOTEL_SERVICIO,{"id_reserva": id_reserva, "id_hotel_servicio": id_servicio})
 
-def cancelar_reserva_servicio_por_id_reserva(id_reserva):
-    run_query(QUERY_CANCELAR_SERVICIOS_POR_ID_RESERVA, {"id_reserva": id_reserva})
+def eliminar_reserva_servicio_por_id_reserva(id_reserva):
+    run_query(QUERY_ELIMINAR_SERVICIOS_POR_ID_RESERVA, {"id_reserva": id_reserva})
+
