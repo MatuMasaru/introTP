@@ -604,6 +604,36 @@ def delete_habitacion_servicio(id_habitacion, id_servicio):
     result = result[0]
     return jsonify({'servicio': result[0], 'tipo': result[1], 'precio':[2], 'id': id_servicio}), 200
 
+@app.route("/api/habitacion_servicio/admin/<int:id_habitacion>/<int:id_servicio>", methods=['PUT'])
+def update_habitacion_servicio(id_habitacion, id_servicio):
+    data = request.get_json()
+
+    """
+        data =  {
+                "id_habitacion": id_habitacion,
+                "id_servicio": id_servicio,
+                "precio": precio,
+            } 
+    """
+
+    keys = ('id_habtiacion', 'id_servicio', 'precio')
+    for key in keys:
+        if key not in data:
+            return jsonify({'error': f'Faltan el dato {key}'}), 400
+    
+    try:
+        result = hoteles.servicio_id_habitacion_id_servicio(id_habitacion, id_servicio)
+        if len(result) == 0:
+            return jsonify({'error': 'No se encontró el servicio de la habitacion'}), 404
+
+        hoteles.actualizar_servicio_habitacion(id_habitacion, id_servicio, data)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    return jsonify({'id_habitacion': id_habitacion, 'id_servicio': id_servicio, **data}), 200
+
+
 #-----------------------------------------------------------#----------------------#
 #-------------RESERVAS DE HABITACION Y SERVICIOS------------#-------GET------------#
 #-----------------------------------------------------------#----------------------#

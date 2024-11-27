@@ -109,7 +109,8 @@ QUERY_INGRESAR_SERVICIO_HABITACION = "INSERT INTO habitacion_servicio (id_habita
 #SERVICIO_HABITACION QUERYS DELETE
 QUERY_BORRAR_SERVICIO_HABITACION = "DELETE FROM habitacion_servicio WHERE id_habitacion = :id_habitacion AND id_servicio = :id_servicio"
 
-
+#SERVICIO_HABITACION QUERYS UPDATE
+QUERY_ACTUALIZAR_SERVICIO_HABITACION = "UPDATE habitacion_servicio SET precio = :precio WHERE id_habitacion = :id_habitacion AND id_servicio = :id_servicio"
 
 # RESERVA HABITACION QUERYS --GET---
 
@@ -271,6 +272,9 @@ def insert_servicio_habitacion(data):
 def borrar_servicio_habitacion(id_habitacion, id_servicio):
     run_query(text(QUERY_BORRAR_SERVICIO_HABITACION), {'id_habitacion': id_habitacion, 'id_servicio': id_servicio})
 
+#PUT
+def actualizar_servicio_habitacion(id_habitacion, id_servicio, data):
+    run_query(text(QUERY_ACTUALIZAR_SERVICIO_HABITACION), {'id_habitacion': id_habitacion, 'id_servicio': id_servicio, **data})
 
 #----RESERVA FUNCIONES 
 
