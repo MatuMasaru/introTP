@@ -227,8 +227,6 @@ def obtener_servicios_por_hotel(id_hotel):
         if len(resultado) == 0:
             return jsonify({"Error": "El id_hotel es inexistente"}), 404
         resultado = hoteles.servicio_por_hotel(id_hotel)
-        if len(resultado) == 0:
-            return jsonify({"Error": "No hay servicios incluidos en este hotel"}), 404
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
     
@@ -348,7 +346,7 @@ def ingresar_reserva():
 @app.route("/api/reserva/servicios/", methods=["POST"])
 def ingresar_reserva_de_servicio():
     datos = request.get_json()
-    keys = ("id_reserva", "id_servicio", "precio")
+    keys = ("id_reserva", "id_servicio")
     for key in keys:
         if key not in datos:
             return jsonify({"Error": f"Falta el dato {key}"}), 400
