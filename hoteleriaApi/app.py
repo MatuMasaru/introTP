@@ -82,6 +82,17 @@ def obtener_todas_las_regiones():
 def create_hotel():
     data = request.get_json()
 
+    """
+        data =  {
+                "nombre": numero,
+                "direccion": direccion,
+                "descripcion": descripcion,
+                "precio": precio,
+                "url_img": url_img,
+                "region": region
+            } 
+    """
+
     keys = ('nombre', 'direccion', 'descripcion', 'url_img', 'region')
     for key in keys:
         if key not in data:
@@ -95,29 +106,36 @@ def create_hotel():
 
     return jsonify(data), 201
 
-@app.route('/api/delete_hotel', methods=['DELETE'])
-def delete_hotel():
+@app.route('/api/delete_hotel/<int:id>', methods=['DELETE'])
+def delete_hotel(id):
     try:
-        id_hotel = request.get_json()
-        int_id_hotel = id_hotel['id']
-
-        resultado = hoteles.hoteles_por_id(int_id_hotel)
+        resultado = hoteles.hoteles_por_id(id)
         if len(resultado) == 0:
             return jsonify({'error': 'No se encontró el hotel'}), 404
         
-        hoteles.borrar_hotel(int_id_hotel)
+        hoteles.borrar_hotel(id)
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
     resultado = resultado[0]
-    return jsonify({'nombre': resultado[1], 'direccion': resultado[2], 'descripcion': resultado[3], 'url_img': resultado[4], 'region': resultado[5], 'id': int_id_hotel}), 200
+    return jsonify({'nombre': resultado[1], 'direccion': resultado[2], 'descripcion': resultado[3], 'url_img': resultado[4], 'region': resultado[5], 'id': id}), 200
 
 
-app.route("/api/update_hotel/", methods=["PUT"])
-def update_hotel():
-    data = request.get_json()
-    int_id_hotel = data['id']
+app.route("/api/update_hotel/<int:id>", methods=["PUT"])
+def update_hotel(id):
+    data = request.get_json(id)
+    
+    """
+        data =  {
+                "nombre": numero,
+                "direccion": direccion,
+                "descripcion": descripcion,
+                "precio": precio,
+                "url_img": url_img,
+                "region": region
+            } 
+    """
 
     keys = ('nombre', 'direccion', 'descripcion', 'url_img', 'region')
     for key in keys:
@@ -125,16 +143,16 @@ def update_hotel():
             return jsonify({'error': f'Falta el dato {key}'}), 400
     
     try:
-        resultado = hoteles.hoteles_por_id(int_id_hotel)
+        resultado = hoteles.hoteles_por_id(id)
         if len(resultado) == 0:
             return jsonify({'error': 'No se encontró el hotel'}), 404
 
-        hoteles.actualizar_hotel(int_id_hotel, data)
+        hoteles.actualizar_hotel(id, data)
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-    return jsonify(data), 201
+    return jsonify({'id': id, **data}), 200
 
 
 #---------------------------------#

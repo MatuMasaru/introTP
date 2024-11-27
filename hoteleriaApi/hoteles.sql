@@ -28,7 +28,7 @@ CREATE TABLE habitaciones (
     url_img TEXT,
     tipo TEXT,
     precio INT,
-    FOREIGN KEY (id_hotel) REFERENCES hotel(id)
+    FOREIGN KEY (id_hotel) REFERENCES hotel(id) ON DELETE CASCADE
 );
 
 CREATE TABLE servicios (
@@ -54,8 +54,8 @@ CREATE TABLE hotel_servicio (
     id_hotel INT,
     id_servicio INT,
     precio INT,
-    FOREIGN KEY (id_hotel) REFERENCES hotel(id),
-    FOREIGN KEY (id_servicio) REFERENCES servicios(id)
+    FOREIGN KEY (id_hotel) REFERENCES hotel(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_servicio) REFERENCES servicios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE reserva_hotel_servicio (
@@ -71,8 +71,8 @@ CREATE TABLE habitacion_servicio (
     id_habitacion INT,
     id_servicio INT,
     precio INT,
-    FOREIGN KEY (id_habitacion) REFERENCES habitaciones(id),
-    FOREIGN KEY (id_servicio) REFERENCES servicios(id)
+    FOREIGN KEY (id_habitacion) REFERENCES habitaciones(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_servicio) REFERENCES servicios(id) ON DELETE CASCADE
 );
 
 -- Insertar datos
