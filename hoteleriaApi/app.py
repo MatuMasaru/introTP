@@ -605,7 +605,7 @@ def add_habitacion_servicio():
 
     return jsonify(data), 201
 
-@app.route("/api/habitacion_servicio/admin/<int:id_habitacion>/<int:id_servicio", methods=['DELETE'])
+@app.route("/api/habitacion_servicio/admin/<int:id_habitacion>/<int:id_servicio>", methods=['DELETE'])
 def delete_habitacion_servicio(id_habitacion, id_servicio):
     try:
         result = hoteles.servicio_id_habitacion_id_servicio(id_habitacion, id_servicio)
