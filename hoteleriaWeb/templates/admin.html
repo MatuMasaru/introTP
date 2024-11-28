@@ -1,33 +1,33 @@
-{%extends 'base.html'%}
+{%extends 'base_admin.html'%}
 {%block title%}Panel de Administración{%endblock%}
-{%block head%}
 
-{%endblock%}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/flatpickr.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+{% endblock %}
+
 {%block body%}
-<section>
-    <h1 class="title">Panel de Administración Hotel</h1>
-</section>
-
-<section>
-    <div>
-	{% for hotel in hotels %}
-          <div>
-            <div>
-                <img src="{{ hotel['url_img'] }}" alt="Hotel en {{ hotel['region'] }}">
-              <div>
-                <h5>{{ hotel['nombre'] }}</h5>
-                <p>{{ hotel['descripcion'] }}</p>
-                <div>
-                  <div>
-                    <button type="button" id="" data-nombre="{{ hotel['nombre'] }}" data-url="{{ url_for('admin_delete_hotel', id=hotel['id'])}}">Eliminar</button>
-                    <a href="{{ url_for('admin_update_hotel', id=hotel['id'])}}"><button type="button">Editar</button></a>
-                  </div>
-                </div>
-              </div>
-            </div>
+<section id="hoteles">
+  <h2>Panel de administracion hotel</h2>
+ 
+  <div class="hoteles__container">
+      {% for hotel in hotels %}
+        <article class="card">
+          <div class="card__image">
+            <img src="{{ hotel['url_img'] }}" alt="Hotel en {{ hotel['region'] }}">
           </div>
-	{% endfor %}
-    </div>
+          <div class="card__content">
+            <aside class="card__description">
+              <p>
+                {{ hotel['descripcion'] }}
+              </p>
+            </aside>
+            <a href="{{ url_for('admin_update_hotel', id=hotel['id']) }}" class="btn btn--primary btn--size-medium">Editar</a>
+            <button type="button" id="" data-nombre="{{ hotel['nombre'] }}" data-url="{{ url_for('admin_delete_hotel', id=hotel['id'])}}">Eliminar</button>
+          </div>
+        </article>
+      {% endfor %}
+  </div>
 </section>
 
 {%endblock%}

@@ -210,26 +210,27 @@ def admin_add_hotel():
             response.raise_for_status()    
         except requests.exceptions.RequestException as e:
             response = []
+            return render_template("add_hotel.html", error = "Hubo un error en al añadir el hotel. Intente nuevamente.")
 
     return redirect(url_for('admin'))
 
 
-@app.route('/admin/delete_hotel/<id_hotel>',methods=['GET'])
+@app.route('/admin/delete_hotel/<id>',methods=['GET'])
 def admin_delete_hotel(id):
+    id = int(id)
     try:
-        hotel_data = {
-            "id": id
-        }
-        response = requests.delete(API_URL + "/delete_hotel",json=hotel_data)
+        response = requests.delete(API_URL + f"/delete_hotel/{id}")
         response.raise_for_status()   
     except requests.exceptions.RequestException as e:
-            response = []
+        response = []
+        return render_template("admin.html", error = "Hubo un error al eliminar el hotel. Intente nuevamente.")
 
     return redirect(url_for('admin'))
 
 
-@app.route('/admin/update_hotel/<id_hotel>', methods=['GET','POST'])
+@app.route('/admin/update_hotel/<id>', methods=['GET','POST'])
 def admin_update_hotel(id):
+    id = int(id)
     if request.method == "GET":
         try:
             response = requests.get(API_URL + f'/hoteles/{id}')
@@ -237,24 +238,25 @@ def admin_update_hotel(id):
             hotel = response.json()       
             return render_template('update_hotel.html', hotel=hotel)
         except requests.exceptions.RequestException as e:
-                hotel = []
+            hotel = []
+            return render_template("admin.html", error = "Hubo un error en la solicitud. Intente nuevamente.")
 
     elif requests.method == "POST":
         try:
             data = {
-                    "id": id,
                     "nombre": request.form.get("fnombre"),
                     "direccion": request.form.get("fdireccion"),
                     "descripcion": request.form.get("fdescripcion"),
                     "url_img": request.form.get("furl_img"),
                     "region": request.form.get("fregion")
                 }
-            response = requests.put(API_URL + "/update_hotel", json=data)
+            response = requests.put(API_URL + f"/update_hotel/{id}", json=data)
             response.raise_for_status()  
             return redirect(url_for('admin'))
 
         except requests.exceptions.RequestException as e:
             response = []
+            return render_template("update_hotel.html", error = "Hubo un error al actualizar el hotel. Intente nuevamente.")
 
 
 @app.errorhandler(404)
