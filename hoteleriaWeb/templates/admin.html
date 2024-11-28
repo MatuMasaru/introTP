@@ -23,11 +23,31 @@
               </p>
             </aside>
             <a href="{{ url_for('admin_update_hotel', id=hotel['id']) }}" class="btn btn--primary btn--size-medium">Editar</a>
-            <button type="button" id="" data-nombre="{{ hotel['nombre'] }}" data-url="{{ url_for('admin_delete_hotel', id=hotel['id'])}}">Eliminar</button>
+            <button type="button" data-nombre="{{ hotel['nombre'] }}" data-url="{{ url_for('admin_delete_hotel', id=hotel['id'])}}">Eliminar</button>
           </div>
         </article>
       {% endfor %}
   </div>
 </section>
 
+{%endblock%}
+{%block scripts%}
+<script>
+  document.querySelectorAll('button[data-url]').forEach(button => {
+    button.addEventListener('click', function() {
+      const nombre = this.getAttribute('data-nombre');
+      const url = this.getAttribute('data-url');
+      if (confirm(`¿Estás seguro de que quieres eliminar el hotel ${nombre}?`)) {
+        fetch(url, { method: 'DELETE' }).then(response => {
+          if (response.ok) {
+            alert('Hotel eliminado');
+            location.reload();  // Recargar la página para ver los cambios
+          } else {
+            alert('Hubo un error al eliminar el hotel');
+          }
+        });
+      }
+    });
+  });
+</script>
 {%endblock%}

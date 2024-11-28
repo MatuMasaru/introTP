@@ -209,7 +209,6 @@ def admin_add_hotel():
             response = requests.post(API_URL + "/create_hotel", json=data)
             response.raise_for_status()    
         except requests.exceptions.RequestException as e:
-            response = []
             return render_template("add_hotel.html", error = "Hubo un error en al añadir el hotel. Intente nuevamente.")
 
     return redirect(url_for('admin'))
@@ -222,7 +221,6 @@ def admin_delete_hotel(id):
         response = requests.delete(API_URL + f"/delete_hotel/{id}")
         response.raise_for_status()   
     except requests.exceptions.RequestException as e:
-        response = []
         return render_template("admin.html", error = "Hubo un error al eliminar el hotel. Intente nuevamente.")
 
     return redirect(url_for('admin'))
