@@ -453,14 +453,14 @@ def delete_servicio(id):
         if len(result) == 0:
             return jsonify({'error': 'No se encontró el servicio'}), 404
 
+        servicio_info = {'servicio': result[1], 'tipo': result[2], 'id': id}
         hoteles.borrar_servicio(id)
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
     result = result[0]
-    return jsonify({'servicio': result[1], 'tipo': result[2], 'id': id}), 200
-
+    return jsonify(servicio_info), 200
 
 @app.route("/api/servicios/admin/<int:id>", methods=['PUT'])
 def update_servicio(id):
@@ -477,7 +477,7 @@ def update_servicio(id):
             return jsonify({'error': f'Faltan el dato {key}'}), 400
 
     try:
-        result = hoteles.hoteles_por_id(id)
+        result = hoteles.servicios_por_id(id)
         if len(result) == 0:
             return jsonify({'error': 'No se encontró el servicio'}), 404
 
@@ -511,13 +511,17 @@ def add_hotel_servicio():
             return jsonify({'error': f'Faltan el dato {key}'}), 400
 
     try:
+        existing = hoteles.servicio_id_hotel_id_servicio(data['id_hotel'], data['id_servicio'])
+        if len(existing) != 0:
+            return jsonify({'error': 'El servicio para el hotel ya exitste'}), 409
+
         result_1 = hoteles.servicios_por_id(data['id_servicio'])
         if len(result_1) == 0:
-            return jsonify({'error': 'No se encontró el servicio'})
+            return jsonify({'error': 'No se encontró el servicio'}); 404
 
         result_2 = hoteles.hoteles_por_id(data['id_hotel'])
         if len(result_2) == 0:
-            return jsonify({'error': 'El servicio no pertence a ningun hotel'}), 400
+            return jsonify({'error': 'No se encontró el hotel con el ID proporcionado'}), 404
 
         hoteles.insert_servicio_hotel(data)
     
@@ -529,18 +533,22 @@ def add_hotel_servicio():
 
 @app.route("/api/hotel_servicio/admin/<int:id_hotel>/<int:id_servicio>", methods=['DELETE'])
 def delete_hotel_servicio(id_hotel, id_servicio):
+    if id_hotel <= 0 or id_servicio <= 0:
+        return jsonify({'error': 'Los IDs deben ser números enteros positivos'}), 400
+
     try:
         result = hoteles.servicio_id_hotel_id_servicio(id_hotel, id_servicio)
         if len(result) == 0:
-            return jsonify({'error': 'No se encontró el servicio del hotel'}), 404
+            return jsonify({'error': 'No se encontro el servicio'}), 404
         
         hoteles.borrar_servicio_hotel(id_hotel, id_servicio)
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-    result = result[0]
-    return jsonify({'servicio': result[0], 'tipo': result[1], 'precio':[2], 'id': id_servicio}), 200
+    servicio = result[0]
+    return jsonify({'servicio': servicio[0], 'tipo': servicio[1], 'precio': servicio[2], 'id': id_servicio}), 200
+
 
 @app.route("/api/hotel_servicio/admin/<int:id_hotel>/<int:id_servicio>", methods=['PUT'])
 def update_hotel_servicio(id_hotel, id_servicio):
@@ -558,11 +566,14 @@ def update_hotel_servicio(id_hotel, id_servicio):
     for key in keys:
         if key not in data:
             return jsonify({'error': f'Faltan el dato {key}'}), 400
-        
+
+    if data['id_hotel'] != id_hotel or data['id_servicio'] != id_servicio:
+        return jsonify({'error': 'Los IDs en el cuerpo y la URL no coinciden'}), 400
+
     try:
         result = hoteles.servicio_id_hotel_id_servicio(id_hotel, id_servicio)
         if len(result) == 0:
-            return jsonify({'error': 'No se encontró el servicio del hotel'}), 404
+            return jsonify({'error': f'No se encontró el servicio {id_servicio} en el hotel {id_hotel} '}), 404
         
         hoteles.actualizar_servicio_hotel(id_hotel, id_servicio, data)
     
@@ -590,13 +601,16 @@ def add_habitacion_servicio():
             return jsonify({'error': f'Faltan el dato {key}'}), 400
 
     try:
+        existing = hoteles.servicio_id_habitacion_id_servicio(data['id_habitacion'], data['id_servicio'])
+        if len(existing) != 0:
+            return jsonify({'error': 'El servicio para la habitacion ya exitste'}), 409
         result_1 = hoteles.servicios_por_id(data['id_servicio'])
         if len(result_1) == 0:
             return jsonify({'error': 'No se encontró el servicio'})
 
         result_2 = hoteles.habitacion_por_id(data['id_habitacion'])
         if len(result_2) == 0:
-            return jsonify({'error': 'El servicio no pertence a ninguna habitacion'}), 400
+            return jsonify({'error': 'No se encontro la habitacion con el ID porporcioando'}), 404
 
         hoteles.insert_servicio_habitacion(data)
 
@@ -610,15 +624,15 @@ def delete_habitacion_servicio(id_habitacion, id_servicio):
     try:
         result = hoteles.servicio_id_habitacion_id_servicio(id_habitacion, id_servicio)
         if len(result) == 0:
-            return jsonify({'error': 'No se encontró el servicio de la habitacion'}), 404
+            return jsonify({'error': 'No se encontró el servicio'}), 404
 
         hoteles.borrar_servicio_habitacion(id_habitacion, id_servicio)
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-    result = result[0]
-    return jsonify({'servicio': result[0], 'tipo': result[1], 'precio':[2], 'id': id_servicio}), 200
+    servicio = result[0]
+    return jsonify({'servicio': servicio[0], 'tipo': servicio[1], 'precio':servicio[2], 'id': id_servicio}), 200
 
 @app.route("/api/habitacion_servicio/admin/<int:id_habitacion>/<int:id_servicio>", methods=['PUT'])
 def update_habitacion_servicio(id_habitacion, id_servicio):
@@ -637,10 +651,13 @@ def update_habitacion_servicio(id_habitacion, id_servicio):
         if key not in data:
             return jsonify({'error': f'Faltan el dato {key}'}), 400
     
+    if data['id_habitacion'] != id_habitacion or data['id_servicio'] != id_servicio:
+        return jsonify({'error': 'Los IDs en el cuerpo y la URL no coinciden'}), 400
+
     try:
         result = hoteles.servicio_id_habitacion_id_servicio(id_habitacion, id_servicio)
         if len(result) == 0:
-            return jsonify({'error': 'No se encontró el servicio de la habitacion'}), 404
+            return jsonify({'error': f'No se encontró el servicio {id_servicio} de la habitacion {id_habitacion}'}), 404
 
         hoteles.actualizar_servicio_habitacion(id_habitacion, id_servicio, data)
 
