@@ -1,6 +1,6 @@
 #:kivy==2.3.0   kivymd==2.0.1.dev0
 from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.app import MDApp
 import requests
 
@@ -182,7 +182,7 @@ class MiservicioSreen(Screen):
 # Crear el gestor de pantallas
 class HoteleriaApp(MDApp):
     def build(self):
-        return Builder.load_file('desig.kv')
+        return Builder.load_file('design.kv')
 
 if __name__ == '__main__':
     HoteleriaApp().run()

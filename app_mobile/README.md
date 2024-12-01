@@ -314,12 +314,12 @@ Python==3.12.3
 ´´´correo
 
     artufran.sanchez@gmail.com
-
+    junmatias2001@gmail.com
 
 ## [Creditos](#creditos)
-INTEGRANTE: ARTURO SANCHEZ
+INTEGRANTE: ARTURO SANCHEZ, MATIAS JUN
 
-nombre GITHUP: arturo252
+nombre GITHUB: arturo252 MatiasJun
 
 
 ## [Funciones Internas](#internas)
