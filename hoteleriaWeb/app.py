@@ -35,8 +35,6 @@ def informacion_reserva():
     if request.method == "POST":
         id_reserva = request.form.get("nreserva")
         apellido_cliente = request.form.get("acliente")
-        if len(id_reserva) == 0  or len(apellido_cliente) == 0:
-            return render_template("login_mis_reservas.html", error = "Complete los campos para continuar.")
         if not id_reserva.isdigit():
              return render_template("login_mis_reservas.html", error = "El ID de la reserva solo puede tener numeros.")
         sa = []
@@ -45,65 +43,49 @@ def informacion_reserva():
             response_reserva = requests.get(API_URL + f"/reserva/{id_reserva}/{apellido_cliente}")
             response_reserva.raise_for_status()
             reserva = response_reserva.json()
-                
-            response_servicios_reserva = requests.get(API_URL + f"/reserva/servicios/{id_reserva}")
-            response_servicios_reserva.raise_for_status()
-            servicios_aparte = response_servicios_reserva.json()
-            for s in servicios_aparte:
-                response_sa = requests.get(API_URL + f"/servicios/{s['id_servicio']}")
-                response_sa.raise_for_status()
-                rsa = response_sa.json()
-                sa.append(rsa[0]['servicio'])
+            servicios_reserva = get_data(f"/reserva/servicios/{id_reserva}")
 
-            response_habitacion = requests.get(API_URL + f"/habitacion/{reserva[0]['id_habitacion']}")
-            response_habitacion.raise_for_status()
-            habitacion = response_habitacion.json()
+            for s in servicios_reserva:
+                sr = get_data(f"/servicios/{s['id_servicio']}")
+                sa.append(sr[0]['servicio'])
 
-            response_servicios_por_habitacion = requests.get(API_URL + f"/servicios/habitacion/{habitacion[0]['id']}")
-            response_servicios_por_habitacion.raise_for_status()
-            servicios_incluidos = response_servicios_por_habitacion.json()
+            habitacion = get_data(f"/habitacion/{reserva[0]['id_habitacion']}")
+
+            servicios_incluidos = get_data(f"/servicios/habitacion/{habitacion[0]['id']}")
 
             id_hotel = habitacion[0]['id_hotel']
-            response_hotel = requests.get(API_URL + f"/hoteles/{id_hotel}")
-            response_hotel.raise_for_status()
-            hotel = response_hotel.json()
-
+            hotel = get_data(f"/hoteles/{id_hotel}")
         except requests.exceptions.RequestException as e:
-            return render_template("login_mis_reservas.html", error = "Hubo un error en la busqueda. Intente nuevamente.")
-        
+            return render_template("login_mis_reservas.html", error = "El ID de la reserva o el apellido son incorrectos. Intente nuevamente.")
+        except UnboundLocalError or IndexError as e:
+             return render_template("error.html", error_code="500", error_description="Error del servidor"), 500
     return render_template("ver_mis_reservas.html", reserva = reserva, servicios_aparte = sa, servicios_incluidos = servicios_incluidos,habitacion = habitacion, hotel = hotel)
 
 
 @app.route("/hoteles/<id_hotel>")
 def hoteles(id_hotel):
+    if not id_hotel.isdigit():
+        return render_template("info_hotel.html", params = [], servicios = [])
     id_hotel = int(id_hotel)
     try:
             #------------------INFORMACION DE TODOS LOS HOTELES------------------
             if id_hotel == 0:
 
-                response_todos_los_hoteles = requests.get(API_URL + "/hoteles")
-                response_todos_los_hoteles.raise_for_status()
-                hoteles = response_todos_los_hoteles.json()
-                
+                hoteles = get_data("/hoteles")
+
                 id_hoteles = [hotel["id"] for hotel in hoteles]
                 servicios = []
                 
                 for id in id_hoteles:
-                    response_servicio_hotel = requests.get(API_URL + f"/servicios/hotel/{id}")
-                    response_servicio_hotel.raise_for_status()
-                    servicios_hotel = response_servicio_hotel.json()
+                    servicios_hotel = get_data(f"/servicios/hotel/{id}")
                     for servicio in servicios_hotel:
                         servicio["id_hotel"] = id
                         servicios.append(servicio)
             else:
             #----------------------INFORMACION DE UN SOLO HOTEL----------------------
-                response_hotel = requests.get(API_URL + f"/hoteles/{id_hotel}")
-                response_hotel.raise_for_status()
-                hoteles = response_hotel.json()
+                hoteles = get_data(f"/hoteles/{id_hotel}")
                 
-                response_servicio_hotel = requests.get(API_URL + f"/servicios/hotel/{id_hotel}")
-                response_servicio_hotel.raise_for_status()
-                servicios_hotel = response_servicio_hotel.json()
+                servicios_hotel = get_data(f"/servicios/hotel/{id_hotel}")
                 servicios = []
                 for servicio in servicios_hotel:
                     servicio["id_hotel"] = id_hotel
