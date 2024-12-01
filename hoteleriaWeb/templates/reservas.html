@@ -11,67 +11,40 @@
 
 {% block body %}
 <h1>Tu reserva</h1>
-<div class="contenedor-primario">
+<div class="contenedor-datos" >
   <div class="container">
     <h2>Información del Huésped</h2>
-    <form action="/submit" method="post">
-        
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
-        
-        
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido" required>
-        
-        
-        
-        
-        <button type="submit">Reservar Ahora</button>
+    <form action="{{ url_for('confirmReservation')  }}" method="post"> 
+
+        <label for="fsecondName">Apellido:</label>
+        <input type="text" id="secondName" name="fsecondName" placeholder="Ingrese su apellido" required>
+        <input type="hidden" name="fstartDate" value="{{ start_date }}">
+        <input type="hidden" name="fendDate" value="{{ end_date }}">
+        <input type="hidden" name="fdataroom" value="{{ room['id'] }}">
+        <input type="hidden" name="fpriceFinal" value="{{ room['precio'] * diference_days }}">
+        <h2> Servicios incluidos </h2>
+        <ul>
+          {% for servicio in servicios %}
+          <li>{{ servicio['servicio'] }}</li>
+          {% endfor %}
+        </ul>
+        <h2> Estancia: {{ diference_days }} dias</h2>
+        <p class="button-price"   > total: {{ room.precio * diference_days  }} USD  </p>
+
+        <button class="button-confirm" type="submit">Reservar Ahora</button>
     </form>
   </div>
   
   <div class="container">
+    <img id="imageHabitacion" src="{{ room.url_img }}">
+    <h2 id="Habitacion"> {{ room.nombre }}, Habitacion {{ room['tipo'] }}</h2>
+    <label for="Fechas">Fechas de estancia</label>
+    <p> {{ start_date }} hasta {{ end_date }}  </p>
     
-    <img id="image" src="{{url_for('static', filename = 'assets/hab.jpeg')}}">
-    <h2 id="Habitacion">Clasica, Habitacion, 1 king, acceso a la piscina</h2>
-    <form>
-      <label for="Fechas">Fechas de estancia</label>
-      <p>martes. 19 nov 2024-miercoles. 20 nov 2024</p>
-      
-      <label for="tipo">Tipo de Habitacion</label>
-      <p>1 Habitacion, 2 personas</p>
+    <label for="tipo">Tipo de Habitacion</label>
+    <p>{{ room.tipo }}</p>
 
-      <label for="pago">Estancia total</label>
-      <p>Precio: 200 USD </p>
-    </form>
-
-    
-  </div>
-  
-  <div class="container">
-    <h2>Detalles de la Habitacion</h2>
-    <ul>
-      <label class="servicios">Comidas y bebidas</label>
-      <li>Servicio a la habitacion las 24 horas</li>
-      <li>Minibar con cargo</li>
-      <label class="servicios">Baño</label>
-      <li>Combinacion de ducha/bañera</li>
-      <li>Secador</li>
-      <li>Bide</li>
-      <label class="servicios">Camas</label>
-      <li>Capacidad maxima: 3</li>
-      <li>1 king</li>
-      <label class="servicios">Caracteristicas generales</label>
-      <li>Wi-fi</li>
-      <li>Aire acondicionado</li>
-      <li>Ventanas insonorizadas</li>
-      <li>telefono</li>
-      <li>Caja de seguridad</li>
-      
-    </ul>
   </div>
 </div>
-
-
 
 {% endblock %}

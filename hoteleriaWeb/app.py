@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import requests
-
+from datetime import datetime
 app = Flask(__name__)
 
 API_URL = "http://localhost:3648/api"
@@ -39,9 +39,18 @@ def informacion_reserva():
             return render_template("login_mis_reservas.html", error = "Complete los campos para continuar.")
         if not id_reserva.isdigit():
              return render_template("login_mis_reservas.html", error = "El ID de la reserva solo puede tener numeros.")
+
+        datos = obtener_datos_reserva(id_reserva,apellido_cliente)
+    return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4])
+
+def reserva_realizada(id_reserva,apellido_cliente):
+    datos = obtener_datos_reserva(id_reserva,apellido_cliente)
+    return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4])
+
+
+def obtener_datos_reserva(id_reserva,apellido_cliente):
         sa = []
         try:
-
             response_reserva = requests.get(API_URL + f"/reserva/{id_reserva}/{apellido_cliente}")
             response_reserva.raise_for_status()
             reserva = response_reserva.json()
@@ -71,7 +80,7 @@ def informacion_reserva():
         except requests.exceptions.RequestException as e:
             return render_template("login_mis_reservas.html", error = "Hubo un error en la busqueda. Intente nuevamente.")
         
-    return render_template("ver_mis_reservas.html", reserva = reserva, servicios_aparte = sa, servicios_incluidos = servicios_incluidos,habitacion = habitacion, hotel = hotel)
+        return [ reserva, sa, servicios_incluidos, habitacion, hotel ]
 
 
 @app.route("/hoteles/<id_hotel>")
@@ -169,14 +178,36 @@ def habitaciones():
     )
 
 
-@app.route("/reservar/<id_room>")
-def reservar(id_room):
-    rooms = {
-        "0": {"id_hotel": 0, "number": 150, "persons": 4, "price": 40000},
-        "1": {"id_hotel": 2, "number": 300, "persons": 4, "price": 40000},
-    }
-    return render_template("reservas.html", room = rooms[id_room], id_room=id_room)
+@app.route('/reservar/<id_room>/<region>/<start_date>/<end_date>')
+def reservar(id_room, region, start_date, end_date):
+        room = get_data("/habitacion/"+str(id_room) )
+        servicios = get_data("/servicios/habitacion/"+str(id_room) )
+        fecha_inicio= datetime.strptime(start_date, '%Y-%m-%d')
+        fecha_final= datetime.strptime(end_date, '%Y-%m-%d')
+        diference = (fecha_final - fecha_inicio).days 
+        return render_template("reservas.html", room=room[0] , region=region, start_date=start_date, end_date=end_date, diference_days=diference, servicios=servicios )
 
+@app.route('/confirmReservation', methods=["GET","POST"]  )
+def confirmReservation():
+        if request.method == "POST":
+            lastName = request.form.get("fsecondName")
+            startDate = request.form.get("fstartDate")
+            endDate = request.form.get("fendDate")
+            room = request.form.get("fdataroom")
+            price = request.form.get("fpriceFinal")
+
+            json_data ={
+                "id_habitacion": room , 
+                "llegada": startDate, 
+                "salida": endDate, 
+                "cliente_apellido": lastName , 
+                "precio": price
+            }
+            try:
+                response = requests.post(API_URL + "/reserva",json=json_data).json()['id_reserva']    
+            except requests.exceptions.RequestException as e:
+                return server_error(e)
+            return reserva_realizada(response,lastName)
 
 @app.errorhandler(404)
 def page_notfound(e):
