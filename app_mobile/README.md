@@ -252,7 +252,7 @@ MainScreen==>DetalleScreen==>HotelesScreen
 
    a. Este comando te instalará una versión de KivyMD que no funciona.
 
-   b. Al momento de ejecutar `app.py`, no funcionará y saldrá una advertencia:
+   b. Al momento de ejecutar `main.py`, no funcionará y saldrá una advertencia:
 
        ```
        [warning] pip install http://github.com/... ---------------------
@@ -323,6 +323,256 @@ nombre GITHUP: arturo252
 
 
 ## [Funciones Internas](#internas)
+## **FUNCIONAMIENTO INTERNO**
+
+La aplicación móvil consta de dos archivos: `main.py` y `design.kv`. Para su construcción se utilizaron las siguientes herramientas:
+
+- **Kivy**: Un framework de Python para el desarrollo de aplicaciones que pueden ejecutarse en múltiples plataformas, como Android.
+- **KivyMD**: Una biblioteca que extiende Kivy y proporciona herramientas adicionales para implementar un diseño más moderno y atractivo en las aplicaciones.
+
+## **COMPONENTES USADOS EN EL PROYECTO**
+
+- **MDApp**
+- **ScreenManager**
+- **Screen**
+- **MDFloatLayout**
+- **MDLabel**
+- **MDTextField**
+- **MDButton**
+- **requests**
+
+## **ARCHIVOS**
+
+### **main.py**
+
+- **Código de Lógica**: Este archivo contiene la lógica de la aplicación, es decir, cómo interactúan los diferentes componentes de la interfaz, cómo se manejan los eventos y cómo se procesan los datos.
+- **Importaciones**: Aquí se importan las bibliotecas necesarias, incluidas las clases de Kivy que se utilizarán para crear y manejar la lógica de la interfaz.
+
+### **design.kv**
+
+- **Diseño de la Interfaz**: Este archivo se utiliza para definir el diseño visual de la aplicación utilizando un lenguaje de marcado específico de KivyMD, similar a HTML/CSS para la web.
+- **Separación de Preocupaciones**: Permite separar la lógica de la aplicación del diseño, lo que facilita el mantenimiento del código y la colaboración entre diseñadores y desarrolladores.
+
+## **1. ESTRUCTURA BÁSICA DE LA APP MÓVIL (main.py)**
+
+```python
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivymd.app import MDApp
+import requests
+
+class HoteleriaApp(MDApp):
+    def build(self):
+        return Builder.load_file('design.kv')
+
+if __name__ == '__main__':
+    HoteleriaApp().run()
+```
+
+### **Descripción :**
+1. `from kivy.lang import Builder`: Importa la clase `Builder`, utilizada para cargar archivos de diseño KV en la aplicación.
+2. `from kivy.uix.screenmanager import ScreenManager, Screen`: Importa las clases `ScreenManager` y `Screen`, que se utilizan para gestionar múltiples pantallas en la aplicación.
+3. `from kivymd.app import MDApp`: Importa la clase `MDApp`, que es una extensión de Material Design para Kivy.
+4. `import requests`: Importa el módulo `requests` para realizar solicitudes HTTP en la aplicación.
+5. `class HoteleriaApp(MDApp)`: Define la clase `HoteleriaApp` que hereda de `MDApp`.
+6. `def build(self)`: Define el método `build`, utilizado para construir la interfaz de usuario de la aplicación.
+7. `return Builder.load_file('design.kv')`: Carga la interfaz de usuario definida en el archivo `design.kv`.
+
+## **2. ESTRUCTURA GENERAL DE main.py**
+
+Dentro de la estructura básica de `main.py`, se definen 7 pantallas:
+
+```python
+class MainScreen(Screen):
+    pass
+
+class DetalleScreen(Screen):
+    def get_reserva_detalle(self, code, name):
+        pass
+
+class CancelScreen(Screen):
+    def cancel_reserva(self, code, name):
+        pass
+
+class ServicioScreen(Screen):
+    def get_detalles_servicios(self, id):
+        pass
+
+class ContratarScreen(Screen):
+    def contratar_servicio(self, id_reserva, id_servicio):
+        pass
+
+class HotelesScreen(Screen):
+    def get_hoteles_detalles(self):
+        pass
+
+class MiservicioScreen(Screen):
+    def get_ver_servicios_reserva(self, id_reserva):
+        pass
+```
+
+### **Funciones**:
+Las funciones definidas en cada pantalla son responsables de 
+manejar la lógica y la interacción específica de cada una de las pantalla en la 
+interfaz de usuario. Estas funciones llevan a cabo acciones como recibir 
+datos del usuario, procesar información, realizar operaciones en segundo
+ plano y actualizar la interfaz gráfica con nuevos datos.
+
+Cada función espera ser llamada desde `design.kv` junto con los datos solicitados para ejecutar su código.
+
+### **Peticiones a la API**
+Las peticiones a la API se realizan utilizando `requests`, con los siguientes métodos:
+- `requests.post(url)`
+- `requests.get(url)`
+- `requests.delete(url)`
+
+Para modificar el texto mostrado en un widget de texto, se utiliza:
+```python
+self.ids.nombre_label.text = "mensaje"
+```
+El widget donde se imprimen los mensajes es un `Label`.
+
+**Widgets Utilizados**:
+- TextField
+- Button
+- Label
+
+## **4. ESTRUCTURA GENERAL DEL design.kv**
+
+```yaml
+ScreenManager:
+    MainScreen:
+        name: 'main'
+    DetalleScreen:
+        name: 'detalle'
+    CancelScreen:
+        name: 'cancel'
+    ServicioScreen:
+        name: 'servicio'
+    ContratarScreen:
+        name: 'contratar'        
+    HotelesScreen:
+        name: 'hoteles'
+    MiservicioSreen:
+        name: 'miservicio'   
+```
+
+### **Descripción**:
+- `ScreenManager`: Es un widget que permite gestionar múltiples pantallas dentro de la aplicación. Dentro de él se definen las pantallas de `main.py`, a las cuales se les asigna un nombre para poder hacer referencia a ellas al redireccionar a otra pantalla.
+
+## **Para trabajar en cada pantalla**
+
+se hace referencia con sus respectivos nombres definidos en el `main.py` :
+
+```yaml
+  <MainScreen>:
+        MDlebel:
+        MDTextField:
+        MDButton:
+
+  <DetalleScreen>:
+        MDlebel:
+        MDTextField:
+        MDButton:
+
+  <CancelScreen>:
+        MDlebel:
+        MDTextField:
+        MDButton:  
+
+  <ServicioScreen>:    
+        MDlebel:
+        MDButton: 
+
+  <ContratarScreen>:     
+        MDlebel:
+        MDTextField:
+        MDButton: 
+        
+  <MiservicioSreen>:
+        MDlebel:
+        MDTextField:
+        MDButton: 
+  
+```
+
+Dentro de cada pantalla se añaden los siguientes widgets:
+- **MDLabel**
+  - Mostrar texto en la interfaz de usuario.
+- **MDTextField**
+  - Campo de texto para capturar entradas del usuario.
+- **MDButton**
+  - Botón que ejecuta acciones al ser clicado.
+
+### **Ejemplos**:
+
+#### **1. MDLabel**
+*Para titulos:*
+```kv
+MDLabel:
+    text: "~~~HOTELES~~~"
+    text_color: 1, 0.65, 0, 1
+    halign: 'center'
+    pos_hint: {'center_y': 0.9} 
+```
+*Para los mensajes de repuesta al ejecutar una acción:*
+```kv
+ MDLabel:
+    id: detalles_hotel_label
+    text: ""
+    halign: 'center'
+    theme_text_color: "Custom"
+    text_color: 1, 0.65, 0, 1
+```
 
 
-     ver  funcionamiento.txt
+#### **2. MDTextField**
+```kv
+MDTextField:
+    mode: "filled"
+    multiline: False
+    id: habitacion_code_input
+    size_hint_x: .4
+    pos_hint: {'center_x': 0.29,'center_y': 0.3}
+    MDTextFieldHintText:
+        text: "ID de habitacion"
+    MDTextFieldHelperText:
+        text: "Complete para continuar"
+        mode: "persistent"           
+        text_color: 1, 0.65, 0, 1     
+```
+
+#### **3. MDButton**
+*boton para ejecutar una accion llevando información*
+```kv
+ MDButton:
+    style: "filled"
+    pos_hint: {'center_x': 0.8,'center_y': 0.3}
+    on_release:
+        root.manager.get_screen('miservicio').get_ver_servicios_gratuitos(habitacion_code_input.text)
+        app.root.current = 'miservicio'
+    MDButtonText:
+        text: "ver"  
+```
+*boton solo para ejecutar una acción(volver)*
+```kv
+  MDButton:
+    style: "filled"
+    pos_hint: {'center_x': 0.5,'center_y': 0.1}
+    on_release:
+        app.root.current = 'servicio'
+    MDButtonText:
+        text: "volver" 
+```
+ 
+
+## **Resumen**
+- **MDLabel**: Utilizado para mostrar texto en la interfaz.
+- **MDTextField**: Utilizado para capturar entradas de texto del usuario.
+- **MDButton**: Utilizado para ejecutar acciones mediante click.
+
+## **info**
+Para más información, [documentación de KivyMD](https://kivymd.readthedocs.io/en/latest).
+
+---
+
