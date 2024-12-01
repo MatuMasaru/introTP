@@ -388,27 +388,27 @@ class MainScreen(Screen):
 
 class DetalleScreen(Screen):
     def get_reserva_detalle(self, code, name):
-        pass
+        
 
 class CancelScreen(Screen):
     def cancel_reserva(self, code, name):
-        pass
+        
 
 class ServicioScreen(Screen):
     def get_detalles_servicios(self, id):
-        pass
+        
 
 class ContratarScreen(Screen):
     def contratar_servicio(self, id_reserva, id_servicio):
-        pass
+        
 
 class HotelesScreen(Screen):
     def get_hoteles_detalles(self):
-        pass
+        
 
 class MiservicioScreen(Screen):
     def get_ver_servicios_reserva(self, id_reserva):
-        pass
+        
 ```
 
 ### **Funciones**:
