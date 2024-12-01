@@ -1,4 +1,4 @@
-#:kivy==1.0.9   installed kivymd==2.0.1.dev0
+#:kivy==2.3.0   kivymd==2.0.1.dev0
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
 from kivymd.app import MDApp
@@ -10,10 +10,11 @@ class MainScreen(Screen):
 
 class DetalleScreen(Screen):
     def get_reserva_detalle(self, code , name):
-        response = requests.get(f'http://127.0.0.1:3648/api/reserva/{code}/{name}')
+        if not code or not name:
+            self.ids.detalle_label.text = "*Necesitamos sus datos para continuar"
+            return
         try:
-            if not code or not name:
-                self.ids.detalle_label.text = "*Necesitamos sus datos para continuar"  
+            response = requests.get(f'http://127.0.0.1:3648/api/reserva/{code}/{name}') 
             if response.status_code == 200:
                 datas = response.json()
                 data=datas[0]
@@ -29,27 +30,31 @@ class DetalleScreen(Screen):
                 )
             if response.status_code == 404:
                 self.ids.detalle_label.text = "*RESERVA NO ENCONTRADA"   
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             self.ids.detalle_label.text = "*ERROR AL INTENTAR ACCEDER A LA RESERVA"
 
 class CancelScreen(Screen):
     def cancel_reserva(self, code, name):
+        if not code or not name:
+            self.ids.cancel_label.text = "*Necesitamos sus datos para cancelar."
+            return 
         url = f"http://127.0.0.1:3648/api/reserva/{code}/{name}"
-        response = requests.put(url)
         try:
-            if not code or not name:
-                self.ids.cancel_label.text = "*Necesitamos sus datos para cancelar."    
+            response = requests.put(url)
             if response.status_code == 200:            
                 self.ids.cancel_label.text = "-Reserva cancelada exitosamente."
             if response.status_code == 400:
                 self.ids.cancel_label.text = "-Su reserva ya se encuentra cancelada."
             if response.status_code ==404:
                 self.ids.cancel_label.text = "*Su codigo de reserva y/o su usuario no existe"
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             self.ids.cancel_label.text = "*Error al cancelar la reserva."
 
 class ServicioScreen(Screen):
     def get_detalles_servicios(self, id):
+        if not id:
+            self.ids.detalle_servicio_label.text = "*Necesitamos su id hotel para continuar."
+            return 
         url = f"http://127.0.0.1:3648/api/servicios/hotel/{id}"
         try:
             response = requests.get(url)
@@ -68,11 +73,14 @@ class ServicioScreen(Screen):
                  self.ids.detalle_servicio_label.text= "No hay servicios para reservar en esta habitacion"
             if response.status_code == 404:
                  self.ids.detalle_servicio_label.text= "ID de hotel no existe"   
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
                  self.ids.detalle_servicio_label.text= "Error al intentar ver los servicios"                  
 
 class ContratarScreen(Screen):
     def contratar_servicio(self, id_reserva, id_servicio):
+        if not id_reserva or not id_servicio:
+            self.ids.contratar_label.text = "Necesitamos su id de servicio y el del hotel"
+            return
         url_contratar = f"http://127.0.0.1:3648/api/servicio/{id_reserva}/{id_servicio}"
         try:
             response = requests.post(url_contratar)
@@ -82,9 +90,13 @@ class ContratarScreen(Screen):
                 self.ids.contratar_label.text = "Su servicio ya se encuentra agregada."
             if response.status_code == 404:
                 self.ids.contratar_label.text = "Su código de reserva y/o el id del servicio no existe."
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             self.ids.contratar_label.text = "Error al agregar el servicio."
+
     def cancelar_servicio(self, id_reserva,id_servicio):
+        if not id_reserva or not id_servicio:
+            self.ids.contratar_label.text = "Necesitamos su id de servicio y el del hotel"
+            return
         url= f"http://127.0.0.1:3648/api/reserva/servicio/{id_reserva}/{id_servicio}"   
         try:
             response = requests.delete(url)
@@ -117,6 +129,9 @@ class HotelesScreen(Screen):
 
 class MiservicioSreen(Screen):
     def get_ver_servicios_reserva(self, id_reserva):
+        if not id_reserva:
+            self.ids.detalles_servicios_label.text =  "Necesitamos su id de reserva"
+            return
         url=f"http://127.0.0.1:3648/api/reserva/servicios/{id_reserva}"
         try:
             response = requests.get(url)
@@ -136,7 +151,11 @@ class MiservicioSreen(Screen):
                 self.ids.detalles_servicios_label.text =  "ID de reserva no existe"            
         except requests.exceptions.RequestException as e:
             self.ids.detalles_servicios_label.text = "Error al intentar ver los servicios agregados"
+            
     def get_ver_servicios_gratuitos(self, id_habitacion):
+        if not id_habitacion:
+            self.ids.detalles_servicios_label.text = "Necesitamos su id habitacion"
+            return
         url=f"http://127.0.0.1:3648/api/servicios/habitacion/{id_habitacion}"
         try:
             if not id_habitacion:
@@ -160,7 +179,6 @@ class MiservicioSreen(Screen):
         except requests.exceptions.RequestException as e:
                  self.ids.detalles_servicios_label.text= "Error al intentar ver los servicios"
        
-
 # Crear el gestor de pantallas
 class HoteleriaApp(MDApp):
     def build(self):
