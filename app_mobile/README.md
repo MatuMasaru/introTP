@@ -260,12 +260,12 @@ MainScreen==>DetalleScreen==>HotelesScreen
 
    c. Copia el comando recomendado y ejecútalo.
 
-   d. Te instalará la versión `kivymd==2.0.1.dev0`:
+   d. Te instalará la versión `kivymd==2.0.1.dev0` o puedes intentar instalar directamente la version con el siguiente comado:
 
     ```bash
     pip install https://github.com/kivymd/KivyMD/archive/master.zip#sha256=ab18d4cc36e2d53ea87f463d01299c39c75bae66cc1950f9bc6397f23317c848
     ```
-    e. Ubica los archivos main.py y design.kv dentro de tu ambiente virtual y ejecútalo.
+    e.-recuerda ubicar los archivos main.py(*app.py*) y desig.kv dentro de tu entorno virtual.
 <br>
 
 ### Para usar en celular:
