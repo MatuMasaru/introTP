@@ -191,7 +191,7 @@
 
   .card__content {
 
-    button {
+    a {
       margin-top: var(--space-x-large);
     }
   }
