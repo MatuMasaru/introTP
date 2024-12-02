@@ -6,7 +6,7 @@ body {
 }
 .container {
     max-width: 600px;
-    margin: 100px auto;
+    margin: 100px 20px;
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -36,7 +36,7 @@ input:focus, select:focus {
     outline: none;
     border-color: #007BFF;
 }
-button {
+.button-confirm {
     padding: 10px;
     font-size: 16px;
     color: #fff;
@@ -45,6 +45,29 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
-button:hover {
+.button-confirm:hover {
     background-color: #0056b3;
+}
+
+.button-price {
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    color: #e2dacf;
+    background-color: #b98838;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.button-price:hover {
+    background-color: #077215;
+}
+
+#imageHabitacion{
+    width: 450px;
+}
+
+.contenedor-datos{
+    display: flex;
+    justify-content: center;
 }

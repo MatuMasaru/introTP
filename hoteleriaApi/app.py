@@ -740,7 +740,7 @@ def ingresar_reserva():
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
     
-    return jsonify({"Exito": f"Los datos se cargaron exitosamente, el id de la reserva es {resultado}"}), 200
+    return jsonify({"Exito": f"Los datos se cargaron exitosamente, el id de la reserva es {resultado}", "id_reserva": f"{resultado}" }), 200
 
 
 @app.route("/api/servicio/<int:id_reserva>/<int:id_servicio>", methods=["POST"])
