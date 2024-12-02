@@ -455,6 +455,9 @@ def create_hotel():
         if key not in data:
             return jsonify({'error': f'Falta el dato {key}'}), 400
     
+    if "/static/assets/" not in data["url_img"]:
+       data["url_img"] = "/static/assets/hero-image-home.jpg"
+    
     try:
         hoteles.insert_hotel(data)
 
@@ -497,6 +500,9 @@ def update_hotel(id):
     for key in keys:
         if key not in data:
             return jsonify({'error': f'Falta el dato {key}'}), 400
+        
+    if "/static/assets/" not in data["url_img"]:
+       data["url_img"] = "/static/assets/hero-image-home.jpg"
     
     try:
         resultado = hoteles.hoteles_por_id(id)
@@ -533,7 +539,10 @@ def create_habitacion():
     for key in keys:
         if key not in data:
             return jsonify({'error': f'Faltan el dato {key}'}), 400
-        
+    
+    if "/static/assets/" not in data["url_img"]:
+       data["url_img"] = "/static/assets/hero-image-home.jpg"
+    
     try:
         result = hoteles.hoteles_por_id(data['id_hotel'])
         if len(result) == 0:
@@ -586,6 +595,9 @@ def update_habitacion(id):
     for key in keys:
         if key not in data:
             return jsonify({'error': f'Faltan el dato {key}'}), 400
+        
+    if "/static/assets/" not in data["url_img"]:
+       data["url_img"] = "/static/assets/hero-image-home.jpg"
 
     try:
         result = hoteles.hoteles_por_id(data['id_hotel'])
@@ -865,4 +877,4 @@ def update_habitacion_servicio(id_habitacion, id_servicio):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3648, host="0.0.0.0")
+    app.run(debug=True, port=3648)
