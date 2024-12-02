@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 
 # HOTELES QUERYS
@@ -11,16 +14,20 @@ QUERY_HOTEL_POR_ID = "SELECT id, nombre, direccion, descripcion, url_img, region
 
 QUERY_HOTEL_POR_REGION = "SELECT id, nombre, direccion, descripcion, url_img, region FROM hotel WHERE region = :region"
 
-#HOTELES QUERYS --INSERT---
+QUERY_REGIONES = "SELECT DISTINCT region FROM hotel"
+
+#---------------ADMIN HOTELES---------------------
+#HOTELES QUERYS ADMIN --INSERT---
 QUERY_INGRESAR_HOTEL = "INSERT INTO hotel (nombre, direccion, descripcion, url_img, region) VALUES (:nombre, :direccion, :descripcion, :url_img, :region)"
 
-#HOTELES QUERYS --DELETE---
+#HOTELES QUERYS ADMIN --DELETE---
 QUERY_BORRAR_HOTEL = "DELETE FROM hotel WHERE id = :id"
 
-#HOTELES QUERYS --UPDATE---
-QUERY_ACTUALIZAR_HOTEL = "UPDATE hotel SET nombre = :nombre, direccion = :direccion, descripcion = :descripcion, url_img = :url_img, region = :region"
+#HOTELES QUERYS ADMIN --UPDATE---
+QUERY_ACTUALIZAR_HOTEL = "UPDATE hotel SET nombre = :nombre, direccion = :direccion, descripcion = :descripcion, url_img = :url_img, region = :region WHERE id = :id"
+#----------------------------------------------------
 
-QUERY_REGIONES = "SELECT DISTINCT region FROM hotel"
+
 # HABITACIONES QUERYS
 
 QUERY_TODAS_LAS_HABITACIONES = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id;"
@@ -56,13 +63,15 @@ QUERY_TIPOS_HABITACIONES = "SELECT DISTINCT tipo FROM habitaciones"
 
 QUERY_HABITACION_REGION_TIPO = "SELECT h.id, h.numero, h.url_img, h.tipo, h.precio, h.id_hotel, ho.nombre FROM habitaciones h JOIN hotel ho ON h.id_hotel = ho.id WHERE tipo = :tipo AND ho.region = :region"
 
-#----HABITACION QUERYS INSERT----
-QUERY_INGRESAR_HABITACION = "INSERT INTO habitaciones (numero, url_img, tipo, precio, id_hotel) VALUES (numero, url_img, tipo, precio, id_hotel)"
-
-#----HABITACION QUERYS DELETE----
+#----HABITACION QUERYS ADMIN INSERT----
+QUERY_INGRESAR_HABITACION = """
+INSERT INTO habitaciones (numero, url_img, tipo, precio, id_hotel) 
+VALUES (:numero, :url_img, :tipo, :precio, :id_hotel)
+"""
+#----HABITACION QUERYS ADMIN DELETE----
 QUERY_BORRAR_HABITACION = "DELETE FROM habitaciones WHERE id = :id"
 
-#----HABITACION QUERYS UPDATE----
+#----HABITACION QUERYS ADMIN UPDATE----
 QUERY_ACTUALIZAR_HABITACION = "UPDATE habitaciones SET numero = :numero, url_img = :url_img, tipo = :tipo, precio = :precio, id_hotel = :id_hotel WHERE id = :id"
 
 
@@ -78,39 +87,39 @@ QUERY_SERVICIO_POR_ID_HOTEL = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM 
 
 QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN hotel_servicio sh ON s.id = sh.id_servicio WHERE sh.id_hotel = :id_hotel AND sh.id_servicio = :id_servicio;"
 
-QUERY_OBTENER_PRECIO_SERVICIO_ID_HABITACION_ID_SERVICIO = "SELECT s.servicio, s.tipo, sh.precio, s.id  FROM servicios s JOIN habitacion_servicio sh ON s.id = sh.id_servicio WHERE sh.id_habitacion = :id_habitacion AND sh.id_servicio = :id_servicio;"
+#-------SERVICIOS ADMIN------------
 
-
-#----SERVICIO QUERYS INSERT----
+#----SERVICIO QUERYS ADMIN INSERT----
 QUERY_INGRESAR_SERVICIO = "INSERT INTO servicios (servicio, tipo) VALUES (:servicio, :tipo)"
 
-#----SERVICIO QUERYS DELETE----
+#----SERVICIO QUERYS ADMIN DELETE----
 QUERY_BORRAR_SERVICIO = "DELETE FROM servicios WHERE id = :id"
 
-#----SERVICIO QUERYS UPDATE----
+#----SERVICIO QUERYS ADMIN UPDATE----
 QUERY_ACTUALIZAR_SERVICIO = "UPDATE servicios SET servicio = :servicio, tipo = :tipo WHERE id = :id"
 
-
-#SERVICIO_HOTEL QUERYS INSERT
+#SERVICIO_HOTEL QUERYS ADMIN INSERT
 QUERY_INGRESAR_SERVICIO_HOTEL = "INSERT INTO hotel_servicio (id_hotel, id_servicio, precio) VALUES (:id_hotel, :id_servicio, :precio)"
 
-#SERVICIO_HOTEL QUERYS DELETE
+#SERVICIO_HOTEL QUERYS ADMIN DELETE
 QUERY_BORRAR_SERVICIO_HOTEL = "DELETE FROM hotel_servicio WHERE id_hotel = :id_hotel AND id_servicio = :id_servicio"
 
-#SERVICIO_HOTEL QUERYS UPDATE
+#SERVICIO_HOTEL QUERYS ADMIN UPDATE
 QUERY_ACTUALIZAR_SERVICIO_HOTEL = "UPDATE hotel_servicio SET precio = :precio WHERE id_hotel = :id_hotel AND id_servicio = :id_servicio"
 
-#SERVICIO_HABITACION INSERT
+#SERVICIO_HABITACION ADMIN INSERT
 QUERY_INGRESAR_SERVICIO_HABITACION = "INSERT INTO habitacion_servicio (id_habitacion, id_servicio, precio) VALUES (:id_habitacion, :id_servicio, :precio)"
 
-#SERVICIO_HABITACION QUERYS DELETE
+#SERVICIO_HABITACION QUERYS ADMIN DELETE
 QUERY_BORRAR_SERVICIO_HABITACION = "DELETE FROM habitacion_servicio WHERE id_habitacion = :id_habitacion AND id_servicio = :id_servicio"
 
-#SERVICIO_HABITACION QUERYS UPDATE
+#SERVICIO_HABITACION QUERYS ADMIN UPDATE
 QUERY_ACTUALIZAR_SERVICIO_HABITACION = "UPDATE habitacion_servicio SET precio = :precio WHERE id_habitacion = :id_habitacion AND id_servicio = :id_servicio"
 
-# RESERVA HABITACION QUERYS --GET---
+#---------------------------------------------------------------
 
+
+# RESERVA HABITACION QUERYS --GET---
 QUERY_RESERVA_POR_ID_Y_CLIENTE = "SELECT id, id_habitacion, llegada, salida, cliente_apellido, estado, precio, fecha_cancelacion FROM reserva WHERE id= :id AND cliente_apellido = :cliente_apellido"
 
 QUERY_RESERVA_POR_ID = "SELECT id, id_habitacion, llegada, salida, cliente_apellido, estado, precio FROM reserva WHERE id= :id"
@@ -121,14 +130,11 @@ QUERY_INGRESAR_RESERVA = "INSERT INTO reserva (id_habitacion, llegada, salida, c
 
 QUERY_DISPONIBILIDAD_HABITACION = "SELECT estado FROM reserva WHERE id_habitacion = :id_habitacion AND (llegada < :salida AND salida > :llegada) AND estado = 'activo'"
 
+#-----SERVICIOS
+
 # CANCELAR RESERVA --UPDATE---
 
 QUERY_CANCELAR_RESERVA = "UPDATE reserva SET estado = 'cancelado', fecha_cancelacion  = NOW() WHERE id = :id AND cliente_apellido =:cliente_apellido AND estado = 'activo'"
-
-
-######################################
-######-----SERVICIOS
-######################################
 
 # RESERVA DE SERVICIO ---INSERT---
 
@@ -146,7 +152,7 @@ QUERY_ELIMINAR_SERVICIOS_POR_ID_RESERVA = "DELETE FROM reserva_hotel_servicio WH
 QUERY_ELIMINAR_RESERVA_SERVICIOS_POR_ID_RESERVA_Y_ID_HOTEL_SERVICIO = "DELETE FROM reserva_hotel_servicio WHERE id_reserva = :id_reserva AND id_hotel_servicio = :id_hotel_servicio"
 
 
-engine = create_engine('mysql+pymysql://tomi:1234@localhost:3306/hoteles')
+engine = create_engine(f"mysql+mysqlconnector://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}:3306/{os.getenv('MYSQL_DB')}?charset=utf8mb4&collation=utf8mb4_unicode_ci")
 
 def run_query(query, parameters=None):
     with engine.connect() as conn:
@@ -168,19 +174,19 @@ def hoteles_por_region(region):
 def todas_las_regiones():
     return run_query(QUERY_REGIONES).fetchall()
 
-#----POST----
 
+#-------------ADMIN HOTELES--------------
+#----POST----
 def insert_hotel(data):
     run_query(QUERY_INGRESAR_HOTEL, data)
 
 #----DELETE----
-
 def borrar_hotel(id):
-    run_query(text(QUERY_BORRAR_HOTEL), {'id': id})
-
+    run_query(QUERY_BORRAR_HOTEL, {'id': id})
 #----PUT----
 def actualizar_hotel(id, data):
-    run_query(text(QUERY_ACTUALIZAR_HOTEL),{'id': id, **data})
+    run_query(QUERY_ACTUALIZAR_HOTEL,{'id': id, **data})
+#-----------------------------------------------
 
 #----HABITACIONES FUNCIONES
 
@@ -210,17 +216,19 @@ def todos_los_tipos_de_habitacion():
 def habitacion_por_region_y_tipo(tipo, region):
     return run_query(QUERY_HABITACION_REGION_TIPO, {"tipo": tipo, "region": region}).fetchall()
 
+
+#-------------ADMIN HABITACIONES--------------
 #----POST----
 def insert_habitacion(data):
     run_query(QUERY_INGRESAR_HABITACION, data)
-
 #----DELETE----
 def borrar_habitacion(id):
-    run_query(text(QUERY_BORRAR_HABITACION), {'id': id})
-
+    run_query(QUERY_BORRAR_HABITACION, {'id': id})
 #----PUT----
 def actualizar_habitacion(id, data):
-    run_query(text(QUERY_ACTUALIZAR_HABITACION), {'id': id, **data})
+    run_query(QUERY_ACTUALIZAR_HABITACION, {'id': id, **data})
+#--------------------------------------------------
+
 
 #----SERVICIOS FUNCIONES
 def todos_los_servicios():
@@ -238,46 +246,38 @@ def servicio_por_hotel(id_hotel):
 def servicio_id_hotel_id_servicio(id_hotel, id_servicio):
     return run_query(QUERY_OBTENER_PRECIO_SERVICIO_ID_HOTEL_ID_SERVICIO, {"id_hotel": id_hotel, "id_servicio": id_servicio}).fetchall()
 
-def servicio_id_habitacion_id_servicio(id_habitacion, id_servicio):
-    return run_query(QUERY_OBTENER_PRECIO_SERVICIO_ID_HABITACION_ID_SERVICIO, {"id_habitacion": id_habitacion, "id_servicio": id_servicio}).fetchall()
-
+#-------------ADMIN SERVICIOS--------------
 #----POST----
 def insert_servicio(data):
     run_query(QUERY_INGRESAR_SERVICIO, data)
-
 #----DELETE----
 def borrar_servicio(id):
-    run_query(text(QUERY_BORRAR_SERVICIO), {'id': id})
-
+    run_query(QUERY_BORRAR_SERVICIO, {'id': id})
 #----PUT----
 def actualizar_servicio(id, data):
-    run_query(text(QUERY_ACTUALIZAR_SERVICIO), {'id': id, **data})
-
+    run_query(QUERY_ACTUALIZAR_SERVICIO, {'id': id, **data})
 #----HOTEL_SERVICIO FUNCIONES
 #POST
 def insert_servicio_hotel(data):
     run_query(QUERY_INGRESAR_SERVICIO_HOTEL, data)
-
 #DELETE
 def borrar_servicio_hotel(id_hotel, id_servicio):
-    run_query(text(QUERY_BORRAR_SERVICIO_HOTEL), {'id_hotel': id_hotel, 'id_servicio': id_servicio})
-
+    run_query(QUERY_BORRAR_SERVICIO_HOTEL, {'id_hotel': id_hotel, 'id_servicio': id_servicio})
 #PUT
 def actualizar_servicio_hotel(id_hotel, id_servicio, data):
-    run_query(text(QUERY_ACTUALIZAR_SERVICIO_HOTEL), {'id_hotel': id_hotel, 'id_servicio': id_servicio, **data})
-
+    run_query(QUERY_ACTUALIZAR_SERVICIO_HOTEL, {'id_hotel': id_hotel, 'id_servicio': id_servicio, **data})
 #----HABITACION_SERVICIO FUNCIONES
 #POST
 def insert_servicio_habitacion(data):
     run_query(QUERY_INGRESAR_SERVICIO_HABITACION, data)
-
 #DELETE
 def borrar_servicio_habitacion(id_habitacion, id_servicio):
-    run_query(text(QUERY_BORRAR_SERVICIO_HABITACION), {'id_habitacion': id_habitacion, 'id_servicio': id_servicio})
-
+    run_query(QUERY_BORRAR_SERVICIO_HABITACION, {'id_habitacion': id_habitacion, 'id_servicio': id_servicio})
 #PUT
 def actualizar_servicio_habitacion(id_habitacion, id_servicio, data):
-    run_query(text(QUERY_ACTUALIZAR_SERVICIO_HABITACION), {'id_habitacion': id_habitacion, 'id_servicio': id_servicio, **data})
+    run_query(QUERY_ACTUALIZAR_SERVICIO_HABITACION, {'id_habitacion': id_habitacion, 'id_servicio': id_servicio, **data})
+#-----------------------------------------------------------------
+
 
 #----RESERVA FUNCIONES 
 
@@ -314,4 +314,3 @@ def eliminar_un_solo_servicio(id_reserva, id_servicio):
 
 def eliminar_reserva_servicio_por_id_reserva(id_reserva):
     run_query(QUERY_ELIMINAR_SERVICIOS_POR_ID_RESERVA, {"id_reserva": id_reserva})
-
