@@ -28,6 +28,22 @@
   }
 }
 
+#input_1, #input_2 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+#input_2 {
+  margin-bottom: 15px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
 
 @media (min-width: 768px) {
   #sobre {
@@ -38,3 +54,4 @@
     }
   }
 }
+
