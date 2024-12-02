@@ -158,11 +158,12 @@ def habitaciones():
         meta_room_type=meta_room_type
     )
 
-
-@app.route('/reservar/<id_room>/<region>/<start_date>/<end_date>')
-def reservar(id_room, region, start_date, end_date):
+@app.route('/reservar/<id_room>/<start_date>/<end_date>')
+def reservar(id_room,start_date, end_date):
         room = get_data("/habitacion/"+str(id_room) )
         servicios = get_data("/servicios/habitacion/"+str(id_room) )
+        hotel = get_data(f"/hoteles/{room[0]["id_hotel"]}")
+        region = hotel[0]["region"]
         fecha_inicio= datetime.strptime(start_date, '%Y-%m-%d')
         fecha_final= datetime.strptime(end_date, '%Y-%m-%d')
         diference = (fecha_final - fecha_inicio).days 
