@@ -865,4 +865,4 @@ def update_habitacion_servicio(id_habitacion, id_servicio):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3648)
+    app.run(debug=True, port=3648, host="0.0.0.0")

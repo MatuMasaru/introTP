@@ -1,9 +1,6 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
-from dotenv import load_dotenv
 import os
-
-load_dotenv()
 
 
 # HOTELES QUERYS
@@ -152,7 +149,7 @@ QUERY_ELIMINAR_SERVICIOS_POR_ID_RESERVA = "DELETE FROM reserva_hotel_servicio WH
 QUERY_ELIMINAR_RESERVA_SERVICIOS_POR_ID_RESERVA_Y_ID_HOTEL_SERVICIO = "DELETE FROM reserva_hotel_servicio WHERE id_reserva = :id_reserva AND id_hotel_servicio = :id_hotel_servicio"
 
 
-engine = create_engine(f"mysql+mysqlconnector://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}:3306/{os.getenv('MYSQL_DB')}?charset=utf8mb4&collation=utf8mb4_unicode_ci")
+engine = create_engine(f"mysql+mysqlconnector://{os.getenv('MYSQL_USER')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}:3306/{os.getenv('MYSQL_DATABASE')}?charset=utf8mb4&collation=utf8mb4_unicode_ci")
 
 def run_query(query, parameters=None):
     with engine.connect() as conn:
