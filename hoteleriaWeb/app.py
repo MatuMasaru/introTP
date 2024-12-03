@@ -37,10 +37,15 @@ def informacion_reserva():
         apellido_cliente = request.form.get("acliente")
         if not id_reserva.isdigit():
              return render_template("login_mis_reservas.html", error = "El ID de la reserva solo puede tener numeros.")
-
         datos = obtener_datos_reserva(id_reserva,apellido_cliente)
-    return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4])
-
+        
+        if len(datos) == 0:
+            return render_template("login_mis_reservas.html", error = "Hubo un error en la busqueda. Intente nuevamente.")
+        else:  
+            return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4])
+    
+    return redirect(url_for("mi_reserva"))
+    
 def reserva_realizada(id_reserva,apellido_cliente):
     datos = obtener_datos_reserva(id_reserva,apellido_cliente)
     return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4])
@@ -65,8 +70,7 @@ def obtener_datos_reserva(id_reserva,apellido_cliente):
             id_hotel = habitacion[0]['id_hotel']
             hotel = get_data(f"/hoteles/{id_hotel}")
         except requests.exceptions.RequestException as e:
-            return render_template("login_mis_reservas.html", error = "Hubo un error en la busqueda. Intente nuevamente.")
-        
+            return []
         return [ reserva, sa, servicios_incluidos, habitacion, hotel ]
 
 
