@@ -4,17 +4,7 @@
 
 {% block styles %}
   <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
-
-    <script>
-        function cancelarReserva(reservaId) {
-            const confirmacion = confirm("¿Estás seguro de que deseas cancelar esta reserva?");
-            if (confirmacion) {
-            
-                alert("Reserva " + reservaId + " cancelada.");
-                
-            }
-        }
-    </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/ver_mis_reservas.css') }}">
 {% endblock %}
 
 {% block header %}
@@ -110,7 +100,14 @@
           </div>
         
         </article>
-        <a href = "{{ url_for('index') }}" class="btn btn--warning btn--size-medium">Volver al inicio.</a>
+        <a href = "{{ url_for('index') }}" class="btn btn--primary btn--size-medium">Volver al inicio.</a>
+        {% if reserva[0]['estado'] != 'cancelado' %}
+          <form action="{{ url_for('informacion_reserva') }}" method="POST">
+            <input type="hidden" name="cancelar_id_reserva" value="{{ reserva[0]['id'] }}">
+            <input type="hidden" name="cancelar_apellido_cliente" value="{{ apellido_cliente }}">
+            <button type="submit" class="btn btn--warning btn--size-medium">Cancelar Reserva</button>
+          </form>
+        {% endif %}
       </section> 
 {% endblock %}
 

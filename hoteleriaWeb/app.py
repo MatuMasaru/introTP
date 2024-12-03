@@ -33,6 +33,13 @@ def mi_reserva():
 @app.route("/informacion_reserva", methods = ['POST' , 'GET'])
 def informacion_reserva():
     if request.method == "POST":
+        cancelar_apellido_cliente = request.form.get("cancelar_apellido_cliente")
+        cancelar_id_reserva = request.form.get("cancelar_id_reserva")
+        
+        if cancelar_id_reserva is not None and cancelar_apellido_cliente is not None:
+            requests.put(API_URL + f'/reserva/{cancelar_id_reserva}/{cancelar_apellido_cliente}')
+            return redirect(url_for("mi_reserva"))
+
         id_reserva = request.form.get("nreserva")
         apellido_cliente = request.form.get("acliente")
         if not id_reserva.isdigit():
@@ -42,13 +49,13 @@ def informacion_reserva():
         if len(datos) == 0:
             return render_template("login_mis_reservas.html", error = "Hubo un error en la busqueda. Intente nuevamente.")
         else:  
-            return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4])
+            return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4], apellido_cliente = apellido_cliente)
     
     return redirect(url_for("mi_reserva"))
     
 def reserva_realizada(id_reserva,apellido_cliente):
     datos = obtener_datos_reserva(id_reserva,apellido_cliente)
-    return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4])
+    return render_template("ver_mis_reservas.html", reserva = datos[0], servicios_aparte = datos[1], servicios_incluidos = datos[2],habitacion = datos[3], hotel = datos[4], apellido_cliente = apellido_cliente)
 
 
 def obtener_datos_reserva(id_reserva,apellido_cliente):
