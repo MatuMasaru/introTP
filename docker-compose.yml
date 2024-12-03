@@ -12,11 +12,11 @@ services:
       <<: *common-environment
       MYSQL_ROOT_PASSWORD: "admintest123"
     volumes:
-      - ./hoteles.sql:/docker-entrypoint-initdb.d/hoteles.sql
+      - ./hoteleriaApi/hoteles.sql:/docker-entrypoint-initdb.d/hoteles.sql
 
   backend:
     build:
-      context: .
+      context: ./hoteleriaApi
       dockerfile: Dockerfile
     ports:
       - "3648:3648"
@@ -25,4 +25,14 @@ services:
       MYSQL_HOST: "db"
     depends_on:
       - db
+
+  frontend:
+    build:
+      context: ./hoteleriaWeb
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+
 

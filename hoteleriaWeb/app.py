@@ -3,7 +3,7 @@ import requests
 from datetime import datetime
 app = Flask(__name__)
 
-API_URL = "http://localhost:3648/api"
+API_URL = "http://backend:3648/api"
 
 
 def get_data(endpoint):
@@ -292,4 +292,4 @@ def server_error(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")
