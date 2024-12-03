@@ -1,0 +1,381 @@
+ScreenManager:
+    MainScreen:
+        name: 'main'
+    DetalleScreen:
+        name: 'detalle'
+    CancelScreen:
+        name: 'cancel'
+    ServicioScreen:
+        name: 'servicio'
+    ContratarScreen:
+        name: 'contratar'        
+    HotelesScreen:
+        name: 'hoteles'
+    MiservicioSreen:
+        name: 'miservicio'    
+
+<MainScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.90, 0.83, 1  
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    MDLabel:
+        text: "ESTANCIAS DEL SOL"
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}
+        font_style: "Title"
+    MDLabel:
+        text: "Obtenga los detalles de su Reserva:"
+        text_color: 0.0, 0.75, 1.0, 1
+        pos_hint: {'center_y': 0.8}  
+        halign: 'center'
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: reserva_code_input
+        size_hint_x: .5
+        pos_hint: {'center_x': 0.5,'center_y': 0.7}
+        MDTextFieldHintText:
+            text: "codigo de reserva"
+        MDTextFieldHelperText:
+            text: "ID de reserva"
+            mode: "persistent"           
+            text_color:  1, 0.65, 0, 1
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: reserva_name_input
+        size_hint_x: .5
+        pos_hint: {'center_x': 0.5,'center_y': 0.5}
+        MDTextFieldHintText:
+            text: "Apellido"
+        MDTextFieldHelperText:
+            text: "Usuario apellido"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1               
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.3}
+        on_release:
+            app.root.current = 'detalle'
+            root.manager.get_screen('detalle').get_reserva_detalle(reserva_code_input.text, reserva_name_input.text)         
+        MDButtonText:
+            text: "consultar"       
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.2}
+        on_release:
+            app.root.current = 'cancel'       
+        MDButtonText:
+            text: "cancelar reserva"
+            theme_text_color: "Custom"
+            
+<DetalleScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.90, 0.83, 1 
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    MDLabel:
+        text: "Detalles de tu reserva"
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}
+        font_style: "Title"     
+    MDLabel:
+        id: detalle_label
+        text: "Detalles:"
+        halign: 'center'
+        theme_text_color: "Custom"
+        text_color: 1, 0.65, 0, 1
+    MDLabel:
+        text: "Para ver servicios ingrese id hotel:"
+        theme_text_color: "Custom"
+        text_color: 0.0, 0.75, 1.0, 1 
+        pos_hint: {'center_y': 0.3}
+        halign: 'center'
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: hotel_id_input
+        size_hint_x: .2
+        pos_hint: {'center_x': 0.5,'center_y': 0.2}
+        MDTextFieldHintText:
+            text: "id"  
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.8,'center_y': 0.2}
+        on_release:
+            app.root.current = 'servicio'
+            root.manager.get_screen('servicio').get_detalles_servicios(hotel_id_input.text)
+        MDButtonText:
+            text: "ver servicios"
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.2,'center_y': 0.2}
+        on_release:
+            app.root.current = 'main'
+        MDButtonText:
+            text: "volver"
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.1}
+        on_release:
+            app.root.current = 'hoteles'
+            root.manager.get_screen('hoteles').get_hoteles_detalles()
+        MDButtonText:
+            text: "id hotel ??"
+
+<CancelScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.90, 0.83, 1   
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    MDLabel:
+        text: "CANCELAR RESERVA"      
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}       
+        font_style: "Title"      
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: cancel_code_input
+        size_hint_x: .6
+        pos_hint: {'center_x': 0.5,'center_y': 0.7}       
+        MDTextFieldHintText:
+            text: "codigo de reserva"
+        MDTextFieldHelperText:
+            text: "coloque su id de reserva por favor"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: cancel_name_input
+        size_hint_x: .6
+        pos_hint: {'center_x': 0.5,'center_y': 0.5}
+        MDTextFieldHintText:
+            text: "Apellido"
+        MDTextFieldHelperText:
+            text: "coloque su Apellido de usuario"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.3}
+        on_release:
+            app.root.current = 'cancel'
+            root.manager.get_screen('cancel').cancel_reserva(cancel_code_input.text, cancel_name_input.text)    
+        MDButtonText:
+            text: "cancelar reserva"                
+    MDLabel:
+        id: cancel_label
+        text: ""
+        pos_hint: {'center_x': 0.5,'center_y': 0.2} 
+        text_color: 1, 0, 0, 1  
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.1}
+        on_release:
+            app.root.current = 'main'
+        MDButtonText:
+            text: "volver"
+
+<ServicioScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.90, 0.83, 1   
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    MDLabel:
+        text: "----Detalles de los Servicios----"
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.95}    
+    MDLabel:
+        id: detalle_servicio_label
+        text: ""
+        halign: 'center'
+        theme_text_color: "Custom"
+        text_color: 1, 0.65, 0, 1
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.8,'center_y': 0.1}
+        on_release:
+            app.root.current = 'contratar'   
+        MDButtonText:
+            text: "continuar"
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.2,'center_y': 0.1}
+        on_release:
+            app.root.current = 'detalle'
+        MDButtonText:
+            text: "volver"
+
+<ContratarScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.90, 0.83, 1   
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    MDLabel:
+        text: "AGREGA O CANCELA TU SERVICIO"      
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}       
+        font_style: "Title"      
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: reserva_code_input
+        size_hint_x: .4
+        pos_hint: {'center_x': 0.29,'center_y': 0.8}       
+        MDTextFieldHintText:
+            text: "ID de reserva"
+        MDTextFieldHelperText:
+            text: "complete campo"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1 
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: servicio_code_input
+        size_hint_x: .4
+        pos_hint: {'center_x': 0.71,'center_y': 0.8}
+        MDTextFieldHintText:
+            text: "ID de servicio"
+        MDTextFieldHelperText:
+            text: "complete campo"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1
+    MDLabel:
+        id: contratar_label
+        text: ""
+        pos_hint: {'center_x': 0.5,'center_y': 0.68} 
+        text_color: 1, 0, 0, 1       
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.2,'center_y': 0.58}
+        on_release:
+            app.root.current = 'contratar'
+            root.manager.get_screen('contratar').contratar_servicio(reserva_code_input.text, servicio_code_input.text)    
+        MDButtonText:
+            text: "contratar"
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.8,'center_y': 0.58}
+        on_release:
+            app.root.current = 'contratar'
+            root.manager.get_screen('contratar').cancelar_servicio(reserva_code_input.text, servicio_code_input.text)    
+        MDButtonText:
+            text: "cancelar"
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.48}
+        on_release:
+            root.manager.get_screen('miservicio').get_ver_servicios_reserva(reserva_code_input.text)
+            app.root.current = 'miservicio'
+        MDButtonText:
+            text: "mis reservas"
+    MDLabel:
+        text: "Para ver servicios gratuitos :"
+        halign: 'center'
+        pos_hint: {'center_y': 0.38} 
+        text_color: 0.0, 0.75, 1.0, 1
+
+    MDTextField:
+        mode: "filled"
+        multiline: False
+        id: habitacion_code_input
+        size_hint_x: .4
+        pos_hint: {'center_x': 0.29,'center_y': 0.3}
+        MDTextFieldHintText:
+            text: "ID de habitacion"
+        MDTextFieldHelperText:
+            text: "Complete para continuar"
+            mode: "persistent"           
+            text_color: 1, 0.65, 0, 1                             
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.8,'center_y': 0.3}
+        on_release:
+            root.manager.get_screen('miservicio').get_ver_servicios_gratuitos(habitacion_code_input.text)
+            app.root.current = 'miservicio'
+        MDButtonText:
+            text: "ver"  
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.5,'center_y': 0.1}
+        on_release:
+            app.root.current = 'servicio'
+        MDButtonText:
+            text: "volver"
+     
+<HotelesScreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.90, 0.83, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size           
+    MDLabel:
+        text: "----HOTELES----"
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}    
+    MDLabel:
+        id: detalles_hotel_label
+        text: ""
+        halign: 'center'
+        theme_text_color: "Custom"
+        text_color: 1, 0.65, 0, 1
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.2,'center_y': 0.1}
+        on_release:
+            app.root.current = 'detalle'
+        MDButtonText:
+            text: "volver"
+
+<MiservicioSreen>:
+    MDFloatLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 0.90, 0.83, 1   
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    MDLabel:
+        text: "----MIS SERVICIOS----"
+        text_color: 1, 0.65, 0, 1
+        halign: 'center'
+        pos_hint: {'center_y': 0.9}    
+    MDLabel:
+        id: detalles_servicios_label
+        text: ""
+        halign: 'center'
+        theme_text_color: "Custom"
+        text_color: 1, 0.65, 0, 1
+    MDButton:
+        style: "filled"
+        pos_hint: {'center_x': 0.2,'center_y': 0.1}
+        on_release:
+            app.root.current = 'contratar'
+        MDButtonText:
+            text: "volver"
